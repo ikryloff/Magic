@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd176dac6853dc4ea965daf49b88550, type: 3}
+  m_Name: 37_ice_spikes
+  m_EditorClassIdentifier: 
+  unitID: 37
+  unitName: 
+  unitType: 1
+  classProperty: 0
+  attackPower: 0
+  description: Ice Spikes
+  level: 3
+  damage: 0
+  health: 0
+  spellTag: ice_spikes
+  code: 102112
+  cost: 30
+  prepareTime: 1
+  targetIndexes: 00000000
+  spellType: 0
+  towerType: 1
+  attackRange: 0
+  attackRate: 0
+  towerPrefab: {fileID: 3649202572655111449, guid: 8c9298c640e4cc2478f7c54053f99e5e,
+    type: 3}
+  bulletPrefab: {fileID: 0}
+  activeIcon: {fileID: 0}
+  unActiveIcon: {fileID: 0}
+  isTowerActive: 0
+  isEnemyAffect: 0
+  school: ELEMENTAL
+  target: 0
+  targetRow: 0
+  targetCell: 0000000000000000

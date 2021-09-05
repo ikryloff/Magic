@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd176dac6853dc4ea965daf49b88550, type: 3}
+  m_Name: 0_power_impulse
+  m_EditorClassIdentifier: 
+  unitID: 0
+  unitName: Power impulse
+  unitType: 0
+  classProperty: 0
+  attackPower: 3
+  description: Power impulse
+  level: 1
+  damage: 10
+  health: 0
+  spellTag: power_impulse
+  code: 112
+  cost: 0
+  prepareTime: 1
+  targetIndexes: 00000000
+  spellType: 1
+  towerType: 0
+  attackRange: 0
+  attackRate: 0
+  towerPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 7181530518866479169, guid: 314526a5f4b2dc84e8823fa6cf93687b,
+    type: 3}
+  activeIcon: {fileID: 0}
+  unActiveIcon: {fileID: 0}
+  isTowerActive: 0
+  isEnemyAffect: 0
+  school: ELEMENTAL
+  target: NIL
+  targetRow: 1
+  targetCell: 

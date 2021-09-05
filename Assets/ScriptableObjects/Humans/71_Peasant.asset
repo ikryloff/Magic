@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd176dac6853dc4ea965daf49b88550, type: 3}
+  m_Name: 71_Peasant
+  m_EditorClassIdentifier: 
+  unitID: 71
+  unitName: 
+  unitType: 0
+  classProperty: 5
+  attackPower: 0
+  description: Peasant
+  level: 1
+  damage: 50
+  health: 100
+  spellTag: 
+  code: 
+  cost: 0
+  prepareTime: 0
+  targetIndexes: 
+  spellType: 2
+  towerType: 3
+  attackRange: 1.3
+  attackRate: 3
+  towerPrefab: {fileID: 6239985308405662872, guid: 3bcef7fb9678ada42a009e24043682df,
+    type: 3}
+  bulletPrefab: {fileID: 0}
+  activeIcon: {fileID: 0}
+  unActiveIcon: {fileID: 0}
+  isTowerActive: 0
+  isEnemyAffect: 0
+  school: 
+  target: 
+  targetRow: 0
+  targetCell: 

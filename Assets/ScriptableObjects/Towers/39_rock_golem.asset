@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd176dac6853dc4ea965daf49b88550, type: 3}
+  m_Name: 39_rock_golem
+  m_EditorClassIdentifier: 
+  unitID: 39
+  unitName: 
+  unitType: 0
+  classProperty: 0
+  attackPower: 3
+  description: 
+  level: 5
+  damage: 0
+  health: 0
+  spellTag: rock_golem
+  code: 11021112
+  cost: 20
+  prepareTime: 2
+  targetIndexes: 03000000
+  spellType: 0
+  towerType: 2
+  attackRange: 3
+  attackRate: 0
+  towerPrefab: {fileID: 3649202572655111449, guid: c73fdfc0677781247be90f1ec673f7fa,
+    type: 3}
+  bulletPrefab: {fileID: 7181530518866479169, guid: 614e724d59576ee4eb54fea2df0f9bae,
+    type: 3}
+  activeIcon: {fileID: 0}
+  unActiveIcon: {fileID: 0}
+  isTowerActive: 0
+  isEnemyAffect: 0
+  school: ELEMENTAL
+  target: 0
+  targetRow: 0
+  targetCell: 0100000001000000

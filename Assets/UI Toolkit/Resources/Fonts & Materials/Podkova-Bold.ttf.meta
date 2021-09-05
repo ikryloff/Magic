@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 5356e76585437ab4d9bc9826bdc8a76a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Podkova
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a00216774cbdd6b4c9fcae3e5a5a9739, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
