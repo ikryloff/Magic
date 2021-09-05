@@ -76,3 +76,7 @@ crashlytics-build.properties
 *.meta
 *.anim
 *.controller
+*.prefab
+*.asset
+*.mat
+*.unity
