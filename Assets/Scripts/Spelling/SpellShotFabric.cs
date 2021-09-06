@@ -53,7 +53,6 @@ public class SpellShotFabric : MonoBehaviour
         if ( template.spellType == SpellUnit.SpellType.HealingSpell || template.spellType == SpellUnit.SpellType.ReturnManaSpell )
         {
             _targetsTowers = GetTowerTargets (cells);
-            Debug.Log (_targetsTowers.Count);
             if ( _targetsTowers == null || _targetsTowers.Count == 0 )
             {
                 GameEvents.current.NewGameMessage ("No target for using spell!");
@@ -64,9 +63,9 @@ public class SpellShotFabric : MonoBehaviour
         return true;
     }
 
-    public void CreateSpellShot(UnitTemplate template)
+    public void CreateSpellShot( UnitTemplate template )
     {
-              
+
         switch ( template.spellType )
         {
             case SpellUnit.SpellType.AttackSpell:
@@ -98,27 +97,55 @@ public class SpellShotFabric : MonoBehaviour
     private List<Human> GetHumanTargets( UnitTemplate spellTemplate, Cell [] cells )
     {
         List<Human> units = new List<Human> ();
-        //Random in line
-        //for ( int i = 0; i < cells.Length; i++ )
-        //{
-        //    if ( _unitsOnBoard.GetRandomHumanToAttack (cells [i]) != null )
-        //    {
-        //        units.Add (_unitsOnBoard.GetRandomHumanToAttack (cells [i]));
-        //    }
-        //}
-        // all in line
-        for ( int i = 0; i < cells.Length; i++ )
+
+        switch ( spellTemplate.attackPower )
         {
-            List<Human> lineUnits = new List<Human> ();
-            lineUnits = _unitsOnBoard.GetAllHumansInLineToAttack (cells [i]);
-            if ( lineUnits != null )
-            {
-                for ( int j = 0; j < lineUnits.Count; j++ )
+            case Unit.UnitAttackPower.RandomInLine:
                 {
-                    units.Add (lineUnits [j]);
+                    for ( int i = 0; i < cells.Length; i++ )
+                    {
+                        Human human = _unitsOnBoard.GetRandomHumanToAttack (cells [i]);
+                        if ( human != null )
+                        {
+                            units.Add (human);
+                        }
+                    }
+
                 }
-            }
-                
+                break;
+            case Unit.UnitAttackPower.NearestInLine:
+                {
+                    for ( int i = 0; i < cells.Length; i++ )
+                    {
+                        Human human = _unitsOnBoard.GetNearestHumanToAttack (cells [i]);
+                        if ( human != null )
+                        {
+                            units.Add (human);
+                        }
+                    }
+
+                }
+                break;
+            case Unit.UnitAttackPower.AllInLine:
+                {
+                    for ( int i = 0; i < cells.Length; i++ )
+                    {
+                        List<Human> lineUnits = new List<Human> ();
+                        lineUnits = _unitsOnBoard.GetAllHumansInLineToAttack (cells [i]);
+                        if ( lineUnits != null )
+                        {
+                            for ( int j = 0; j < lineUnits.Count; j++ )
+                            {
+                                units.Add (lineUnits [j]);
+                            }
+                        }
+
+                    }
+                }
+                break;
+            case Unit.UnitAttackPower.All:
+                units = _unitsOnBoard.GetAllHumansToAttack ();
+                break;
         }
         return units;
     }
@@ -128,7 +155,7 @@ public class SpellShotFabric : MonoBehaviour
     {
         List<TowerUnit> towers = new List<TowerUnit> ();
         // must be only one cell
-        Debug.Log ("TargetCell " + cells[0].GetLinePosition() + " " + cells [0].GetColumnPosition ());
+        Debug.Log ("TargetCell " + cells [0].GetLinePosition () + " " + cells [0].GetColumnPosition ());
         if ( cells.Length != 1 )
             return null;
         TowerUnit tower = _unitsOnBoard.GetTowerUnitFromCell (cells [0]);
@@ -142,14 +169,14 @@ public class SpellShotFabric : MonoBehaviour
         return Instantiate (spellTemplate.bulletPrefab, _firePoints.GetRandomPoint ().position, Quaternion.identity);
     }
 
-    private void CreateAttacks( UnitTemplate template, List <Human> targets  )
+    private void CreateAttacks( UnitTemplate template, List<Human> targets )
     {
         for ( int i = 0; i < targets.Count; i++ )
         {
             GameObject bulletGO = MakeBullet (template);
 
             ShotSpell shotSpell = new ShotSpell ();
-            shotSpell.Attack (bulletGO, targets[i], template);
+            shotSpell.Attack (bulletGO, targets [i], template);
         }
     }
 }

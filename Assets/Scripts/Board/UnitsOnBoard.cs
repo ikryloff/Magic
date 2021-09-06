@@ -84,7 +84,31 @@ public class UnitsOnBoard : MonoBehaviour
         }
         else
             return _lineHumansLists [line] [Random.Range (0, _lineHumansLists [line].Count)];
+    }
 
+    public Human GetNearestHumanToAttack( Cell cell )
+    {
+        int line = cell.GetLinePosition ();
+
+        if ( _lineHumansLists [line].Count == 0 )
+        {
+            return null;
+        }
+        else
+        {
+            int min = int.MaxValue;
+            Human nearest = null;
+            for ( int i = 0; i < _lineHumansLists [line].Count; i++ )
+            {
+                Human human = _lineHumansLists [line] [i];
+                if ( human.GetColumnPosition () < min )
+                {
+                    nearest = human;
+                    min = nearest.GetColumnPosition ();
+                }
+            }
+            return nearest;
+        }
 
     }
 
@@ -97,6 +121,25 @@ public class UnitsOnBoard : MonoBehaviour
         }
         else
             return _lineHumansLists [line];
+
+    }
+
+    public List<Human> GetAllHumansToAttack( )
+    {
+        List<Human> allHumans = new List<Human> ();
+
+        for ( int i = 0; i < _lineHumansLists.Length; i++ )
+        {
+            for ( int j = 0; j < _lineHumansLists[i].Count; j++ )
+            {
+                if(_lineHumansLists[i].Count != 0 )
+                {
+                    allHumans.Add (_lineHumansLists [i] [j]);
+                }                    
+            }
+        }
+        Debug.Log (allHumans.Count);
+        return allHumans;
 
 
     }
