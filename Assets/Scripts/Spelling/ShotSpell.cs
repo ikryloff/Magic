@@ -16,5 +16,19 @@ public class ShotSpell
 
     }
 
+    public void Heal( Tower target, UnitTemplate template )
+    {
+        Debug.Log ("Heal " + target.name);
+
+       
+
+    }
+
+    public void Return( TowerUnit target)
+    {
+        Debug.Log ("Return " + target.GetUnitName());
+
+    }
+
 
 }

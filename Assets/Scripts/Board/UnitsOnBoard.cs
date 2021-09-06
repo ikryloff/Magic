@@ -53,7 +53,7 @@ public class UnitsOnBoard : MonoBehaviour
     public  void AddTowerToLineTowersList (TowerUnit tower, Cell cell )
     {
         _lineTowersList [cell.GetLinePosition()].Add (tower);
-        Debug.Log ("Tower " + tower.Name + " Added to list " + cell.GetLinePosition ());
+        Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + cell.GetLinePosition ());
     }
 
     public  void RemoveTowerFromLineTowersList( TowerUnit tower )

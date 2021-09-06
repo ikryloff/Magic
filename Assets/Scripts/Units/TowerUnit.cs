@@ -13,7 +13,6 @@ public class TowerUnit : BoardUnit
     }
 
     public int towerID;
-    public string towerName;
     public TowerType towerType;
     public int towerLevel;
     public int towerDamage;
@@ -28,7 +27,8 @@ public class TowerUnit : BoardUnit
     
     public virtual void Activate( UnitTemplate template,  Cell cell )
     {
-        Name = template.unitName;
+        towerCost = template.cost;
+        _name = template.unitName;
         towerType = template.towerType;
         SetLinePosition (cell.GetLinePosition());
         SetColumnPosition (cell.GetColumnPosition());

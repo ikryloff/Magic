@@ -11,12 +11,10 @@
     protected int _linePosition;
     protected int _columnPosition;
 
-    private string _name;
+    protected string _name;
 
     public float attackRange;
     public float attackRate;
-
-    public string Name { get => _name; set => _name = value; }
 
     public int GetLinePosition()
     {
@@ -38,5 +36,10 @@
         _columnPosition = columnPosition;
     }
 
-    
+    public string GetUnitName()
+    {
+        return _name;
+    }
+
+   
 }

@@ -8,7 +8,7 @@ public class SpellShotFabric : MonoBehaviour
     private int [] _targetLines;
     private UnitsOnBoard _unitsOnBoard;
     List<Human> _targetHumans;
-    List<TowerUnit> _targetsTowers;
+    TowerUnit _targetsTower;
     private FirePoints _firePoints;
 
     private void Awake()
@@ -26,7 +26,6 @@ public class SpellShotFabric : MonoBehaviour
 
         _targetLines = GetTargetLines (cells);
         _targetHumans = new List<Human> ();
-        _targetsTowers = new List<TowerUnit> ();
     }
 
     public bool IsValidSpellCall( UnitTemplate template, Cell [] cells )
@@ -52,8 +51,8 @@ public class SpellShotFabric : MonoBehaviour
 
         if ( template.spellType == SpellUnit.SpellType.HealingSpell || template.spellType == SpellUnit.SpellType.ReturnManaSpell )
         {
-            _targetsTowers = GetTowerTargets (cells);
-            if ( _targetsTowers == null || _targetsTowers.Count == 0 )
+            _targetsTower = GetTowerTarget (cells);
+            if ( _targetsTower == null )
             {
                 GameEvents.current.NewGameMessage ("No target for using spell!");
                 GameEvents.current.StopCastingAction ();
@@ -69,13 +68,14 @@ public class SpellShotFabric : MonoBehaviour
         switch ( template.spellType )
         {
             case SpellUnit.SpellType.AttackSpell:
-                CreateAttacks (template, _targetHumans);
+                CreateAttacksOfHumans (template, _targetHumans);
                 break;
             case SpellUnit.SpellType.PressureSpell:
                 break;
             case SpellUnit.SpellType.HealingSpell:
                 break;
             case SpellUnit.SpellType.ReturnManaSpell:
+                ReturnTowerForMana (_targetsTower);
                 break;
 
 
@@ -151,17 +151,18 @@ public class SpellShotFabric : MonoBehaviour
     }
 
     // its only for TowerUnit
-    private List<TowerUnit> GetTowerTargets( Cell [] cells )
+    private TowerUnit GetTowerTarget( Cell [] cells )
     {
-        List<TowerUnit> towers = new List<TowerUnit> ();
         // must be only one cell
         Debug.Log ("TargetCell " + cells [0].GetLinePosition () + " " + cells [0].GetColumnPosition ());
         if ( cells.Length != 1 )
             return null;
         TowerUnit tower = _unitsOnBoard.GetTowerUnitFromCell (cells [0]);
         if ( tower != null )
-            towers.Add (tower);
-        return towers;
+            return tower;
+        else
+            return null;
+
     }
 
     private GameObject MakeBullet( UnitTemplate spellTemplate )
@@ -169,7 +170,7 @@ public class SpellShotFabric : MonoBehaviour
         return Instantiate (spellTemplate.bulletPrefab, _firePoints.GetRandomPoint ().position, Quaternion.identity);
     }
 
-    private void CreateAttacks( UnitTemplate template, List<Human> targets )
+    private void CreateAttacksOfHumans( UnitTemplate template, List<Human> targets )
     {
         for ( int i = 0; i < targets.Count; i++ )
         {
@@ -178,5 +179,11 @@ public class SpellShotFabric : MonoBehaviour
             ShotSpell shotSpell = new ShotSpell ();
             shotSpell.Attack (bulletGO, targets [i], template);
         }
+    }
+
+    private void ReturnTowerForMana( TowerUnit tower )
+    {
+        ShotSpell shotSpell = new ShotSpell ();
+        shotSpell.Return (tower);
     }
 }

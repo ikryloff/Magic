@@ -7,17 +7,18 @@ public class Bullet : MonoBehaviour
     private float _speed;
     private BoardUnit _victim;
     private float _damage;
+    private float _hp;
     private Unit.UnitClassProperty _classProperty;
 
 
-    //public void SeekTower( TowerTemp tower, float _damage )
-    //{
-    //    target = tower.towerTransform;
-    //    damage = _damage;
-    //    victim = tower;
-    //}
+    public void SeekTowerToHeal( Tower tower, float hp )
+    {
+        _target = tower.transform;
+        _hp = hp;
+        _victim = tower;
+    }
 
-    
+
     public void SeekHuman( BoardUnit human, float damage, Unit.UnitClassProperty classProperty )
     {
         _speed = Constants.BULLET_SPEED;
