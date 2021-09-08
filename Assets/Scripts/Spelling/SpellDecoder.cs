@@ -82,7 +82,7 @@ public class SpellDecoder : MonoBehaviour
         {
             for ( int j = tempLeftPos; j <= tempRightPos; j++ )
             {
-                Cell cell = _board.GetCell (i, j);
+                Cell cell = _board.GetCell ( new CellPos(j, i));
                 if ( cell.IsLoaded )
                 {
                     spell [count] = 1;

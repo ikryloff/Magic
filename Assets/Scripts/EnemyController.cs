@@ -4,7 +4,6 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public List<Human> humans;
-    public Line [] lines;
     public Transform [] spawns;
     SpawnPoints [] sp;
     
@@ -13,9 +12,7 @@ public class EnemyController : MonoBehaviour
 
     private void Awake()
     {
-        lines = FindObjectsOfType<Line> ();
         sp = FindObjectsOfType<SpawnPoints> ();
-        SortLines (lines);
                 
     }
 
@@ -23,15 +20,7 @@ public class EnemyController : MonoBehaviour
 
     
 
-    private void SortLines( Line [] _lines )
-    {
-        Line [] ls = new Line [9];
-        for ( int i = 0; i < _lines.Length; i++ )
-        {
-            ls [_lines [i].GetLineNumber()] = _lines [i];
-        }
-        lines = ls;
-    }
+    
     /*
     public void AddTowerToEnemyList( TowerTemp tower )
     {

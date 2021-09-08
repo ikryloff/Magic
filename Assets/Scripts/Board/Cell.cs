@@ -9,6 +9,7 @@ public class Cell : MonoBehaviour
     public SpriteRenderer CellRenderer;
     private int _linePosition;
     private int _columnNumber;
+    private Vector2 _position;
     public bool IsLoaded;
     public bool IsUsed;
     private bool _isEngaged;
