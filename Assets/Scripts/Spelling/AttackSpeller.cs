@@ -11,7 +11,6 @@ public class AttackSpeller : MonoBehaviour
     public List<Transform> targetsTransforms;
 
     private SpawnPoints _spawnPoints;
-    private EnemyController ec;
     private SpellCaster castManager;
     private UIManager ui;
 
@@ -27,7 +26,6 @@ public class AttackSpeller : MonoBehaviour
     {
         wizard = ObjectsHolder.Instance.wizard;
         ui = ObjectsHolder.Instance.uIManager;
-        ec = ObjectsHolder.Instance.enemyController;
         castManager = ObjectsHolder.Instance.castManager;
     }
 
@@ -44,7 +42,6 @@ public class AttackSpeller : MonoBehaviour
 
     IEnumerator PrepareSpellRoutine( UnitTemplate spellTemplate, SpellShotFabric shotFabric)
     {
-        Wizard.IsStopCasting = true;
         //ui.SetPrepareIcon (spell.entityID);
         float time = spellTemplate.prepareTime;
         float perc = Time.deltaTime / time * 100;
@@ -58,7 +55,7 @@ public class AttackSpeller : MonoBehaviour
         }
         ui.SetPrepareValue (0);
         shotFabric.CreateSpellShot (spellTemplate);
-        GameEvents.current.StopCastingAction ();
+        GameEvents.current.StopCastingEvent ();
     }
 
     

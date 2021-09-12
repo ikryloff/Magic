@@ -6,19 +6,25 @@ public class TouchController : MonoBehaviour
     private SpellCaster castManager;
     private ObjectsHolder objects;
 
-    private bool isStopTouching;
+    private bool _isTouchable;
 
 
     private void Awake()
     {
         castManager = FindObjectOfType<SpellCaster> ();
         objects = FindObjectOfType<ObjectsHolder> ();
+        GameEvents.current.OnSwitchTouch += SwitchTouchability;
+
     }
 
-    
+    private void OnDisable()
+    {
+        GameEvents.current.OnSwitchTouch -= SwitchTouchability;
+    }
+
     private void Update()
     {
-        if ( !IsStopTouching())
+        if ( _isTouchable )
         {
             if ( Input.touchCount > 0 )
             {
@@ -29,18 +35,11 @@ public class TouchController : MonoBehaviour
                 }
             }
         }
-          
-
     }
 
-    public bool IsStopTouching()
+    private void SwitchTouchability( bool isOn )
     {
-        return isStopTouching;
-    }
-
-    public void SetStopTouching( bool isOn )
-    {
-        isStopTouching = isOn;
+        _isTouchable = isOn;
     }
 
    

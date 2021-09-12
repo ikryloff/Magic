@@ -13,7 +13,6 @@ public class Wizard : MonoBehaviour
     private float manaCicleRate;
     public float temp;
 
-    public static bool IsStopCasting;
 
     void Start()
     {

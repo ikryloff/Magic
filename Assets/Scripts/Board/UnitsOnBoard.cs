@@ -10,7 +10,7 @@ public class UnitsOnBoard : MonoBehaviour
     {
         GameEvents.current.OnTowerWasBuilt += AddTowerToLineTowersList;
         GameEvents.current.OnHumanPositionWasChanged += AddHumanToLineHumansList;
-        GameEvents.current.OnHumanDeath += RemoveHumanFromLineHumansList;
+        GameEvents.current.OnHumanDeathAction += RemoveHumanFromLineHumansList;
         InitLists ();
     }
 
@@ -18,7 +18,7 @@ public class UnitsOnBoard : MonoBehaviour
     {
         GameEvents.current.OnTowerWasBuilt -= AddTowerToLineTowersList;
         GameEvents.current.OnHumanPositionWasChanged -= AddHumanToLineHumansList;
-        GameEvents.current.OnHumanDeath -= RemoveHumanFromLineHumansList;
+        GameEvents.current.OnHumanDeathAction -= RemoveHumanFromLineHumansList;
     }
 
     private void InitLists()
@@ -34,7 +34,7 @@ public class UnitsOnBoard : MonoBehaviour
         {
             _lineHumansLists [i] = new List<Human> ();
         }
-        GameEvents.current.FieldIsBuiltAction ();
+        GameEvents.current.BoardIsBuiltEvent ();
 
     }
 

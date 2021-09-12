@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class WaveController : MonoBehaviour
 {
-    private EnemyController ec;
     private Wave [] waves;
     public WavesList wavesList;
     private SpawnPoints spawnPoints;
@@ -16,14 +15,13 @@ public class WaveController : MonoBehaviour
 
     private void Awake()
     {
-        wavesList = GetComponent<WavesList>();
+        wavesList = GetComponent<WavesList> ();
         waves = new Wave [3];
         spawnPoints = FindObjectOfType<SpawnPoints> ();
     }
     private void Start()
     {
-       
-        ec = ObjectsHolder.Instance.enemyController;
+
         waves = wavesList.GetWavesList (1);
     }
 
@@ -47,9 +45,9 @@ public class WaveController : MonoBehaviour
     {
         Wave wave = waves [waveIndex];
         print ("WI " + (waveIndex + 1));
-        for ( int i = 0; i < wave.creeps.Length; i++ )
+        for ( int i = 0; i < wave.humans.Length; i++ )
         {
-            SpawnHuman (wave.creeps [i]);
+            SpawnHuman (wave.humans [i]);
             countdown = timeBetweenWaves;
             yield return new WaitForSeconds (timeBetweenCreeps);
         }
@@ -57,18 +55,16 @@ public class WaveController : MonoBehaviour
 
     }
 
-    private void SpawnHuman( GameObject humanPrefab )
+    private void SpawnHuman( UnitTemplate humanTemplate )
     {
-        if ( humanPrefab == null )
+        if ( humanTemplate == null )
         {
-            throw new System.ArgumentNullException (nameof (humanPrefab));
+            throw new System.ArgumentNullException (nameof (humanTemplate));
         }
 
         int pos = Random.Range (1, 8);
-        GameObject humanGO = Instantiate (humanPrefab, spawnPoints.GetRandomSpawnPoint().position, Quaternion.identity) as GameObject;
+        GameObject humanGO = Instantiate (humanTemplate.unitPrefab, spawnPoints.GetRandomSpawnPoint ().position, Quaternion.identity) as GameObject;
         Human newHuman = humanGO.GetComponent<Human> ();
-        newHuman.SetLinePosition (pos);
-        ec.humans.Add (newHuman);
-        GameEvents.current.EnemyAppear ();
+        newHuman.Activate (pos, humanTemplate);
     }
 }

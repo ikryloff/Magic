@@ -26,7 +26,7 @@ public class UnitTemplate : ScriptableObject
     [Header ("For towers and humans")]
     public float attackRange;
     public float attackRate;
-    public GameObject towerPrefab;
+    public GameObject unitPrefab;
     public GameObject bulletPrefab;
     public Texture2D activeIcon;
     public Texture2D unActiveIcon;

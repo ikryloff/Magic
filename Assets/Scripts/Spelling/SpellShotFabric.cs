@@ -33,7 +33,7 @@ public class SpellShotFabric : MonoBehaviour
         if ( template.cost > PlayerCharacters.GetPlayerMP () )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
-            GameEvents.current.StopCastingAction ();
+            GameEvents.current.StopCastingEvent ();
             return false;
         }
 
@@ -43,7 +43,7 @@ public class SpellShotFabric : MonoBehaviour
             if ( _targetHumans.Count == 0 )
             {
                 GameEvents.current.NewGameMessage ("No target!");
-                GameEvents.current.StopCastingAction ();
+                GameEvents.current.StopCastingEvent ();
                 return false;
             }
             print (_targetHumans.Count + " targets in " + cells.Length);
@@ -55,7 +55,7 @@ public class SpellShotFabric : MonoBehaviour
             if ( _targetsTower == null )
             {
                 GameEvents.current.NewGameMessage ("No target for using spell!");
-                GameEvents.current.StopCastingAction ();
+                GameEvents.current.StopCastingEvent ();
                 return false;
             }
         }

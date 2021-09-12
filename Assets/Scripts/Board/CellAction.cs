@@ -5,30 +5,34 @@ public class CellAction : MonoBehaviour, IPointerEnterHandler
 {
     private Cell cell;
     private SpellCaster castManager;
-    private TouchController touchController;
-
+    private bool _isActive;
 
 
     private void Awake()
     {
         cell = GetComponent<Cell> ();
-        
+        GameEvents.current.OnSwitchTouch += SwitchActivity;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        touchController = ObjectsHolder.Instance.touchController;
+        GameEvents.current.OnSwitchTouch -= SwitchActivity;
     }
 
 
     public void OnPointerEnter( PointerEventData eventData )
     {
-        if ( !touchController.IsStopTouching () )
+        if ( _isActive )
         {
             if ( !cell.IsLoaded )
             {
                 cell.LoadCell ();
             }
         }
+    }
+
+    private void SwitchActivity( bool isOn )
+    {
+        _isActive = isOn;
     }
 }

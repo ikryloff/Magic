@@ -7,7 +7,6 @@ public class Barrier : TowerUnit
 
     private void Start()
     {
-        Debug.Log ("I am Barrier");
     }
 
 }

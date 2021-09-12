@@ -6,10 +6,8 @@ public class Bullet : MonoBehaviour
     private Transform _target;
     private float _speed;
     private BoardUnit _victim;
-    private float _damage;
     private float _hp;
-    private Unit.UnitClassProperty _classProperty;
-
+    private UnitTemplate _sender;
 
     public void SeekTowerToHeal( Tower tower, float hp )
     {
@@ -19,13 +17,16 @@ public class Bullet : MonoBehaviour
     }
 
 
-    public void SeekHuman( BoardUnit human, float damage, Unit.UnitClassProperty classProperty )
+    public void SeekHuman( BoardUnit human, UnitTemplate template )
     {
-        _speed = Constants.BULLET_SPEED;
-        _victim = human;
-        _target = human.transform;
-        _damage = damage;
-        _classProperty = classProperty;
+        if(human != null )
+        {
+            _speed = Constants.BULLET_SPEED;
+            _victim = human;
+            _target = human.transform;
+            _sender = template;
+        }
+        
         
     }
 
@@ -54,7 +55,7 @@ public class Bullet : MonoBehaviour
     {
         if(_victim != null )
         {
-            GameEvents.current.NewHit (_victim, _damage,_classProperty);
+            GameEvents.current.NewHit (_victim, _sender);
         }
         _target = null;
         _victim = null;

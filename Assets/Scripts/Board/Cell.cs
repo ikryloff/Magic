@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    
-    public SpriteRenderer CellRenderer;
-    private int _linePosition;
-    private int _columnNumber;
+
+    private SpriteRenderer _cellSprite;
+    private CellPos _cellPos;
     private Vector2 _position;
     public bool IsLoaded;
     public bool IsUsed;
     private bool _isEngaged;
     [SerializeField]
     private int cellType; // 0 - common, 1 - untouchable 
-    private SpellCaster castManager;
+    private SpellCaster _spellCaster;
     public Sprite spellSprite;
     public Sprite cellSprite;
     public Sprite colorSprite;
@@ -23,50 +20,48 @@ public class Cell : MonoBehaviour
     private TowerUnit _engagingTower;
     const int _cellNameNumberOfChars = 5;
 
-    private void Awake()
+   
+    public void Init( CellPos cellPos )
     {
-        CellRenderer = GetComponent<SpriteRenderer> ();
-        castManager = FindObjectOfType<SpellCaster> ();        
-    }
-
-    public void CellInit()
-    {
-        GetColumnNumber ();
+        _cellSprite = GetComponent<SpriteRenderer> ();
+        _spellCaster = FindObjectOfType<SpellCaster> ();
         GameEvents.current.OnTowerWasBuilt += SetEngagedByTower;
-    }
-
-    private void GetColumnNumber()
-    {
-        _columnNumber = int.Parse( name.Substring (_cellNameNumberOfChars) );
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.current.OnCastOver -= CountCell;
-        GameEvents.current.OnCastReset -= ReloadCell;
-        GameEvents.current.OnTowerWasBuilt -= SetEngagedByTower;        
-    }
-    void Start()
-    {
         GameEvents.current.OnCastOver += CountCell;
-        GameEvents.current.OnCastReset += ReloadCell;
+        GameEvents.current.OnCastResetAction += ReloadCell;
         spellSprite = ObjectsHolder.Instance.spellSprite;
         cellSprite = ObjectsHolder.Instance.cellSprite;
         colorSprite = ObjectsHolder.Instance.colorSprite;
         untouchableSprite = ObjectsHolder.Instance.untouchableSprite;
-
-        Wizard.IsStopCasting = true;
-        StartCoroutine (CastDelay ());
-
+        SetPos (cellPos);
+        
     }
 
-    public void SetEngagedByTower(TowerUnit tower, Cell cell)
+
+    private void OnDisable()
     {
-        if(cell == this)
+        GameEvents.current.OnCastOver -= CountCell;
+        GameEvents.current.OnCastResetAction -= ReloadCell;
+        GameEvents.current.OnTowerWasBuilt -= SetEngagedByTower;
+    }
+   
+
+    private void SetPos( CellPos cellPos )
+    {
+        _cellPos = cellPos;
+    }
+
+    public void SetEngagedByTower( TowerUnit tower, Cell cell )
+    {
+        if ( cell == this )
         {
             _isEngaged = true;
             _engagingTower = tower;
         }
+    }
+
+    public void SetUnusable()
+    {
+        _isEngaged = true;
     }
 
     public void SetFreefromTower()
@@ -87,64 +82,48 @@ public class Cell : MonoBehaviour
 
     public void ReloadCell()
     {
-        if ( CellRenderer)
+        if ( _cellSprite )
         {
-            if(cellType == 1)
-                CellRenderer.sprite = untouchableSprite;
+            if ( cellType == 1 )
+                _cellSprite.sprite = untouchableSprite;
             else
-                CellRenderer.sprite = cellSprite;
+                _cellSprite.sprite = cellSprite;
 
-            CellRenderer.sortingOrder = 0;
+            _cellSprite.sortingOrder = 0;
         }
         IsLoaded = false;
     }
 
     public void LoadCell()
     {
-        if ( Wizard.IsStopCasting )
-            return;
-        if ( CellRenderer )
+        if ( _cellSprite )
         {
-            CellRenderer.sprite = spellSprite;
-            CellRenderer.sortingOrder = 20;
+            _cellSprite.sprite = spellSprite;
+            _cellSprite.sortingOrder = 20;
         }
         IsLoaded = true;
-        castManager.CastLine.Add (this);
+        _spellCaster.CastLine.Add (this);
     }
 
-    public void ColorCell()
+    public void ColorCellToPrepare()
     {
-        if ( CellRenderer )
+        if ( _cellSprite )
         {
-            CellRenderer.sprite = colorSprite;
-            CellRenderer.sortingOrder = 0;
+            _cellSprite.sprite = colorSprite;
+            _cellSprite.sortingOrder = 0;
         }
-    }
-
-    IEnumerator CastDelay()
-    {
-        yield return new WaitForSeconds (0.5f);
-        Wizard.IsStopCasting = false;
     }
 
     public int GetLinePosition()
     {
-        return _linePosition;
-    }
-
-    public void SetLinePosition( int linePosition )
-    {
-        _linePosition = linePosition;
+        return _cellPos.Line;
     }
 
     public int GetColumnPosition()
     {
-        return _columnNumber;
+        return _cellPos.Col;
     }
 
-    public void SetColumnPosition( int columnNumber )
-    {
-        _columnNumber = columnNumber;
-    }
+
 
 }

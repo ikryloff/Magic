@@ -13,7 +13,6 @@ public class ObjectsHolder : MonoBehaviour
     public SpellsMaps spells;
     public Board field;
     public TowerBuilder buildingManager;
-    public EnemyController enemyController;
     public AttackSpeller attackManager;
     public Wizard wizard;
     public XPpoints xpPoints;
@@ -42,7 +41,6 @@ public class ObjectsHolder : MonoBehaviour
         buildingManager = FindObjectOfType<TowerBuilder> ();
         attackManager = FindObjectOfType<AttackSpeller> ();
         castManager = FindObjectOfType<SpellCaster> ();
-        enemyController = FindObjectOfType<EnemyController> ();
         touchController = FindObjectOfType<TouchController>();
         wizard = FindObjectOfType<Wizard> ();
         xpPoints = wizard.GetComponent<XPpoints> ();

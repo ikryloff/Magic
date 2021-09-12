@@ -32,6 +32,7 @@ public class TowerUnit : BoardUnit
         towerType = template.towerType;
         SetLinePosition (cell.GetLinePosition());
         SetColumnPosition (cell.GetColumnPosition());
+        DisplaceZPosition ();
     }
 
     public virtual void FindTarget() { }

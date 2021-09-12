@@ -20,12 +20,12 @@ public class SpellCaster : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.current.OnStopCastingEvent += StopCasting;
+        GameEvents.current.OnStopCastingAction += StopCasting;
     }
 
     private void OnDisable()
     {
-        GameEvents.current.OnStopCastingEvent -= StopCasting;
+        GameEvents.current.OnStopCastingAction -= StopCasting;
     }
 
     public void CastSpell()
@@ -47,7 +47,7 @@ public class SpellCaster : MonoBehaviour
     public void ClearCast()
     {
         DeleteCast ();
-        GameEvents.current.CastReset ();
+        GameEvents.current.CastResetEvent ();
     }
 
     IEnumerator MakeCastWithDelay()
@@ -63,15 +63,14 @@ public class SpellCaster : MonoBehaviour
             return;
         for ( int i = 0; i < castLine.Count; i++ )
         {
-            castLine [i].ColorCell ();
+            castLine [i].ColorCellToPrepare ();
         }
     }
 
     private void StopCasting()
     {
-        GameEvents.current.CastReset ();
         ClearCast ();
-        Wizard.IsStopCasting = false;
+        GameEvents.current.GameStateChangedEvent (GameManager.GameState.BoardActive);
         ui.SetPrepareValue (100);
         ui.SetDefaultPrepareIcon ();
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerBuilder : MonoBehaviour
@@ -6,32 +7,28 @@ public class TowerBuilder : MonoBehaviour
     public Wizard wizard;
     private UIManager ui;
     private UnitsOnBoard _boardUnits;
-    [SerializeField]
-    private Cell [] _defCells;
+    private List<Cell> _defCells;
     [SerializeField]
     private UnitTemplate _defTowerTemplate;
 
-
-
     private void Awake()
     {
+        Init ();
+    }
+   
+    private void Init()
+    {
         _boardUnits = FindObjectOfType<UnitsOnBoard> ();
-    }
-
-    private void Start()
-    {
-        InitDefenceTowerBuilding ();
-    }
-
-    private void InitDefenceTowerBuilding()
-    {
+        _defCells = new List<Cell> ();
         ui = FindObjectOfType<UIManager> ();
         wizard = FindObjectOfType<Wizard> ();
         print ("Init Defence TBuilder");
-        BuildTower (_defTowerTemplate, _defCells);
     }
 
-
+    private void GetDeffCells( List<Cell> cells )
+    {
+        _defCells = cells;
+    }
 
     public void BuildTower( UnitTemplate spellTemplate, Cell [] cells )
     {
@@ -44,10 +41,10 @@ public class TowerBuilder : MonoBehaviour
     {
         for ( int i = 0; i < cells.Length; i++ )
         {
-            if ( cells [i].GetEngaged() )
+            if ( cells [i].GetEngaged () )
             {
                 GameEvents.current.NewGameMessage ("Can`t do that here!");
-                GameEvents.current.StopCastingAction ();
+                GameEvents.current.StopCastingEvent ();
                 return false;
             }
         }
@@ -55,7 +52,7 @@ public class TowerBuilder : MonoBehaviour
         if ( wizard != null && spellTemplate.cost > wizard.GetManapoints () )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
-            GameEvents.current.StopCastingAction (); ;
+            GameEvents.current.StopCastingEvent (); ;
             return false;
         }
         return true;
@@ -63,7 +60,6 @@ public class TowerBuilder : MonoBehaviour
 
     IEnumerator PrepareBuildingRoutine( UnitTemplate spellTemplate, Cell [] cells )
     {
-        Wizard.IsStopCasting = true;
         //ui.SetPrepareIcon (spellTemplate);
         //wizard.ManaWaste (spellTemplate.cost);
         GameEvents.current.NewGameMessage (spellTemplate.unitName);
@@ -72,12 +68,12 @@ public class TowerBuilder : MonoBehaviour
         float value = 100;
         while ( time > 0 )
         {
-            //ui.SetPrepareValue (value);
+            ui.SetPrepareValue (value);
             time -= Time.deltaTime;
             value -= perc;
             yield return null;
         }
-        //ui.SetPrepareValue (0);
+        ui.SetPrepareValue (0);
 
         Building (spellTemplate, cells);
     }
@@ -86,22 +82,28 @@ public class TowerBuilder : MonoBehaviour
     {
         for ( int i = 0; i < cells.Length; i++ )
         {
-            GameObject newTowerGO = Instantiate (unitTemplate.towerPrefab, cells[i].transform.position, Quaternion.identity);
-            SetSpritePosition (newTowerGO, cells[i]);
+            GameObject newTowerGO = Instantiate (unitTemplate.unitPrefab, cells [i].transform.position, Quaternion.identity);
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
             newTower.towerCost = unitTemplate.cost / unitTemplate.targetIndexes.Length;
             newTower.Activate (unitTemplate, cells [i]);
             GameEvents.current.TowerWasBuilt (newTower, cells [i]);
         }
-        GameEvents.current.StopCastingAction ();
+        GameEvents.current.StopCastingEvent ();
     }
 
-    private void SetSpritePosition( GameObject go, Cell cell )
+  
+    public void BuildDefTower( List<Cell> cells )
     {
-        // to avoid texture flickering
-        SpriteRenderer sr = go.GetComponent<SpriteRenderer> ();
-        sr.sortingOrder = cell.GetLinePosition ();
-        go.transform.position += new Vector3 (0, 0, EnemyController.GetSpriteDisplace ());
+        for ( int i = 0; i < cells.Count; i++ )
+        {
+            GameObject newTowerGO = Instantiate (_defTowerTemplate.unitPrefab, cells [i].transform.position, Quaternion.identity);
+            TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
+            newTower.Activate (_defTowerTemplate, cells [i]);
+            GameEvents.current.TowerWasBuilt (newTower, cells [i]);
+        }
+
+        Debug.Log ("BuildDefTower");
+
     }
 }
 

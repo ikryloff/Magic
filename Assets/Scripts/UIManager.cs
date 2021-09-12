@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     TimeManager timeManager;
-    TouchController touchController;
     private bool magicPanelIsOn;
     SpellsMaps spells;
     Button menuButton;
@@ -95,15 +94,14 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        touchController = ObjectsHolder.Instance.touchController;
         spells = ObjectsHolder.Instance.spells;
         timeManager = FindObjectOfType<TimeManager> ();
         speedButton.clicked += SpeedGame;
         spellsButton.clicked += ToggleSchoolList;
-
+        CloseSchoolList ();
         menuButton.clicked += OpenMenu;
-        magicPanelIsOn = true;
-        ToggleSchoolList ();
+        magicPanelIsOn = false;
+        
         CleanMessage ();
         PrintSpellsQuantity ();
         SetPrepareValue (100);
@@ -158,7 +156,7 @@ public class UIManager : MonoBehaviour
     {
         if ( magicPanelIsOn ) // if we need to close
         {
-            StartSpelling ();
+            ResumeSpelling ();
             uISpellsManager.HideMagicPanel ();
             spellsButton.style.display = DisplayStyle.Flex;
             messageScreen.style.display = DisplayStyle.Flex;
@@ -176,6 +174,15 @@ public class UIManager : MonoBehaviour
             uISpellsManager.TurnTab (0);
             uISpellsManager.UpdateSpellBoard ();
         }
+    }
+
+    private void CloseSchoolList()
+    {
+        uISpellsManager.HideMagicPanel ();
+        spellsButton.style.display = DisplayStyle.Flex;
+        messageScreen.style.display = DisplayStyle.Flex;
+        gamePanel.style.display = DisplayStyle.Flex;
+        magicPanelIsOn = false;
     }
 
     public void SetPrepareValue( float value )
@@ -203,13 +210,11 @@ public class UIManager : MonoBehaviour
 
     public void StopSpelling()
     {
-        touchController.SetStopTouching (true);
-        timeManager.PauseGameOn ();
+        GameEvents.current.GameStateChangedEvent (GameManager.GameState.PauseGame);
     }
-    public void StartSpelling()
+    public void ResumeSpelling()
     {
-        timeManager.PauseGameOff ();
-        touchController.SetStopTouching (false);
+        GameEvents.current.GameStateChangedEvent (GameManager.GameState.ResumeGame);
     }
 
 

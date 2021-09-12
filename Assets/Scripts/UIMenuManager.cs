@@ -60,7 +60,7 @@ public class UIMenuManager : MonoBehaviour
 
     public void RestartGame()
     {
-        Wizard.IsStopCasting = false;
+        GameEvents.current.GameStateChangedEvent (GameManager.GameState.ResumeGame);
         SceneManager.LoadScene (0);
     }
 
@@ -78,7 +78,7 @@ public class UIMenuManager : MonoBehaviour
         else
         {
             root.style.display = DisplayStyle.None;
-            uIManager.StartSpelling ();
+            uIManager.ResumeSpelling ();
         }
     }
 

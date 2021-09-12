@@ -21,16 +21,7 @@ public class TimeManager : MonoBehaviour
             
     }
 
-    public void PauseGameOn()
-    {
-        Time.timeScale = 0;
-    }
-
-    public void PauseGameOff()
-    {
-        Time.timeScale = 1;
-    }
-
+   
     public void MaxSpeed()
     {
         Time.timeScale = 20;

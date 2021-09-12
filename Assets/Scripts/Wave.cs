@@ -2,5 +2,5 @@
 
 public class Wave
 {
-    public GameObject [] creeps;
+    public UnitTemplate [] humans;
 }

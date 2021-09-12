@@ -9,4 +9,14 @@ public class FirePoints : MonoBehaviour
     {
         return _points [Random.Range (0, _points.Length)];
     }
+
+    public void SetPointPosition( int index, Vector3 pos )
+    {
+        _points [index].position = pos;
+    }
+
+    public int GetPointsCount()
+    {
+        return _points.Length;
+    }
 }

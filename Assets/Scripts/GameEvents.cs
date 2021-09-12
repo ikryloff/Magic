@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
@@ -25,26 +26,40 @@ public class GameEvents : MonoBehaviour
     }
 
 
-
     public event Action OnCastOver;
-    public event Action OnStopCastingEvent;
-    public event Action OnFieldIsBuiltEvent;
-    public event Action OnCastReset;
+    public event Action <GameManager.GameState> OnGameStateChangedAction;
+    public event Action <bool> OnSwitchTouch;
+    public event Action OnStopCastingAction;
+    public event Action OnBoardIsBuiltAction;
+    public event Action OnCastResetAction;
     public event Action OnEnemyAppear;
     public event Action<TowerUnit, Cell> OnTowerWasBuilt;
     public event Action<Human, Cell> OnHumanPositionWasChanged;
     public event Action<string> OnNewGameMessage;
-    public event Action<BoardUnit, float, Unit.UnitClassProperty> OnNewHit;
-    public event Action<Human> OnHumanDeath;
+    public event Action<BoardUnit, UnitTemplate> OnNewHit;
+    public event Action<Human> OnHumanDeathAction;
 
-    public void HumanDeath( Human unit )
+    public void GameStateChangedEvent( GameManager.GameState state )
     {
-        OnHumanDeath?.Invoke (unit);
+        OnGameStateChangedAction?.Invoke (state);
+        Debug.Log ("GameState " + state);
     }
 
-    public void NewHit( BoardUnit unit, float damage, Unit.UnitClassProperty classProperty )
+    public void SwitchTouch( bool isOn )
     {
-        OnNewHit?.Invoke (unit, damage, classProperty );
+        OnSwitchTouch?.Invoke (isOn);
+        Debug.Log ("Touch " + isOn);
+    }
+
+
+    public void HumanDeathEvent( Human unit )
+    {
+        OnHumanDeathAction?.Invoke (unit);
+    }
+
+    public void NewHit( BoardUnit unit, UnitTemplate sender)
+    {
+        OnNewHit?.Invoke (unit, sender);
     }
 
     public void NewGameMessage( string message )
@@ -58,24 +73,21 @@ public class GameEvents : MonoBehaviour
         OnCastOver?.Invoke ();
     }
 
-    public void StopCastingAction()
+    public void StopCastingEvent()
     {
-        OnStopCastingEvent?.Invoke ();
+        OnStopCastingAction?.Invoke ();
     }
 
-    public void FieldIsBuiltAction()
+    public void BoardIsBuiltEvent()
     {
-        OnFieldIsBuiltEvent?.Invoke ();
+        OnBoardIsBuiltAction?.Invoke ();
     }
 
 
 
-    public void CastReset()
+    public void CastResetEvent()
     {
-        if ( OnCastReset != null )
-        {
-            OnCastReset ();
-        }
+        OnCastResetAction?.Invoke ();
     }
 
     public void EnemyAppear()
@@ -95,4 +107,6 @@ public class GameEvents : MonoBehaviour
     {
         OnHumanPositionWasChanged?.Invoke (human, cell);
     }
+
+  
 }

@@ -3,12 +3,9 @@ using UnityEngine;
 
 public class Human : BoardUnit
 {
-    EnemyController ec;
     private CreepAnimation creepAnimation;
     [SerializeField]
     private string enemyType;
-
-
     private float xp;
     private float speed;
     private bool isRanger;
@@ -21,19 +18,12 @@ public class Human : BoardUnit
     private float fireCountDown;
     private float damage;
     private string bulletName;
-
-
-
     public GameObject bulletPref;
     public GameObject impactPref;
     public GameObject deathPref;
     private GameObject suppressionWind;
     private GameObject defenceAffect;
     private ObjectsHolder oh;
-    private SpriteRenderer sprite;
-
-    public Transform creepTransform;
-
     public HealthBar healthBar;
     private GameObject healthBarGO;
     private XPpoints xpPoints;
@@ -58,21 +48,21 @@ public class Human : BoardUnit
         defenceAffect = GameAssets.instance.GetAssetByString (Constants.DEFFENCE_AFFECT);
         creepAnimation = GetComponent<CreepAnimation> ();
         healthBarGO = healthBar.gameObject;
-        creepTransform = gameObject.transform;
-        sprite = GetComponent<SpriteRenderer> ();
-        // SetCreepProperties ();
+
     }
 
-    private void Start()
+    public void Activate( int linePosition, UnitTemplate template )
     {
         oh = ObjectsHolder.Instance;
         xpPoints = oh.xpPoints;
         hp_norm = 1f;
-        startHp = hitPoints;
-        ec = oh.enemyController;
-        SetBullet ();
+        startHp = template.health;
+        hitPoints = startHp;
+        SetBullet (template);
         healthBarGO.SetActive (false);
+        SetLinePosition (linePosition);
         DisplaceZPosition (); // to prevent flicking
+
 
         // GetMainTower ();
         // GetClosestTower ();
@@ -80,25 +70,9 @@ public class Human : BoardUnit
 
     void Update()
     {
-        if ( isDead )
-            return;
-        creepTransform.Translate (Vector2.left * 0.11f * Time.deltaTime);
+        transform.Translate (Vector2.left * 0.11f * Time.deltaTime);
     }
 
-    private void SetCreepProperties()
-    {
-        xp = EnemyProperties.GetXP (enemyType);
-        speed = EnemyProperties.GetSpeed (enemyType);
-        hitPoints = EnemyProperties.GetHP (enemyType);
-        attackRange = EnemyProperties.GetAttackRange (enemyType);
-        fireDelay = EnemyProperties.GetFireDelay (enemyType);
-        damage = EnemyProperties.GetDamage (enemyType);
-        isRanger = EnemyProperties.IsRanger (enemyType);
-        if ( isRanger )
-        {
-            bulletName = EnemyProperties.GetBulletName (enemyType);
-        }
-    }
 
     public void SetSlowSpeed()
     {
@@ -115,21 +89,15 @@ public class Human : BoardUnit
         return isDead;
     }
 
-    private void DisplaceZPosition()
-    {
-        float dp = EnemyController.GetSpriteDisplace ();
-        sprite.sortingOrder = GetLinePosition ();
-        creepTransform.position = new Vector3 (creepTransform.position.x, creepTransform.position.y, creepTransform.position.z + dp);
 
-    }
 
     public void PlaySlowAffect()
     {
-        Instantiate (defenceAffect, creepTransform);
-        Instantiate (suppressionWind, creepTransform);
+        Instantiate (defenceAffect, transform);
+        Instantiate (suppressionWind, transform);
     }
 
-    private void OnTriggerEnter2D( Collider2D collider)
+    private void OnTriggerEnter2D( Collider2D collider )
     {
         if ( collider.gameObject.tag.Equals (Constants.CELL_TAG) )
         {
@@ -139,6 +107,7 @@ public class Human : BoardUnit
             GameEvents.current.HumanPositionWasChanged (this, cell);
         }
     }
+
 
     public void MoveUp()
     {
@@ -163,7 +132,7 @@ public class Human : BoardUnit
 
     public void MoveBack()
     {
-        creepTransform.position = new Vector3 (creepTransform.position.x + Constants.CELL_WIDTH * 5, creepTransform.position.y, creepTransform.position.z);
+        transform.position = new Vector3 (transform.position.x + Constants.CELL_WIDTH * 5, transform.position.y, transform.position.z);
 
     }
 
@@ -175,7 +144,6 @@ public class Human : BoardUnit
 
             creepAnimation.StopFightAnimation ();
             healthBarGO.SetActive (false);
-            ec.humans.Remove (this);
             xpPoints.AddPoints (xp, transform.position.x);
             MakeDeath ();
         }
@@ -183,32 +151,32 @@ public class Human : BoardUnit
 
 
 
-    public void TakeDamage( BoardUnit unit, float damage, Unit.UnitClassProperty property )
+    public void TakeDamage( BoardUnit unit, UnitTemplate sender )
     {
         if ( unit != this )
             return;
 
         if ( !healthBarGO.activeSelf )
             healthBarGO.SetActive (true);
-        hitPoints -= damage;
+        hitPoints -= sender.damage;
         hp_norm = hitPoints / startHp;
         healthBar.SetHBSize (hp_norm);
         MakeImpact ();
         creepAnimation.HitAnimation ();
         CheckHP ();
 
-        Debug.Log (this.name + " Got " + damage + " points of damage");
+        Debug.Log (this.name + " Got " + sender.damage + " points of damage");
     }
 
     private void MakeImpact()
     {
-        Instantiate (impactPref, creepTransform.position, Quaternion.identity);
+        Instantiate (impactPref, transform.position, Quaternion.identity);
     }
 
     private void MakeDeath()
     {
-        GameEvents.current.HumanDeath (this);
-        Instantiate (deathPref, creepTransform.position, Quaternion.identity);
+        GameEvents.current.HumanDeathEvent (this);
+        Instantiate (deathPref, transform.position, Quaternion.identity);
         Destroy (gameObject);
 
     }
@@ -267,10 +235,10 @@ public class Human : BoardUnit
         Fire (damage);
     }
 
-    private void SetBullet()
+    private void SetBullet( UnitTemplate template )
     {
-        if ( bulletName != null )
-            bulletPref = GameAssets.instance.GetAssetByString (bulletName);
+        if ( template.bulletPrefab == null )
+            bulletPref = template.bulletPrefab;
         impactPref = GameAssets.instance.GetAssetByString (Constants.BLOOD_IMPACT);
         deathPref = GameAssets.instance.GetAssetByString (Constants.CREEP_DEATH);
     }

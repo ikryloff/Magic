@@ -28,7 +28,7 @@ public class SpellDecoder : MonoBehaviour
     {
         if ( cells.Count <= 1 )
         {
-            GameEvents.current.StopCastingAction ();
+            GameEvents.current.StopCastingEvent ();
             return;
         }
         string spellCode = GetSpellcode (cells);
@@ -37,7 +37,7 @@ public class SpellDecoder : MonoBehaviour
         UnitTemplate entityTemplate = spellsMaps.GetSpellByString (spellCode);
         if( entityTemplate == null )
         {
-            GameEvents.current.StopCastingAction ();
+            GameEvents.current.StopCastingEvent ();
             return;
         }
 
@@ -53,24 +53,24 @@ public class SpellDecoder : MonoBehaviour
         int tempBottomPos = 0;
 
         _activeCells = null;
-
-        foreach ( Cell item in cells )
+        //calc bounds of used cells
+        foreach ( Cell cell in cells )
         {            
-            if ( item.GetLinePosition() < tempTopPos )
-                tempTopPos = item.GetLinePosition();
-            if ( item.GetLinePosition () > tempBottomPos )
-                tempBottomPos = item.GetLinePosition ();
-            if ( item.GetColumnPosition() < tempLeftPos )
-                tempLeftPos = item.GetColumnPosition ();
-            if ( item.GetColumnPosition () > tempRightPos )
-                tempRightPos = item.GetColumnPosition ();
+            if ( cell.GetLinePosition() < tempTopPos )
+                tempTopPos = cell.GetLinePosition();
+            if ( cell.GetLinePosition () > tempBottomPos )
+                tempBottomPos = cell.GetLinePosition ();
+            if ( cell.GetColumnPosition() < tempLeftPos )
+                tempLeftPos = cell.GetColumnPosition ();
+            if ( cell.GetColumnPosition () > tempRightPos )
+                tempRightPos = cell.GetColumnPosition ();
         }
         Top = tempTopPos;
         Bottom = tempBottomPos;
         Left = tempLeftPos;
         Right = tempRightPos;
 
-
+        //calc lenght of spellcode
         int spellLenght = (Bottom - Top + 1) * (Right - Left + 1) + (Bottom - Top + 1); 
 
         int [] spell = new int [spellLenght];
@@ -82,7 +82,9 @@ public class SpellDecoder : MonoBehaviour
         {
             for ( int j = tempLeftPos; j <= tempRightPos; j++ )
             {
-                Cell cell = _board.GetCell ( new CellPos(j, i));
+                //Debug.Log ("col " + j + " line " + i);
+                Cell cell = _board.GetCellByPosition ( new CellPos(j, i));
+                
                 if ( cell.IsLoaded )
                 {
                     spell [count] = 1;
