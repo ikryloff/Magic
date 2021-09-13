@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
@@ -19,15 +18,15 @@ public class Bullet : MonoBehaviour
 
     public void SeekHuman( BoardUnit human, UnitTemplate template )
     {
-        if(human != null )
+        if ( human != null )
         {
             _speed = Constants.BULLET_SPEED;
             _victim = human;
             _target = human.transform;
             _sender = template;
         }
-        
-        
+
+
     }
 
     private void Update()
@@ -47,18 +46,20 @@ public class Bullet : MonoBehaviour
         {
             HitTarget ();
             return;
-        }        
+        }
         transform.Translate (dir.normalized * distThisFrame, Space.World);
-        
+
     }
     private void HitTarget()
     {
-        if(_victim != null )
+        if ( _victim != null )
         {
             GameEvents.current.NewHit (_victim, _sender);
+            Instantiate (_victim.GetImpact (), transform.position, Quaternion.identity);
         }
         _target = null;
         _victim = null;
+
         Destroy (gameObject);
     }
 

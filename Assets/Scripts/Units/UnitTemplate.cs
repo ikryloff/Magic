@@ -28,17 +28,14 @@ public class UnitTemplate : ScriptableObject
     public float attackRate;
     public GameObject unitPrefab;
     public GameObject bulletPrefab;
+    public GameObject impactPrefab;
+    public GameObject deathPrefab;
     public Texture2D activeIcon;
     public Texture2D unActiveIcon;
 
-    [Header ("Temp")]
-    public bool isTowerActive;
-    public bool isEnemyAffect;
-    public string school;
-    public string target;
-    public int targetRow; // 8 - all, 1 - top, 2 - bottom, 3 - center, 4 - all inside, 0 - tower
-    public int [] targetCell;
-
+    [Header ("For humans")]
+    public float speed;
+    public float xp;
 
 }
 

@@ -6,7 +6,6 @@ using UnityEngine;
 public class AttackSpeller : MonoBehaviour
 {
     
-    public Wizard wizard;
     public Human targetEnemy;
     public List<Transform> targetsTransforms;
 
@@ -24,7 +23,6 @@ public class AttackSpeller : MonoBehaviour
 
     private void Start()
     {
-        wizard = ObjectsHolder.Instance.wizard;
         ui = ObjectsHolder.Instance.uIManager;
         castManager = ObjectsHolder.Instance.castManager;
     }

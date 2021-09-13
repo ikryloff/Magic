@@ -37,7 +37,15 @@ public class GameEvents : MonoBehaviour
     public event Action<Human, Cell> OnHumanPositionWasChanged;
     public event Action<string> OnNewGameMessage;
     public event Action<BoardUnit, UnitTemplate> OnNewHit;
+    public event Action<BoardUnit, float> OnHealthChangedAction;
     public event Action<Human> OnHumanDeathAction;
+
+
+    public void HealthChangedEvent( BoardUnit sender, float ratio )
+    {
+        OnHealthChangedAction?.Invoke (sender, ratio);
+    }
+
 
     public void GameStateChangedEvent( GameManager.GameState state )
     {

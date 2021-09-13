@@ -5,28 +5,14 @@ public class Human : BoardUnit
 {
     private CreepAnimation creepAnimation;
     [SerializeField]
-    private string enemyType;
-    private float xp;
-    private float speed;
-    private bool isRanger;
-    private bool isDead;
+    private float _xp;
+    private float _speed;
     private bool isSlow;
-    private float hitPoints;
-    private float startHp;
-    private float hp_norm;
     private float fireDelay;
     private float fireCountDown;
-    private float damage;
-    private string bulletName;
-    public GameObject bulletPref;
-    public GameObject impactPref;
     public GameObject deathPref;
     private GameObject suppressionWind;
     private GameObject defenceAffect;
-    private ObjectsHolder oh;
-    public HealthBar healthBar;
-    private GameObject healthBarGO;
-    private XPpoints xpPoints;
 
 
     //private float time;
@@ -47,30 +33,26 @@ public class Human : BoardUnit
         suppressionWind = GameAssets.instance.GetAssetByString (Constants.SUPPRESSION_WIND);
         defenceAffect = GameAssets.instance.GetAssetByString (Constants.DEFFENCE_AFFECT);
         creepAnimation = GetComponent<CreepAnimation> ();
-        healthBarGO = healthBar.gameObject;
 
     }
 
     public void Activate( int linePosition, UnitTemplate template )
     {
-        oh = ObjectsHolder.Instance;
-        xpPoints = oh.xpPoints;
-        hp_norm = 1f;
-        startHp = template.health;
-        hitPoints = startHp;
-        SetBullet (template);
-        healthBarGO.SetActive (false);
+        _unitTemplate = template;
+        _health = _unitTemplate.health;
+        _currentHealth = _health;
+        _xp = _unitTemplate.xp;
+        _speed = _unitTemplate.speed;
+        _impact = _unitTemplate.impactPrefab;
+        _death = _unitTemplate.deathPrefab;
         SetLinePosition (linePosition);
         DisplaceZPosition (); // to prevent flicking
-
-
-        // GetMainTower ();
-        // GetClosestTower ();
+        SetBullet (_unitTemplate);
     }
 
     void Update()
     {
-        transform.Translate (Vector2.left * 0.11f * Time.deltaTime);
+        transform.Translate (Vector2.left * _speed * Time.deltaTime);
     }
 
 
@@ -78,15 +60,10 @@ public class Human : BoardUnit
     {
         if ( !isSlow )
         {
-            speed = speed / 2;
+            _speed = _speed / 2;
             isSlow = true;
             PlaySlowAffect ();
         }
-    }
-
-    public bool IsDead()
-    {
-        return isDead;
     }
 
 
@@ -136,49 +113,17 @@ public class Human : BoardUnit
 
     }
 
-    private void CheckHP()
+    public override void AnimateHit()
     {
-        if ( hitPoints <= 0 )
-        {
-            isDead = true;
-
-            creepAnimation.StopFightAnimation ();
-            healthBarGO.SetActive (false);
-            xpPoints.AddPoints (xp, transform.position.x);
-            MakeDeath ();
-        }
-    }
-
-
-
-    public void TakeDamage( BoardUnit unit, UnitTemplate sender )
-    {
-        if ( unit != this )
-            return;
-
-        if ( !healthBarGO.activeSelf )
-            healthBarGO.SetActive (true);
-        hitPoints -= sender.damage;
-        hp_norm = hitPoints / startHp;
-        healthBar.SetHBSize (hp_norm);
-        MakeImpact ();
         creepAnimation.HitAnimation ();
-        CheckHP ();
-
-        Debug.Log (this.name + " Got " + sender.damage + " points of damage");
     }
 
-    private void MakeImpact()
-    {
-        Instantiate (impactPref, transform.position, Quaternion.identity);
-    }
 
-    private void MakeDeath()
+    public override void MakeDeath()
     {
         GameEvents.current.HumanDeathEvent (this);
-        Instantiate (deathPref, transform.position, Quaternion.identity);
+        Instantiate (_death, transform.position, Quaternion.identity);
         Destroy (gameObject);
-
     }
 
 
@@ -187,7 +132,7 @@ public class Human : BoardUnit
     {
         if ( fireCountDown <= 0 )
         {
-            Attack (damage);
+            Attack (_damage);
             fireCountDown = fireDelay;
         }
         fireCountDown -= Time.deltaTime;
@@ -235,13 +180,7 @@ public class Human : BoardUnit
         Fire (damage);
     }
 
-    private void SetBullet( UnitTemplate template )
-    {
-        if ( template.bulletPrefab == null )
-            bulletPref = template.bulletPrefab;
-        impactPref = GameAssets.instance.GetAssetByString (Constants.BLOOD_IMPACT);
-        deathPref = GameAssets.instance.GetAssetByString (Constants.CREEP_DEATH);
-    }
+ 
 
 }
 

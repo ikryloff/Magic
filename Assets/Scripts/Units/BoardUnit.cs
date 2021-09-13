@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class BoardUnit : Unit
 {
@@ -15,9 +16,26 @@ public class BoardUnit : Unit
     protected int _columnPosition;
 
     protected string _name;
+    protected float _health;
+    protected float _currentHealth;
+
+    protected float _damage;
 
     public float attackRange;
     public float attackRate;
+
+    public GameObject _bullet;
+    public GameObject _impact;
+    public GameObject _death;
+
+    protected UnitTemplate _unitTemplate;
+
+    public GameObject GetImpact()
+    {
+        return _impact;
+    }
+
+
 
     public int GetLinePosition()
     {
@@ -44,6 +62,27 @@ public class BoardUnit : Unit
         return _name;
     }
 
+    public UnitTemplate GetUnitTemplate()
+    {
+        return _unitTemplate;
+    }
+
+    public float GetUnitHealth()
+    {
+        return _health;
+    }
+    public void SetUnitHealth( float health )
+    {
+        _health = health;
+    }
+
+    public float GetUnitDamage()
+    {
+        return _damage;
+    }
+
+
+
     protected float GetSpriteDisplace()
     {
         if ( Displace > 0.9999f )
@@ -52,6 +91,7 @@ public class BoardUnit : Unit
         return Displace;
     }
 
+    // to prevent flickering
     protected void DisplaceZPosition()
     {
         SpriteRenderer sr = GetComponent<SpriteRenderer> ();
@@ -60,4 +100,42 @@ public class BoardUnit : Unit
         transform.position = new Vector3 (transform.position.x, transform.position.y, transform.position.z + dp);
 
     }
+
+    private void CheckHP()
+    {
+        if ( _currentHealth <= 0 )
+            MakeDeath ();
+        if (_currentHealth >= _health )
+            _currentHealth = _health;
+    }
+
+
+    public void TakeDamage( BoardUnit unit, UnitTemplate sender )
+    {
+        if ( unit != this )
+            return;
+        _currentHealth -= sender.damage;
+        float ratio = _currentHealth / _health;
+        ShowHealthBar (ratio);
+        AnimateHit ();
+        CheckHP ();
+
+        Debug.Log (this.name + " Got " + sender.damage + " points of damage");
+    }
+
+    private void ShowHealthBar(float ratio)
+    {
+        GameEvents.current.HealthChangedEvent (this, ratio);
+    }
+
+    public virtual void MakeDeath() { }
+    public virtual void AnimateHit() { }
+
+
+    public void SetBullet( UnitTemplate template )
+    {
+        if ( template.bulletPrefab == null )
+            _bullet = template.bulletPrefab;
+    }
+
 }

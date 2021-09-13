@@ -15,8 +15,6 @@ public class TowerUnit : BoardUnit
     public int towerID;
     public TowerType towerType;
     public int towerLevel;
-    public int towerDamage;
-    public int towerHealth;
     public int towerCost;
 
     
@@ -27,6 +25,7 @@ public class TowerUnit : BoardUnit
     
     public virtual void Activate( UnitTemplate template,  Cell cell )
     {
+        _unitTemplate = template;
         towerCost = template.cost;
         _name = template.unitName;
         towerType = template.towerType;
