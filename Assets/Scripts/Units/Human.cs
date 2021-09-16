@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Human : BoardUnit
@@ -10,23 +11,23 @@ public class Human : BoardUnit
     private bool isSlow;
     private float fireDelay;
     private float fireCountDown;
+    private List<TowerUnit> _towers;
     public GameObject deathPref;
     private GameObject suppressionWind;
     private GameObject defenceAffect;
+    private HumanState _humanState;
 
 
-    //private float time;
-
-    private void OnEnable()
+    public enum HumanState
     {
-        GameEvents.current.OnNewHit += TakeDamage;
+        Walk,
+        AttackLeft,
+        AttackRight,
+        ReadyLeft,
+        ReadyRight,
+        Hit,
+        Die,
     }
-    private void OnDisable()
-    {
-        GameEvents.current.OnNewHit -= TakeDamage;
-    }
-
-
 
     private void Awake()
     {
@@ -34,10 +35,79 @@ public class Human : BoardUnit
         defenceAffect = GameAssets.instance.GetAssetByString (Constants.DEFFENCE_AFFECT);
         creepAnimation = GetComponent<CreepAnimation> ();
 
+
     }
+
+    private void OnEnable()
+    {
+        GameEvents.current.OnNewHit += TakeDamage;
+        GameEvents.current.OnHumanPositionWasChanged += GetEnemies;
+        GameEvents.current.OnTowerWasBuilt += GetEnemies;
+    }
+    private void OnDisable()
+    {
+        GameEvents.current.OnNewHit -= TakeDamage;
+        GameEvents.current.OnHumanPositionWasChanged -= GetEnemies;
+        GameEvents.current.OnTowerWasBuilt -= GetEnemies;
+    }
+
+    private void GetEnemies( BoardUnit human, Cell cell )
+    {
+        if(human.GetType() == typeof(Human) && human != this )
+            return;
+
+        if ( cell.GetLinePosition() != _linePosition )
+            return;
+
+        List<TowerUnit> enemies = UnitsOnBoard.LineTowersList [_linePosition];
+
+        if ( enemies.Count == 0 )
+            return;
+
+        for ( int i = 0; i < enemies.Count; i++ )
+        {
+            if ( Mathf.Abs (enemies [i].GetColumnPosition () - _columnPosition) <= attackRange )
+            {
+                if ( !_towers.Contains (enemies [i]) )
+                {
+                    _towers.Add (enemies [i]);
+                    Debug.Log (name + " Found " + enemies [i].name + " Count " + _towers.Count + " at line " + _linePosition);
+                }
+            }
+        }
+
+        if(_towers.Count > 0 )
+        {
+            Decide ();
+        }
+        else
+        {
+            ChangeState (HumanState.Walk);
+        }
+
+    }
+
+    private void Decide()
+    {
+        if(GetRandomTarget().transform.position.x < transform.position.x )
+        {
+            ChangeState (HumanState.ReadyLeft);
+        }
+        else
+        {
+            ChangeState (HumanState.ReadyRight);
+        }
+    }
+
+    private TowerUnit GetRandomTarget()
+    {
+        return _towers [Random.Range (0, _towers.Count)];
+    }
+   
 
     public void Activate( int linePosition, UnitTemplate template )
     {
+        _towers = new List<TowerUnit> ();
         _unitTemplate = template;
         _health = _unitTemplate.health;
         _currentHealth = _health;
@@ -45,16 +115,53 @@ public class Human : BoardUnit
         _speed = _unitTemplate.speed;
         _impact = _unitTemplate.impactPrefab;
         _death = _unitTemplate.deathPrefab;
+        attackRange = _unitTemplate.attackRange;
         SetLinePosition (linePosition);
         DisplaceZPosition (); // to prevent flicking
         SetBullet (_unitTemplate);
+        ChangeState (HumanState.Walk);
+
     }
 
     void Update()
     {
-        transform.Translate (Vector2.left * _speed * Time.deltaTime);
+        UpdateState ();
     }
 
+    public void UpdateState()
+    {
+        switch ( _humanState )
+        {
+            case HumanState.Walk:
+                Walk ();
+                break;
+            case HumanState.AttackLeft:
+                break;
+            case HumanState.AttackRight:
+                break;
+            case HumanState.ReadyLeft:
+                _speed = 0;
+                break;
+            case HumanState.ReadyRight:
+                _speed = 0;
+                break;
+            case HumanState.Hit:
+                break;
+            case HumanState.Die:
+                break;
+        }
+    }
+
+    private void ChangeState(HumanState state )
+    {
+        _humanState = state;
+        Debug.Log ( name +  " State " + _humanState);
+    }
+
+    private void Walk()
+    {
+        transform.Translate (Vector2.left * _speed * Time.deltaTime);
+    }
 
     public void SetSlowSpeed()
     {
@@ -74,16 +181,18 @@ public class Human : BoardUnit
         Instantiate (suppressionWind, transform);
     }
 
-    private void OnTriggerEnter2D( Collider2D collider )
+    private void OnTriggerExit2D( Collider2D collider )
     {
         if ( collider.gameObject.tag.Equals (Constants.CELL_TAG) )
         {
             Cell cell = collider.GetComponent<Cell> ();
-            this.SetColumnPosition (cell.GetColumnPosition ());
+            this.SetColumnPosition (cell.GetColumnPosition () - 1);
             this.SetLinePosition (cell.GetLinePosition ());
             GameEvents.current.HumanPositionWasChanged (this, cell);
         }
     }
+
+
 
 
     public void MoveUp()
@@ -180,7 +289,7 @@ public class Human : BoardUnit
         Fire (damage);
     }
 
- 
+
 
 }
 

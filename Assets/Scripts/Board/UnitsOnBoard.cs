@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class UnitsOnBoard : MonoBehaviour
 {
-    private List <TowerUnit> [] _lineTowersList;
-    private List <Human> [] _lineHumansLists;
+    public static List <TowerUnit> [] LineTowersList;
+    public static List <Human> [] LineHumansLists;
 
     private void OnEnable()
     {
@@ -24,15 +24,15 @@ public class UnitsOnBoard : MonoBehaviour
     private void InitLists()
     {
         Debug.Log ("Init BoardUnits Lists");
-        _lineTowersList = new List<TowerUnit> [9]; // 0 and 8 are unused
-        for ( int i = 0; i < _lineTowersList.Length; i++ )
+        LineTowersList = new List<TowerUnit> [9]; // 0 and 8 are unused
+        for ( int i = 0; i < LineTowersList.Length; i++ )
         {
-            _lineTowersList [i] = new List<TowerUnit> ();
+            LineTowersList [i] = new List<TowerUnit> ();
         }
-        _lineHumansLists = new List<Human> [9]; // 0 and 8 are unused
-        for ( int i = 0; i < _lineHumansLists.Length; i++ )
+        LineHumansLists = new List<Human> [9]; // 0 and 8 are unused
+        for ( int i = 0; i < LineHumansLists.Length; i++ )
         {
-            _lineHumansLists [i] = new List<Human> ();
+            LineHumansLists [i] = new List<Human> ();
         }
         GameEvents.current.BoardIsBuiltEvent ();
 
@@ -42,55 +42,55 @@ public class UnitsOnBoard : MonoBehaviour
 
     public  List<TowerUnit> GetLineTowersList(int lineNumber) 
     {
-        return _lineTowersList [lineNumber];
+        return LineTowersList [lineNumber];
     }
 
     public  List<Human> GetLineHumansList( int lineNumber )
     {
-        return _lineHumansLists [lineNumber];
+        return LineHumansLists [lineNumber];
     }
 
     public  void AddTowerToLineTowersList (TowerUnit tower, Cell cell )
     {
-        _lineTowersList [cell.GetLinePosition()].Add (tower);
+        LineTowersList [cell.GetLinePosition()].Add (tower);
         Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + cell.GetLinePosition ());
     }
 
     public  void RemoveTowerFromLineTowersList( TowerUnit tower )
     {
-        _lineTowersList [tower.GetLinePosition ()].Remove (tower);
+        LineTowersList [tower.GetLinePosition ()].Remove (tower);
     }
 
     public  void AddHumanToLineHumansList( Human human, Cell cell )
     {
-        if ( _lineHumansLists [cell.GetLinePosition ()].Contains (human) )
+        if ( LineHumansLists [cell.GetLinePosition ()].Contains (human) )
             return;
-        _lineHumansLists [cell.GetLinePosition ()].Add (human);
+        LineHumansLists [cell.GetLinePosition ()].Add (human);
         Debug.Log ("Human " + human.name + " Added to list " + cell.GetLinePosition ());
     }
 
     public void RemoveHumanFromLineHumansList( Human human )
     {
-        _lineHumansLists [human.GetLinePosition ()].Remove (human);
+        LineHumansLists [human.GetLinePosition ()].Remove (human);
         Debug.Log ("Human " + human.name + " Removed from list " + human.GetLinePosition ());
     }
 
     public Human GetRandomHumanToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
-        if ( _lineHumansLists [line].Count == 0 )
+        if ( LineHumansLists [line].Count == 0 )
         {
             return null;
         }
         else
-            return _lineHumansLists [line] [Random.Range (0, _lineHumansLists [line].Count)];
+            return LineHumansLists [line] [Random.Range (0, LineHumansLists [line].Count)];
     }
 
     public Human GetNearestHumanToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
 
-        if ( _lineHumansLists [line].Count == 0 )
+        if ( LineHumansLists [line].Count == 0 )
         {
             return null;
         }
@@ -98,9 +98,9 @@ public class UnitsOnBoard : MonoBehaviour
         {
             int min = int.MaxValue;
             Human nearest = null;
-            for ( int i = 0; i < _lineHumansLists [line].Count; i++ )
+            for ( int i = 0; i < LineHumansLists [line].Count; i++ )
             {
-                Human human = _lineHumansLists [line] [i];
+                Human human = LineHumansLists [line] [i];
                 if ( human.GetColumnPosition () < min )
                 {
                     nearest = human;
@@ -115,12 +115,12 @@ public class UnitsOnBoard : MonoBehaviour
     public List <Human> GetAllHumansInLineToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
-        if ( _lineHumansLists [line].Count == 0 )
+        if ( LineHumansLists [line].Count == 0 )
         {
             return null;
         }
         else
-            return _lineHumansLists [line];
+            return LineHumansLists [line];
 
     }
 
@@ -128,13 +128,13 @@ public class UnitsOnBoard : MonoBehaviour
     {
         List<Human> allHumans = new List<Human> ();
 
-        for ( int i = 0; i < _lineHumansLists.Length; i++ )
+        for ( int i = 0; i < LineHumansLists.Length; i++ )
         {
-            for ( int j = 0; j < _lineHumansLists[i].Count; j++ )
+            for ( int j = 0; j < LineHumansLists[i].Count; j++ )
             {
-                if(_lineHumansLists[i].Count != 0 )
+                if(LineHumansLists[i].Count != 0 )
                 {
-                    allHumans.Add (_lineHumansLists [i] [j]);
+                    allHumans.Add (LineHumansLists [i] [j]);
                 }                    
             }
         }
@@ -147,15 +147,15 @@ public class UnitsOnBoard : MonoBehaviour
     public TowerUnit GetTowerUnitFromCell( Cell cell )
     {
         int line = cell.GetLinePosition ();
-        if ( _lineTowersList [line].Count == 0 )
+        if ( LineTowersList [line].Count == 0 )
         {
             return null;
         }
         else
         {
-            for ( int i = 0; i < _lineTowersList[line].Count; i++ )
+            for ( int i = 0; i < LineTowersList[line].Count; i++ )
             {
-                TowerUnit towerUnit = _lineTowersList [line][i];
+                TowerUnit towerUnit = LineTowersList [line][i];
                 if ( towerUnit.GetColumnPosition () == cell.GetColumnPosition () )
                     return towerUnit;
             }

@@ -21,7 +21,7 @@ public class BoardUnit : Unit
 
     protected float _damage;
 
-    public float attackRange;
+    public int attackRange;
     public float attackRate;
 
     public GameObject _bullet;
