@@ -97,7 +97,9 @@ public class Board : MonoBehaviour
 
     public Cell GetCellByPosition( CellPos pos )
     {
-        return _positionCellMap [pos];
+        if ( _positionCellMap.ContainsKey (pos) )
+            return _positionCellMap [pos];
+        else return null;
     }
 }
 

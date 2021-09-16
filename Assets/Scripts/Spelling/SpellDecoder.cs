@@ -70,10 +70,8 @@ public class SpellDecoder : MonoBehaviour
         Left = tempLeftPos;
         Right = tempRightPos;
 
-        //calc lenght of spellcode
-        int spellLenght = (Bottom - Top + 1) * (Right - Left + 1) + (Bottom - Top + 1); 
 
-        int [] spell = new int [spellLenght];
+        List<int> spell = new List<int>();
         _activeCells = new Cell [cells.Count];
 
         int count = 0;
@@ -84,22 +82,22 @@ public class SpellDecoder : MonoBehaviour
             {
                 //Debug.Log ("col " + j + " line " + i);
                 Cell cell = _board.GetCellByPosition ( new CellPos(j, i));
+                if ( cell == null )
+                    continue;
                 
                 if ( cell.IsLoaded )
                 {
-                    spell [count] = 1;
+                    spell.Add(1);
                     _activeCells [countCell] = cell;
                     countCell += 1;
                 }
                 else
-                    spell [count] = 0;
+                    spell.Add (0);
 
-                count += 1;
 
                 if ( j == tempRightPos )
                 {
-                    spell [count] = 2;
-                    count++;
+                    spell.Add (2);
                 }
             }
         }
