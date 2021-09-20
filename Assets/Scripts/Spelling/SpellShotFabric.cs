@@ -6,14 +6,12 @@ public class SpellShotFabric : MonoBehaviour
     private Cell [] _cells;
     private UnitTemplate _template;
     private int [] _targetLines;
-    private UnitsOnBoard _unitsOnBoard;
     List<Human> _targetHumans;
     TowerUnit _targetsTower;
     private FirePoints _firePoints;
 
     private void Awake()
     {
-        _unitsOnBoard = FindObjectOfType<UnitsOnBoard> ();
         _firePoints = FindObjectOfType<FirePoints> ();
     }
 
@@ -46,7 +44,6 @@ public class SpellShotFabric : MonoBehaviour
                 GameEvents.current.StopCastingEvent ();
                 return false;
             }
-            print (_targetHumans.Count + " targets in " + cells.Length);
         }
 
         if ( template.spellType == SpellUnit.SpellType.HealingSpell || template.spellType == SpellUnit.SpellType.ReturnManaSpell )
@@ -104,7 +101,7 @@ public class SpellShotFabric : MonoBehaviour
                 {
                     for ( int i = 0; i < cells.Length; i++ )
                     {
-                        Human human = _unitsOnBoard.GetRandomHumanToAttack (cells [i]);
+                        Human human = UnitsOnBoard.GetRandomHumanToAttack (cells [i]);
                         if ( human != null )
                         {
                             units.Add (human);
@@ -117,7 +114,7 @@ public class SpellShotFabric : MonoBehaviour
                 {
                     for ( int i = 0; i < cells.Length; i++ )
                     {
-                        Human human = _unitsOnBoard.GetNearestHumanToAttack (cells [i]);
+                        Human human = UnitsOnBoard.GetNearestHumanToAttack (cells [i]);
                         if ( human != null )
                         {
                             units.Add (human);
@@ -131,7 +128,7 @@ public class SpellShotFabric : MonoBehaviour
                     for ( int i = 0; i < cells.Length; i++ )
                     {
                         List<Human> lineUnits = new List<Human> ();
-                        lineUnits = _unitsOnBoard.GetAllHumansInLineToAttack (cells [i]);
+                        lineUnits = UnitsOnBoard.GetAllHumansInLineToAttack (cells [i]);
                         if ( lineUnits != null )
                         {
                             for ( int j = 0; j < lineUnits.Count; j++ )
@@ -144,7 +141,7 @@ public class SpellShotFabric : MonoBehaviour
                 }
                 break;
             case Unit.UnitAttackPower.All:
-                units = _unitsOnBoard.GetAllHumansToAttack ();
+                units = UnitsOnBoard.GetAllHumansToAttack ();
                 break;
         }
         return units;
@@ -157,7 +154,7 @@ public class SpellShotFabric : MonoBehaviour
         Debug.Log ("TargetCell " + cells [0].GetLinePosition () + " " + cells [0].GetColumnPosition ());
         if ( cells.Length != 1 )
             return null;
-        TowerUnit tower = _unitsOnBoard.GetTowerUnitFromCell (cells [0]);
+        TowerUnit tower = UnitsOnBoard.GetTowerUnitFromCell (cells [0]);
         if ( tower != null )
             return tower;
         else

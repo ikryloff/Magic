@@ -16,23 +16,33 @@ public class TowerUnit : BoardUnit
     public TowerType towerType;
     public int towerLevel;
     public int towerCost;
-
-    
+    protected Cell _cell;
 
     public SpellUnit.SpellType spellType;
 
     public ParticleSystem appearParticles;
-    
-    public virtual void Activate( UnitTemplate template,  Cell cell )
+
+    public void Activate( UnitTemplate template,  Cell cell )
     {
-        _unitTemplate = template;
-        towerCost = template.cost;
-        _name = template.unitName;
+        _cell = cell;
         towerType = template.towerType;
         SetLinePosition (cell.GetLinePosition());
         SetColumnPosition (cell.GetColumnPosition());
-        DisplaceZPosition ();
+        Init (template);
+        towerCost = template.cost;
+
+       // _boardUnitState = GetComponent<BoardUnitState> ();
+       // _boardUnitState.Init ();
     }
+
+    public override void MakeDeath()
+    {
+        GameEvents.current.TowerUnitDeathEvent (this, Board.GetCellByPosition(new CellPos(GetColumnPosition(), GetLinePosition())));
+        _cell.SetFreefromTower ();
+        Instantiate (_death, transform.position, Quaternion.identity);
+        Destroy (gameObject);
+    }
+
 
     public virtual void FindTarget() { }
 

@@ -75,13 +75,13 @@ public class UIManager : MonoBehaviour
         manaValue = rootGameUI.Query<Label> ("mana-bar-value");
         defenceValue = rootGameUI.Query<Label> ("defence-bar-value");
         spellsText = rootGameUI.Query<Label> ("spells-txt");
-        FontUtilities.SetFontSize42 (spellsText);
+        Utilities.SetFontSize42 (spellsText);
         spellsNumber = rootGameUI.Query<Label> ("spells-number");
-        FontUtilities.SetFontSize42 (spellsNumber);
+        Utilities.SetFontSize42 (spellsNumber);
         xPText = rootGameUI.Query<Label> ("exp-text");
-        FontUtilities.SetFontSize42 (xPText);
+        Utilities.SetFontSize42 (xPText);
         xPoints = rootGameUI.Query<Label> ("exp-number");
-        FontUtilities.SetFontSize42 (xPoints);
+        Utilities.SetFontSize42 (xPoints);
 
         // Events
         GameEvents.current.OnNewGameMessage += SetMessage;

@@ -13,8 +13,8 @@ public class Board : MonoBehaviour
     private FirePoints _firePoints;
     private List<Cell> _defCells;
     private TowerBuilder _builder;
-    private Dictionary<Cell, CellPos> _cellsPositionMap;
-    private Dictionary<CellPos, Cell> _positionCellMap;
+    public static Dictionary<Cell, CellPos> _cellsPositionMap;
+    private static Dictionary<CellPos, Cell> _positionCellMap;
 
     private void Awake()
     {
@@ -60,7 +60,7 @@ public class Board : MonoBehaviour
                 _positionCellMap.Add (new CellPos (col, line), cell);
 
                 // set bounds of board
-                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1 )
+                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1 || x == 1 )
                 {
                     cell.SetUnusable ();
                 }
@@ -88,14 +88,15 @@ public class Board : MonoBehaviour
         _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.45f, _height / 2, -10);
         Debug.Log ("Cells was built");
         _builder.BuildDefTower (_defCells);
+        GameEvents.current.CastResetEvent ();
     }
 
-    public CellPos GetPositionByCell( Cell cell )
+    public static CellPos GetPositionByCell( Cell cell )
     {
         return _cellsPositionMap [cell];
     }
 
-    public Cell GetCellByPosition( CellPos pos )
+    public static Cell GetCellByPosition( CellPos pos )
     {
         if ( _positionCellMap.ContainsKey (pos) )
             return _positionCellMap [pos];

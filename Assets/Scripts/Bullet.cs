@@ -16,17 +16,15 @@ public class Bullet : MonoBehaviour
     }
 
 
-    public void SeekHuman( BoardUnit human, UnitTemplate template )
+    public void SeekTarget( BoardUnit target, UnitTemplate template )
     {
-        if ( human != null )
+        if ( target != null )
         {
             _speed = Constants.BULLET_SPEED;
-            _victim = human;
-            _target = human.transform;
+            _victim = target;
+            _target = target.transform;
             _sender = template;
         }
-
-
     }
 
     private void Update()

@@ -1,17 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 
-public class BoardUnit : Unit
+public class BoardUnit : Unit 
 {
-    public enum States
-    {
-        Idle, //common state
-        Seeking, //looking to the target
-        Attacking, //attack cycle animation
-        Dead //dead animation, before removal from play field
-    }
-
-    public static float Displace = 0f;
     protected int _linePosition;
     protected int _columnPosition;
 
@@ -21,21 +12,31 @@ public class BoardUnit : Unit
 
     protected float _damage;
 
-    public int attackRange;
-    public float attackRate;
+    protected int _attackRange;
+    protected float _attackRate;
 
-    public GameObject _bullet;
-    public GameObject _impact;
-    public GameObject _death;
+    protected GameObject _bullet;
+    protected GameObject _impact;
+    protected GameObject _death;
 
     protected UnitTemplate _unitTemplate;
+    protected UnitAnimation _animator;
+
+    protected BoardUnitState _boardUnitState;
+    #region
+
+    
+    
 
     public GameObject GetImpact()
     {
         return _impact;
     }
 
-
+    public GameObject GetBullet()
+    {
+        return _bullet;
+    }
 
     public int GetLinePosition()
     {
@@ -81,34 +82,26 @@ public class BoardUnit : Unit
         return _damage;
     }
 
-
-
-    protected float GetSpriteDisplace()
+    public float GetUnitRange()
     {
-        if ( Displace > 0.9999f )
-            Displace = 0.0001f;
-        Displace += 0.0001f;
-        return Displace;
+        return _attackRange;
     }
 
-    // to prevent flickering
-    protected void DisplaceZPosition()
+    public float GetUnitRate()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer> ();
-        float dp = GetSpriteDisplace ();
-        sr.sortingOrder = GetLinePosition ();
-        transform.position = new Vector3 (transform.position.x, transform.position.y, transform.position.z + dp);
-
+        return _attackRate;
     }
+
+    
+    
 
     private void CheckHP()
     {
         if ( _currentHealth <= 0 )
             MakeDeath ();
-        if (_currentHealth >= _health )
+        if ( _currentHealth >= _health )
             _currentHealth = _health;
     }
-
 
     public void TakeDamage( BoardUnit unit, UnitTemplate sender )
     {
@@ -117,20 +110,19 @@ public class BoardUnit : Unit
         _currentHealth -= sender.damage;
         float ratio = _currentHealth / _health;
         ShowHealthBar (ratio);
-        AnimateHit ();
         CheckHP ();
-
         Debug.Log (this.name + " Got " + sender.damage + " points of damage");
     }
 
-    private void ShowHealthBar(float ratio)
+    private void ShowHealthBar( float ratio )
     {
         GameEvents.current.HealthChangedEvent (this, ratio);
     }
 
+    public virtual BoardUnit GetRandomTarget() { return null; }
     public virtual void MakeDeath() { }
-    public virtual void AnimateHit() { }
-
+    public virtual void Idle() { }
+    public virtual void GetEnemies( BoardUnit human, Cell cell ) { }
 
     public void SetBullet( UnitTemplate template )
     {
@@ -138,4 +130,59 @@ public class BoardUnit : Unit
             _bullet = template.bulletPrefab;
     }
 
+    #endregion
+
+    protected UnitStateIdle _unitStateIdle;
+    protected UnitStateHold _unitStateHold;
+    protected UnitStateAttack _unitStateAttack;
+    protected UnitStateHit _unitStateHit;
+
+    protected void InitStateMachine()
+    {
+
+        _unitStateIdle = new UnitStateIdle (this, _unitTemplate, _animator);
+        _unitStateHit = new UnitStateHit (this, _unitTemplate, _animator);
+        _unitStateHold = new UnitStateHold (this);
+        _unitStateAttack = new UnitStateAttack (this);
+
+        ChangeState (_unitStateIdle);
+    }
+
+    protected void Init(UnitTemplate template)
+    {
+        _unitType = template.unitType;
+        _unitTemplate = template;
+        _name = template.unitName;
+        _health = template.health;
+        _currentHealth = _health;
+        _impact = template.impactPrefab;
+        _death = template.deathPrefab;
+        _attackRange = template.attackRange;
+        _attackRate = template.attackRate;
+        _animator = GetComponent<UnitAnimation>();
+        Utilities.DisplaceZPosition (this); // to prevent flicking
+        SetBullet (template);
+        StartListening ();
+        InitStateMachine ();
+    }
+
+    private void StartListening()
+    {
+        GameEvents.current.OnNewHit += TakeDamage;
+        GameEvents.current.OnHumanPositionWasChanged += GetEnemies;
+        GameEvents.current.OnTowerWasBuiltAction += GetEnemies;
+    }
+
+    private void StopListening()
+    {
+        Debug.Log ("Stop Listen");
+        GameEvents.current.OnNewHit -= TakeDamage;
+        GameEvents.current.OnHumanPositionWasChanged -= GetEnemies;
+        GameEvents.current.OnTowerWasBuiltAction -= GetEnemies;
+    }
+
+    private void OnDisable()
+    {
+        StopListening ();
+    }
 }

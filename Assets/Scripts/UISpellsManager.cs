@@ -92,7 +92,7 @@ public class UISpellsManager : MonoBehaviour
 
         itemName = root.Query<Label> ("spells-panel-tab-name");
         spellDescription = root.Query<Label> ("spell-desc-value");
-        FontUtilities.SetFontSize42 (spellDescription);
+        Utilities.SetFontSize42 (spellDescription);
 
 
         spell1 = root.Query<Button> ("spell-level1-but");

@@ -17,12 +17,13 @@
 
     public static float TOWER_HEAL_POINTS = 30f;
     //Strings
-    public static string ANIM_ENEMY_HIT_FORWARD = "enemy_hit_forward";
-    public static string ANIM_ENEMY_HIT_BACK = "enemy_hit_back";
-    public static string ANIM_ENEMY_FIGHT_STATE_FORWARD = "isInFight_Forward";
-    public static string ANIM_ENEMY_FIGHT_STATE_BACK = "isInFight_Back";
-    public static string ANIM_ENEMY_ATTACK_BACK = "enemy_attack_back";
-    public static string ANIM_ENEMY_ATTACK_FORWARD = "enemy_attack_forward";
+    public static string ANIM_UNIT_HIT_LEFT = "unit_hit_left";
+    public static string ANIM_UNIT_HIT_RIGHT = "unit_hit_right";
+    public static string ANIM_UNIT_WALK = "unit_walk";
+    public static string ANIM_UNIT_STAY_LEFT = "unit_stay_left";
+    public static string ANIM_UNIT_STAY_RIGHT = "unit_stay_right";
+    public static string ANIM_UNITY_ATTACK_RIGHT = "unit_attack_right";
+    public static string ANIM_UNITY_ATTACK_LEFT = "unit_attack_left";
 
 
     public static string ENEMY_TYPE_PEASANT = "peasant";

@@ -66,5 +66,6 @@ public class WaveController : MonoBehaviour
         GameObject humanGO = Instantiate (humanTemplate.unitPrefab, spawnPoints.GetRandomSpawnPoint ().position, Quaternion.identity) as GameObject;
         Human newHuman = humanGO.GetComponent<Human> ();
         newHuman.Activate (pos, humanTemplate);
+        UnitsOnBoard.AddHumanToLineHumansList (newHuman, pos);
     }
 }

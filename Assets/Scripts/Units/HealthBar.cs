@@ -29,7 +29,6 @@ public class HealthBar : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log ("HBDestroyed");
         GameEvents.current.OnHealthChangedAction -= ShowHealthBar;
     }
 

@@ -74,16 +74,19 @@ public class SpellDecoder : MonoBehaviour
         List<int> spell = new List<int>();
         _activeCells = new Cell [cells.Count];
 
-        int count = 0;
         int countCell = 0;
         for ( int i = tempTopPos; i <= tempBottomPos; i++ )
         {
             for ( int j = tempLeftPos; j <= tempRightPos; j++ )
             {
                 //Debug.Log ("col " + j + " line " + i);
-                Cell cell = _board.GetCellByPosition ( new CellPos(j, i));
+                Cell cell = Board.GetCellByPosition ( new CellPos(j, i));
+                //this spell code must be wrong
                 if ( cell == null )
+                {
+                    spell.Add (5);
                     continue;
+                }
                 
                 if ( cell.IsLoaded )
                 {

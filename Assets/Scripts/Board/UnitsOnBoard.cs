@@ -8,17 +8,13 @@ public class UnitsOnBoard : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.current.OnTowerWasBuilt += AddTowerToLineTowersList;
-        GameEvents.current.OnHumanPositionWasChanged += AddHumanToLineHumansList;
-        GameEvents.current.OnHumanDeathAction += RemoveHumanFromLineHumansList;
+        GameEvents.current.OnTowerUnitDeathAction += RemoveTowerFromLineTowersList;
         InitLists ();
     }
 
     private void OnDisable()
     {
-        GameEvents.current.OnTowerWasBuilt -= AddTowerToLineTowersList;
-        GameEvents.current.OnHumanPositionWasChanged -= AddHumanToLineHumansList;
-        GameEvents.current.OnHumanDeathAction -= RemoveHumanFromLineHumansList;
+        GameEvents.current.OnTowerUnitDeathAction -= RemoveTowerFromLineTowersList;
     }
 
     private void InitLists()
@@ -50,32 +46,33 @@ public class UnitsOnBoard : MonoBehaviour
         return LineHumansLists [lineNumber];
     }
 
-    public  void AddTowerToLineTowersList (TowerUnit tower, Cell cell )
+    public static void AddTowerToLineTowersList (TowerUnit tower, int line )
     {
-        LineTowersList [cell.GetLinePosition()].Add (tower);
-        Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + cell.GetLinePosition ());
+        LineTowersList [line].Add (tower);
+        Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + line);
     }
 
-    public  void RemoveTowerFromLineTowersList( TowerUnit tower )
+    public static void RemoveTowerFromLineTowersList( TowerUnit tower, Cell cell )
     {
         LineTowersList [tower.GetLinePosition ()].Remove (tower);
+        Debug.Log ("Tower " + tower.name + " Removed from list " + tower.GetLinePosition ());
     }
 
-    public  void AddHumanToLineHumansList( Human human, Cell cell )
+    public static void AddHumanToLineHumansList( Human human, int line )
     {
-        if ( LineHumansLists [cell.GetLinePosition ()].Contains (human) )
+        if ( LineHumansLists [line].Contains (human) )
             return;
-        LineHumansLists [cell.GetLinePosition ()].Add (human);
-        Debug.Log ("Human " + human.name + " Added to list " + cell.GetLinePosition ());
+        LineHumansLists [line].Add (human);
+        Debug.Log ("Human " + human.name + " Added to list " + line);
     }
 
-    public void RemoveHumanFromLineHumansList( Human human )
+    public static void RemoveHumanFromLineHumansList( Human human )
     {
         LineHumansLists [human.GetLinePosition ()].Remove (human);
         Debug.Log ("Human " + human.name + " Removed from list " + human.GetLinePosition ());
     }
 
-    public Human GetRandomHumanToAttack( Cell cell )
+    public static Human GetRandomHumanToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
         if ( LineHumansLists [line].Count == 0 )
@@ -86,7 +83,7 @@ public class UnitsOnBoard : MonoBehaviour
             return LineHumansLists [line] [Random.Range (0, LineHumansLists [line].Count)];
     }
 
-    public Human GetNearestHumanToAttack( Cell cell )
+    public static Human GetNearestHumanToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
 
@@ -112,7 +109,7 @@ public class UnitsOnBoard : MonoBehaviour
 
     }
 
-    public List <Human> GetAllHumansInLineToAttack( Cell cell )
+    public static List <Human> GetAllHumansInLineToAttack( Cell cell )
     {
         int line = cell.GetLinePosition ();
         if ( LineHumansLists [line].Count == 0 )
@@ -124,7 +121,7 @@ public class UnitsOnBoard : MonoBehaviour
 
     }
 
-    public List<Human> GetAllHumansToAttack( )
+    public static List<Human> GetAllHumansToAttack( )
     {
         List<Human> allHumans = new List<Human> ();
 
@@ -144,7 +141,7 @@ public class UnitsOnBoard : MonoBehaviour
 
     }
 
-    public TowerUnit GetTowerUnitFromCell( Cell cell )
+    public static TowerUnit GetTowerUnitFromCell( Cell cell )
     {
         int line = cell.GetLinePosition ();
         if ( LineTowersList [line].Count == 0 )

@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Unit : MonoBehaviour
+public class Unit : StateMachine
 {
-    private UnitType eType;
+    protected UnitType _unitType;
 
     public enum UnitType
     {
         Spell,
-        Tower,        
-        Human
+        Tower,
+        Human,
     }
 
     public enum UnitClassProperty
@@ -21,7 +17,7 @@ public class Unit : MonoBehaviour
         Necromancy,
         Deffence,
         Hunter,
-        Bravery,        
+        Bravery,
         Nobility,
         Holiness,
         Immunity
@@ -34,6 +30,11 @@ public class Unit : MonoBehaviour
         NearestInLine,
         RandomInLine,
         All,
-        
+
+    }
+
+    public UnitType GetUnitType()
+    {
+        return _unitType;
     }
 }

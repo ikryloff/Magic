@@ -86,7 +86,8 @@ public class TowerBuilder : MonoBehaviour
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
             newTower.towerCost = unitTemplate.cost / unitTemplate.targetIndexes.Length;
             newTower.Activate (unitTemplate, cells [i]);
-            GameEvents.current.TowerWasBuilt (newTower, cells [i]);
+            UnitsOnBoard.AddTowerToLineTowersList (newTower, cells[i].GetLinePosition());
+            GameEvents.current.TowerWasBuiltEvent (newTower, cells [i]);
         }
         GameEvents.current.StopCastingEvent ();
     }
@@ -99,7 +100,8 @@ public class TowerBuilder : MonoBehaviour
             GameObject newTowerGO = Instantiate (_defTowerTemplate.unitPrefab, cells [i].transform.position, Quaternion.identity);
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
             newTower.Activate (_defTowerTemplate, cells [i]);
-            GameEvents.current.TowerWasBuilt (newTower, cells [i]);
+            UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
+            GameEvents.current.TowerWasBuiltEvent (newTower, cells [i]);
         }
 
         Debug.Log ("BuildDefTower");
