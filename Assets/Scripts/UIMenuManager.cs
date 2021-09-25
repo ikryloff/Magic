@@ -60,7 +60,7 @@ public class UIMenuManager : MonoBehaviour
 
     public void RestartGame()
     {
-        GameEvents.current.GameStateChangedEvent (GameManager.GameState.ResumeGame);
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
         SceneManager.LoadScene (0);
     }
 

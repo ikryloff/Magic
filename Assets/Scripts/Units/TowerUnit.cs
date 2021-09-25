@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerUnit : BoardUnit
@@ -16,46 +15,49 @@ public class TowerUnit : BoardUnit
     public TowerType towerType;
     public int towerLevel;
     public int towerCost;
-    protected Cell _cell;
 
     public SpellUnit.SpellType spellType;
 
     public ParticleSystem appearParticles;
 
-    public void Activate( UnitTemplate template,  Cell cell )
+    public void Activate( UnitTemplate template, Cell cell )
     {
         _cell = cell;
         towerType = template.towerType;
-        SetLinePosition (cell.GetLinePosition());
-        SetColumnPosition (cell.GetColumnPosition());
+        SetLinePosition (cell.GetLinePosition ());
+        SetColumnPosition (cell.GetColumnPosition ());
         Init (template);
         towerCost = template.cost;
 
-       // _boardUnitState = GetComponent<BoardUnitState> ();
-       // _boardUnitState.Init ();
     }
 
     public override void MakeDeath()
     {
-        GameEvents.current.TowerUnitDeathEvent (this, Board.GetCellByPosition(new CellPos(GetColumnPosition(), GetLinePosition())));
+        UnitsOnBoard.RemoveTowerFromLineTowersList (this, _cell);
         _cell.SetFreefromTower ();
         Instantiate (_death, transform.position, Quaternion.identity);
+        SetDieState ();
         Destroy (gameObject);
     }
 
+    public override BoardUnit GetRandomTarget()
+    {
+        List<Human> humans = UnitsOnBoard.LineHumansLists [_linePosition];
 
-    public virtual void FindTarget() { }
+        if ( humans.Count == 0 )
+            return null;
 
-    
+        List<Human> humansInRange = new List<Human> ();
+        for ( int i = 0; i < humans.Count; i++ )
+        {
+            if ( Mathf.Abs (humans [i].GetColumnPosition () - _columnPosition) <= _attackRange )
+                humansInRange.Add (humans [i]);
+        }
+        if ( humansInRange.Count == 0 )
+            return null;
 
-    public virtual void FreeCell(Cell cell) { }
+        return humansInRange [Random.Range (0, humansInRange.Count)];
+    }
 
-    public virtual void Die() { }
-
-    public virtual void TakeDamage( float damage ) { }
-
-    public virtual void Attack( float damage, UnitClassProperty classProperty, GameObject bullet ) { }
-
-   
 
 }

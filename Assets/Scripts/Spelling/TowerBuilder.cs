@@ -15,7 +15,7 @@ public class TowerBuilder : MonoBehaviour
     {
         Init ();
     }
-   
+
     private void Init()
     {
         _boardUnits = FindObjectOfType<UnitsOnBoard> ();
@@ -44,7 +44,7 @@ public class TowerBuilder : MonoBehaviour
             if ( cells [i].GetEngaged () )
             {
                 GameEvents.current.NewGameMessage ("Can`t do that here!");
-                GameEvents.current.StopCastingEvent ();
+                GameEvents.current.StopCastingAction ();
                 return false;
             }
         }
@@ -52,7 +52,7 @@ public class TowerBuilder : MonoBehaviour
         if ( wizard != null && spellTemplate.cost > wizard.GetManapoints () )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
-            GameEvents.current.StopCastingEvent (); ;
+            GameEvents.current.StopCastingAction (); ;
             return false;
         }
         return true;
@@ -86,13 +86,18 @@ public class TowerBuilder : MonoBehaviour
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
             newTower.towerCost = unitTemplate.cost / unitTemplate.targetIndexes.Length;
             newTower.Activate (unitTemplate, cells [i]);
-            UnitsOnBoard.AddTowerToLineTowersList (newTower, cells[i].GetLinePosition());
-            GameEvents.current.TowerWasBuiltEvent (newTower, cells [i]);
+            cells [i].SetEngagedByTower (newTower);
+            // traps are invisible for humans
+            if ( newTower.towerType != TowerUnit.TowerType.Trap )
+            {
+                UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
+                GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
+            }
         }
-        GameEvents.current.StopCastingEvent ();
+        GameEvents.current.StopCastingAction ();
     }
 
-  
+
     public void BuildDefTower( List<Cell> cells )
     {
         for ( int i = 0; i < cells.Count; i++ )
@@ -101,7 +106,8 @@ public class TowerBuilder : MonoBehaviour
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
             newTower.Activate (_defTowerTemplate, cells [i]);
             UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
-            GameEvents.current.TowerWasBuiltEvent (newTower, cells [i]);
+            cells [i].SetEngagedByTower (newTower);
+            GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
         }
 
         Debug.Log ("BuildDefTower");

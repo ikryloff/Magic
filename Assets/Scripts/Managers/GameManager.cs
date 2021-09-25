@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        GameEvents.current.OnGameStateChangedAction += ChangeGameState;
+        GameEvents.current.OnGameStateChangedEvent += ChangeGameState;
     }
 
     private void OnDisable()
     {
-        GameEvents.current.OnGameStateChangedAction -= ChangeGameState;
+        GameEvents.current.OnGameStateChangedEvent -= ChangeGameState;
     }
 
     private void Start()

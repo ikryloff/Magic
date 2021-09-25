@@ -53,7 +53,6 @@ public class Bullet : MonoBehaviour
         if ( _victim != null )
         {
             GameEvents.current.NewHit (_victim, _sender);
-            Instantiate (_victim.GetImpact (), transform.position, Quaternion.identity);
         }
         _target = null;
         _victim = null;

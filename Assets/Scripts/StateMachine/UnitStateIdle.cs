@@ -15,17 +15,16 @@ public class UnitStateIdle : IUnitState
 
     public void Enter()
     {
-        Debug.Log ("Enter");
+        _unit.SetStartDirection (_template);
         _animator.IdleAnimation ();
     }
 
     public void Exit()
     {
-        _animator.StopAllAnimations ();
     }
 
-    public void Update()
+    public void Tick()
     {
-        _unit.Idle ();
+        _unit.IdleBehavior ();
     }
 }

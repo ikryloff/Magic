@@ -53,7 +53,7 @@ public class AttackSpeller : MonoBehaviour
         }
         ui.SetPrepareValue (0);
         shotFabric.CreateSpellShot (spellTemplate);
-        GameEvents.current.StopCastingEvent ();
+        GameEvents.current.StopCastingAction ();
     }
 
     

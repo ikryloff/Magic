@@ -8,13 +8,11 @@ public class UnitsOnBoard : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.current.OnTowerUnitDeathAction += RemoveTowerFromLineTowersList;
         InitLists ();
     }
 
     private void OnDisable()
     {
-        GameEvents.current.OnTowerUnitDeathAction -= RemoveTowerFromLineTowersList;
     }
 
     private void InitLists()

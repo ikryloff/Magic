@@ -17,6 +17,9 @@
 
     public static float TOWER_HEAL_POINTS = 30f;
     //Strings
+    public static string UNIT_LEFT_DIR = "unit_left";
+    public static string UNIT_RIGHT_DIR = "unit_right";
+
     public static string ANIM_UNIT_HIT_LEFT = "unit_hit_left";
     public static string ANIM_UNIT_HIT_RIGHT = "unit_hit_right";
     public static string ANIM_UNIT_WALK = "unit_walk";

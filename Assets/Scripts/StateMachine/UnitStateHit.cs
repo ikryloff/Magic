@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitStateHit : IUnitState
@@ -19,16 +17,31 @@ public class UnitStateHit : IUnitState
 
     public void Enter()
     {
-        
+        if ( _unit == null )
+            return;
+
+        GameEvents.current.OnAnimationFinishedAction += ExitCondition;
+        if ( _unit.GetDirection () == Constants.UNIT_LEFT_DIR )
+            _animator.AnimateHitWhenLeft ();
+        else
+            _animator.AnimateHitWhenRight ();
     }
 
     public void Exit()
     {
-        
+        GameEvents.current.OnAnimationFinishedAction -= ExitCondition;
     }
 
-    public void Update()
+    public void Tick() { return;}
+
+    private void ExitCondition( BoardUnit unit, string animType )
     {
-        
+        if ( _unit == unit )
+        {
+            if ( animType == Constants.ANIM_UNIT_HIT_LEFT || animType == Constants.ANIM_UNIT_HIT_RIGHT )
+            {
+                _unit.SetHoldState ();
+            }
+        }
     }
 }

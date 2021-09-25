@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class UnitAnimation : MonoBehaviour
@@ -11,8 +10,6 @@ public class UnitAnimation : MonoBehaviour
     private float _hitLeftTime;
     private float _hitRightTime;
     private BoardUnit _unit;
-    
-    public bool IsOver;
 
     private void Awake()
     {
@@ -27,7 +24,7 @@ public class UnitAnimation : MonoBehaviour
         AnimationClip [] clips = animator.runtimeAnimatorController.animationClips;
         foreach ( AnimationClip clip in clips )
         {
-            if(clip.name.Equals(Constants.ANIM_UNIT_HIT_LEFT) )
+            if ( clip.name.Equals (Constants.ANIM_UNIT_HIT_LEFT) )
                 _hitLeftTime = clip.length;
             if ( clip.name.Equals (Constants.ANIM_UNIT_HIT_RIGHT) )
                 _hitRightTime = clip.length;
@@ -38,78 +35,87 @@ public class UnitAnimation : MonoBehaviour
         }
     }
 
-    public void HitRightAnimation()
+    public void AnimateHitWhenLeft()
     {
-        animator.Play (Constants.ANIM_UNIT_HIT_RIGHT);
-        StartCoroutine (HitAnimationRoutine (_hitRightTime));
-    }
-    public void HitLeftAnimation()
-    {
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_HIT_LEFT);
-        StartCoroutine (HitAnimationRoutine (_hitLeftTime));
+        StartCoroutine (HitAnimationRoutine (_hitLeftTime, Constants.ANIM_UNIT_HIT_LEFT));
+    }
+
+    public void AnimateHitWhenRight()
+    {
+        animator.enabled = true;
+        animator.Play (Constants.ANIM_UNIT_HIT_RIGHT);
+        StartCoroutine (HitAnimationRoutine (_hitRightTime, Constants.ANIM_UNIT_HIT_RIGHT));
     }
 
     public void AttackLeftAnimation()
     {
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNITY_ATTACK_LEFT);
-        StartCoroutine (AttackAnimationRoutine (_attackLeftTime));
+        StartCoroutine (AttackAnimationRoutine (_attackLeftTime, Constants.ANIM_UNITY_ATTACK_LEFT));
     }
 
     public void AttackRightAnimation()
     {
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNITY_ATTACK_RIGHT);
-        StartCoroutine (AttackAnimationRoutine (_attackRightTime));
+        StartCoroutine (AttackAnimationRoutine (_attackRightTime, Constants.ANIM_UNITY_ATTACK_RIGHT));
     }
 
     public void AnimateWalk()
     {
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_WALK);
     }
 
     public void AnimateStayLeft()
     {
+        Debug.Log ("AnimationStayLeft");
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_STAY_LEFT);
 
     }
 
     public void AnimateStayRight()
     {
+        animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_STAY_RIGHT);
     }
 
-    private IEnumerator HitAnimationRoutine(float length)
+    private IEnumerator HitAnimationRoutine( float length, string animType )
     {
         while ( length > 0 )
         {
             length -= Time.deltaTime;
             yield return null;
         }
-        //unitState.Decide();
+        GameEvents.current.AnimationFinishedEvent (_unit, animType);
     }
 
-    private IEnumerator AttackAnimationRoutine( float length )
+    private IEnumerator AttackAnimationRoutine( float length, string animType )
     {
         while ( length > 0 )
         {
             length -= Time.deltaTime;
             yield return null;
         }
-       // unitState.Fire ();
+        GameEvents.current.AnimationFinishedEvent (_unit, animType);
     }
 
     public void StopAllAnimations()
     {
         StopAllCoroutines ();
+        animator.enabled = false;
     }
 
     public void IdleAnimation()
     {
-        StopAllCoroutines ();
+        animator.enabled = true;
         if ( _unit.GetUnitType () == Unit.UnitType.Human )
             AnimateWalk ();
         else
             AnimateStayRight ();
-
     }
 
 }

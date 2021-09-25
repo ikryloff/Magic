@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Barrier : TowerUnit
 {
+    public override void SeekEnemies( BoardUnit unit, Cell cell ) { return; }
 
-    private void Start()
-    {
-    }
-
+    public override BoardUnit GetRandomTarget() { return null; }
 }

@@ -25,7 +25,6 @@ public class Cell : MonoBehaviour
     {
         _cellSprite = GetComponent<SpriteRenderer> ();
         _spellCaster = FindObjectOfType<SpellCaster> ();
-        GameEvents.current.OnTowerWasBuiltAction += SetEngagedByTower;
         GameEvents.current.OnCastOver += CountCell;
         GameEvents.current.OnCastResetAction += ReloadCell;
         spellSprite = ObjectsHolder.Instance.spellSprite;
@@ -41,7 +40,6 @@ public class Cell : MonoBehaviour
     {
         GameEvents.current.OnCastOver -= CountCell;
         GameEvents.current.OnCastResetAction -= ReloadCell;
-        GameEvents.current.OnTowerWasBuiltAction -= SetEngagedByTower;
     }
    
 
@@ -50,13 +48,12 @@ public class Cell : MonoBehaviour
         _cellPos = cellPos;
     }
 
-    public void SetEngagedByTower( TowerUnit tower, Cell cell )
+    public void SetEngagedByTower( TowerUnit tower )
     {
-        if ( cell == this )
-        {
-            _isEngaged = true;
-            _engagingTower = tower;
-        }
+        _isEngaged = true;
+        _engagingTower = tower;
+        cellType = 2;
+        ReloadCell ();
     }
 
     public void SetUnusable()
@@ -69,6 +66,8 @@ public class Cell : MonoBehaviour
     {
         _isEngaged = false;
         _engagingTower = null;
+        cellType = 0;
+        ReloadCell ();
     }
 
     public bool GetEngaged()
@@ -87,8 +86,10 @@ public class Cell : MonoBehaviour
         {
             if ( cellType == 1 )
                 _cellSprite.sprite = untouchableSprite;
-            else
+            if ( cellType == 0 )
                 _cellSprite.sprite = cellSprite;
+            if( cellType == 2 )
+                _cellSprite.sprite = colorSprite;
 
             _cellSprite.sortingOrder = 0;
         }

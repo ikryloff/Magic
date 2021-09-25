@@ -27,30 +27,24 @@ public class GameEvents : MonoBehaviour
 
 
     public event Action OnCastOver;
-    public event Action <GameManager.GameState> OnGameStateChangedAction;
+    public event Action <GameManager.GameState> OnGameStateChangedEvent;
     public event Action <bool> OnSwitchTouch;
-    public event Action OnStopCastingAction;
+    public event Action OnStopCastingEvent;
     public event Action OnBoardIsBuiltAction;
     public event Action OnCastResetAction;
     public event Action OnEnemyAppear;
-    public event Action<TowerUnit, Cell> OnTowerWasBuiltAction;
+    public event Action<TowerUnit, Cell> OnTowerWasBuiltEvent;
     public event Action<Human, Cell> OnHumanPositionWasChanged;
     public event Action<string> OnNewGameMessage;
     public event Action<BoardUnit, UnitTemplate> OnNewHit;
-    public event Action<BoardUnit, float> OnHealthChangedAction;
+    public event Action<BoardUnit, string> OnAnimationFinishedAction;
     public event Action<Human> OnHumanDeathAction;
-    public event Action<TowerUnit, Cell> OnTowerUnitDeathAction;
+    public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
 
 
-    public void HealthChangedEvent( BoardUnit sender, float ratio )
+    public void GameStateChangedAction( GameManager.GameState state )
     {
-        OnHealthChangedAction?.Invoke (sender, ratio);
-    }
-
-
-    public void GameStateChangedEvent( GameManager.GameState state )
-    {
-        OnGameStateChangedAction?.Invoke (state);
+        OnGameStateChangedEvent?.Invoke (state);
         Debug.Log ("GameState " + state);
     }
 
@@ -66,14 +60,19 @@ public class GameEvents : MonoBehaviour
         OnHumanDeathAction?.Invoke (unit);
     }
 
-    public void TowerUnitDeathEvent( TowerUnit unit, Cell cell )
+    public void TowerUnitDeathAction( TowerUnit unit, Cell cell )
     {
-        OnTowerUnitDeathAction?.Invoke (unit, cell);
+        OnTowerUnitDeathEvent?.Invoke (unit, cell);
     }
 
     public void NewHit( BoardUnit unit, UnitTemplate sender)
     {
         OnNewHit?.Invoke (unit, sender);
+    }
+
+    public void AnimationFinishedEvent( BoardUnit unit, string animType )
+    {
+        OnAnimationFinishedAction?.Invoke (unit, animType);
     }
 
     public void NewGameMessage( string message )
@@ -87,9 +86,9 @@ public class GameEvents : MonoBehaviour
         OnCastOver?.Invoke ();
     }
 
-    public void StopCastingEvent()
+    public void StopCastingAction()
     {
-        OnStopCastingAction?.Invoke ();
+        OnStopCastingEvent?.Invoke ();
     }
 
     public void BoardIsBuiltEvent()
@@ -112,9 +111,9 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void TowerWasBuiltEvent( TowerUnit tower, Cell cell )
+    public void TowerWasBuiltAction( TowerUnit tower, Cell cell )
     {
-        OnTowerWasBuiltAction?.Invoke (tower, cell);
+        OnTowerWasBuiltEvent?.Invoke (tower, cell);
     }
 
     public void HumanPositionWasChanged( Human human, Cell cell )

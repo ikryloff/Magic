@@ -23,7 +23,7 @@ public class SpellActivator : MonoBehaviour
     {
         if ( !_isActive )
             return;
-        GameEvents.current.GameStateChangedEvent (GameManager.GameState.BoardSleep);
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardSleep);
 
         if ( spellTemplate.unitType == Unit.UnitType.Spell )
         {

@@ -210,11 +210,11 @@ public class UIManager : MonoBehaviour
 
     public void StopSpelling()
     {
-        GameEvents.current.GameStateChangedEvent (GameManager.GameState.PauseGame);
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.PauseGame);
     }
     public void ResumeSpelling()
     {
-        GameEvents.current.GameStateChangedEvent (GameManager.GameState.ResumeGame);
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
     }
 
 

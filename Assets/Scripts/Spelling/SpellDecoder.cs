@@ -28,7 +28,7 @@ public class SpellDecoder : MonoBehaviour
     {
         if ( cells.Count <= 1 )
         {
-            GameEvents.current.StopCastingEvent ();
+            GameEvents.current.StopCastingAction ();
             return;
         }
         string spellCode = GetSpellcode (cells);
@@ -37,7 +37,7 @@ public class SpellDecoder : MonoBehaviour
         UnitTemplate entityTemplate = spellsMaps.GetSpellByString (spellCode);
         if( entityTemplate == null )
         {
-            GameEvents.current.StopCastingEvent ();
+            GameEvents.current.StopCastingAction ();
             return;
         }
 

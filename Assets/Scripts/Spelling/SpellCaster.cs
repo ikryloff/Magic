@@ -20,12 +20,12 @@ public class SpellCaster : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.current.OnStopCastingAction += StopCasting;
+        GameEvents.current.OnStopCastingEvent += StopCasting;
     }
 
     private void OnDisable()
     {
-        GameEvents.current.OnStopCastingAction -= StopCasting;
+        GameEvents.current.OnStopCastingEvent -= StopCasting;
     }
 
     public void CastSpell()
@@ -70,7 +70,7 @@ public class SpellCaster : MonoBehaviour
     private void StopCasting()
     {
         ClearCast ();
-        GameEvents.current.GameStateChangedEvent (GameManager.GameState.BoardActive);
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
         ui.SetPrepareValue (100);
         ui.SetDefaultPrepareIcon ();
     }

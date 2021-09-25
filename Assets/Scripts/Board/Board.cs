@@ -64,10 +64,10 @@ public class Board : MonoBehaviour
                 {
                     cell.SetUnusable ();
                 }
-                // if it is last cell in line
-                if ( x == _width - 1 && y != 0 && y != _height - 1 )
+                // setup spawnpoints if it is last cell in line, without first and last lines
+                if ( x == _width - 1 && line != 0 && line < 8)
                 {
-                    _spawnPoints.SetPointPosition (y - 1, cell.transform.position + new Vector3 (_tileWidth, _tileWidth * 0.5f, 0));
+                    _spawnPoints.SetPointPosition (line - 1, cell.transform.position + new Vector3 (_tileWidth, _tileWidth * 0.5f, 0));
                 }
                 // setup firepoints
                 if ( y == _height - 1 && x < _firePoints.GetPointsCount () )
