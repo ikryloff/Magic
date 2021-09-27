@@ -12,6 +12,8 @@
     public void Enter()
     {
         _animator.StopAllAnimations ();
+        if(_unit.GetUnitType() == Unit.UnitType.Tower)
+            _unit.GetCurrentCell().SetFreefromTower ();
     }
 
     public void Exit()

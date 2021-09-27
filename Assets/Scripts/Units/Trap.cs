@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Trap : TowerUnit
@@ -13,9 +14,9 @@ public class Trap : TowerUnit
 
     public override void MakeDeath()
     {
-        _cell.SetFreefromTower ();
-        Instantiate (_death, transform.position, Quaternion.identity);
         SetDieState ();
+        Instantiate (_death, transform.position, Quaternion.identity);
         Destroy (gameObject);
     }
+
 }

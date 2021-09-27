@@ -26,6 +26,7 @@ public class Human : BoardUnit
         _speed = template.speed;
         _currentSpeed = _speed;
         SetLinePosition (linePosition);
+        SetColumnPosition (int.MaxValue);
 
         Init (template);
     }
@@ -37,18 +38,10 @@ public class Human : BoardUnit
             _cell = collider.GetComponent<Cell> ();
             this.SetColumnPosition (_cell.GetColumnPosition ());
             this.SetLinePosition (_cell.GetLinePosition ());
-        }
-    }
-
-    private void OnTriggerExit2D( Collider2D collider )
-    {
-        if ( collider.gameObject.tag.Equals (Constants.CELL_TAG) )
-        {
             GameEvents.current.HumanPositionWasChanged (this, _cell);
         }
     }
 
-     
     public override BoardUnit GetRandomTarget( )
     {
         List<TowerUnit> towers = UnitsOnBoard.LineTowersList [_linePosition];

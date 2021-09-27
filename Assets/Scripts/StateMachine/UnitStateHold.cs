@@ -15,12 +15,12 @@ public class UnitStateHold : IUnitState
     }
     public void Enter()
     {
-        if(_enemy == null)
+        if ( _enemy == null )
             _enemy = _unit.GetRandomTarget ();
 
         if ( _enemy == null )
         {
-            Debug.Log ("Cant see anybody " + _unit.GetUnitName());
+            Debug.Log ("Cant see anybody " + _unit.GetUnitName ());
             _unit.SetIdleState ();
         }
         else
@@ -80,21 +80,24 @@ public class UnitStateHold : IUnitState
         if ( unit.GetUnitType () != Unit.UnitType.Human )
             return;
 
-        int newColPos = 0;
-        if ( direction.Equals (Constants.UNIT_RIGHT_DIR) )
-        {
-            newColPos = enemy.GetColumnPosition () - 1;
+        int newColPos = unit.GetColumnPosition ();
+        int enemyColPos = enemy.GetColumnPosition ();
 
-        }
-        if ( direction.Equals (Constants.UNIT_LEFT_DIR) )
+        if ( newColPos == enemyColPos )
         {
-            newColPos = enemy.GetColumnPosition () + 1;
-        }
+            if ( direction.Equals (Constants.UNIT_RIGHT_DIR) )
+            {
+                newColPos = enemyColPos - 1;
 
-        unit.SetColumnPosition (newColPos);
+            }
+            if ( direction.Equals (Constants.UNIT_LEFT_DIR) )
+            {
+                newColPos = enemyColPos + 1;
+            }
+            unit.SetColumnPosition (newColPos);
+        }
         CellPos newPos = new CellPos (newColPos, unit.GetLinePosition ());
         Cell newCell = Board.GetCellByPosition (newPos);
-        unit.transform.position = new Vector3( newCell.transform.position.x, unit.transform.position.y, unit.transform.position.z);
-        unit.SetCurrentCell (newCell);
+        unit.transform.position = new Vector3 (newCell.transform.position.x + Utilities.GetPositionDisplace (), unit.transform.position.y, unit.transform.position.z);
     }
 }

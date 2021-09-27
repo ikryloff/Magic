@@ -20,7 +20,7 @@ public class TowerUnit : BoardUnit
 
     public ParticleSystem appearParticles;
 
-    public void Activate( UnitTemplate template, Cell cell )
+    public virtual void Activate( UnitTemplate template, Cell cell )
     {
         _cell = cell;
         towerType = template.towerType;
@@ -34,7 +34,6 @@ public class TowerUnit : BoardUnit
     public override void MakeDeath()
     {
         UnitsOnBoard.RemoveTowerFromLineTowersList (this, _cell);
-        _cell.SetFreefromTower ();
         Instantiate (_death, transform.position, Quaternion.identity);
         SetDieState ();
         Destroy (gameObject);

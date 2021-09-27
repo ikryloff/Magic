@@ -5,6 +5,10 @@
     public static float STANDART_SCREEN_HEIGHT = 12.5f;
     // Tags
     public static string CELL_TAG = "Cell";
+    public static string HUMAN_TAG = "Human";
+    // Sorting layer
+    public static string SPELL_SL = "Spell";
+
 
     // Numbers
     public static float CELL_WIDTH = 1.35f;

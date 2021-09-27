@@ -33,7 +33,14 @@ public class BoardUnit : Unit
     protected UnitStateHit _unitStateHit;
     protected UnitStateDie _unitStateDie;
 
+    private SpriteRenderer _sprite;
+
     #region 
+
+    public SpriteRenderer GetSprite( BoardUnit unit )
+    {
+        return _sprite;
+    }
 
     public void SetCurrentEnemy( BoardUnit enemy )
     {
@@ -156,8 +163,6 @@ public class BoardUnit : Unit
 
     public Cell GetCurrentCell() { return _cell; }
 
-    public void SetCurrentCell( Cell cell ) { _cell = cell; }
-
     private void TakeDamage( BoardUnit unit, UnitTemplate sender )
     {
         if ( unit != this )
@@ -222,6 +227,7 @@ public class BoardUnit : Unit
             GameObject imp = Instantiate (template.impactPrefab, transform.position, Quaternion.identity);
             imp.transform.parent = transform;
             _impactParticle = imp.GetComponent<ParticleSystem> ();
+            _impactParticle.Stop ();
         }
     }
 
@@ -237,6 +243,7 @@ public class BoardUnit : Unit
         _death = template.deathPrefab;
         _attackRange = template.attackRange;
         _attackRate = template.attackRate;
+        _sprite = GetComponent<SpriteRenderer> ();
         _animator = GetComponent<UnitAnimation> ();
         Utilities.DisplaceZPosition (this); // to prevent flicking
         SetBullet (template);
@@ -264,7 +271,7 @@ public class BoardUnit : Unit
         GameEvents.current.OnTowerWasBuiltEvent += SeekEnemies;
     }
 
-    private void StopListening()
+    protected void StopListening()
     {
         GameEvents.current.OnNewHit -= TakeDamage;
         GameEvents.current.OnHumanPositionWasChanged -= SeekEnemies;

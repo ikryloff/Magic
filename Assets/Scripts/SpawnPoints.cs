@@ -12,8 +12,9 @@ public class SpawnPoints : MonoBehaviour
 
     public void SetPointPosition( int index, Vector3 pos )
     {
-        Debug.Log (index);
         _points [index].position = pos;
+        
+        
     }
 
 }

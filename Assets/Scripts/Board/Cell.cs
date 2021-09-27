@@ -50,8 +50,10 @@ public class Cell : MonoBehaviour
 
     public void SetEngagedByTower( TowerUnit tower )
     {
+
         _isEngaged = true;
         _engagingTower = tower;
+        Debug.Log (_engagingTower.name);
         cellType = 2;
         ReloadCell ();
     }
@@ -64,6 +66,7 @@ public class Cell : MonoBehaviour
 
     public void SetFreefromTower()
     {
+        Debug.Log (_engagingTower.name);
         _isEngaged = false;
         _engagingTower = null;
         cellType = 0;
@@ -91,7 +94,7 @@ public class Cell : MonoBehaviour
             if( cellType == 2 )
                 _cellSprite.sprite = colorSprite;
 
-            _cellSprite.sortingOrder = 0;
+            _cellSprite.sortingLayerID = 0;
         }
         IsLoaded = false;
     }
@@ -101,7 +104,7 @@ public class Cell : MonoBehaviour
         if ( _cellSprite )
         {
             _cellSprite.sprite = spellSprite;
-            _cellSprite.sortingOrder = 20;
+            _cellSprite.sortingLayerName = Constants.SPELL_SL;
         }
         IsLoaded = true;
         _spellCaster.CastLine.Add (this);
@@ -112,7 +115,7 @@ public class Cell : MonoBehaviour
         if ( _cellSprite )
         {
             _cellSprite.sprite = colorSprite;
-            _cellSprite.sortingOrder = 0;
+            _cellSprite.sortingLayerID = 0;
         }
     }
 

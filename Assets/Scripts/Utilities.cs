@@ -24,7 +24,7 @@ public class Utilities
         label.style.fontSize = (int)(size * CameraViewportHandler.Instance.heightKoef);
     }
 
-    public static float GetSpriteDisplace()
+    public static float GetSpriteZDisplace()
     {
         if ( Displace > 0.9999f )
             Displace = 0.0001f;
@@ -32,13 +32,20 @@ public class Utilities
         return Displace;
     }
 
+    // to see group of units
+    public static float GetPositionDisplace()
+    {
+        return Random.Range (-0.1f, 0.1f);
+    }
+
     // to prevent flickering
     public static void DisplaceZPosition( BoardUnit unit )
     {
-        SpriteRenderer sr = unit.GetComponent<SpriteRenderer> ();
-        float dp = GetSpriteDisplace ();
+        SpriteRenderer sr = unit.GetSprite (unit);
+        float dp = GetSpriteZDisplace ();
         sr.sortingOrder = unit.GetLinePosition ();
         unit.transform.position = new Vector3 (unit.transform.position.x, unit.transform.position.y, unit.transform.position.z + dp);
 
     }
+    
 }

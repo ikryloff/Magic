@@ -13,6 +13,7 @@ public class Board : MonoBehaviour
     private FirePoints _firePoints;
     private List<Cell> _defCells;
     private TowerBuilder _builder;
+    public static float [] LineY;
     public static Dictionary<Cell, CellPos> _cellsPositionMap;
     private static Dictionary<CellPos, Cell> _positionCellMap;
 
@@ -32,6 +33,7 @@ public class Board : MonoBehaviour
         _builder = FindObjectOfType<TowerBuilder> ();
         _spawnPoints = GetComponentInChildren<SpawnPoints> ();
         _firePoints = GetComponentInChildren<FirePoints> ();
+        LineY = new float [_height];
         Debug.Log ("InitBoardObject");
         BuildBoard ();
     }
@@ -83,6 +85,8 @@ public class Board : MonoBehaviour
             // offset for cells numeration
             if ( y % 2 == 1 )
                 countLineOffset -= 1;
+            LineY [_height - y - 1] = y + _tileWidth * 0.5f;
+            Debug.Log (LineY [_height - y - 1] + " in " + (_height - y - 1));
 
         }
         _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.45f, _height / 2, -10);
@@ -101,6 +105,11 @@ public class Board : MonoBehaviour
         if ( _positionCellMap.ContainsKey (pos) )
             return _positionCellMap [pos];
         else return null;
+    }
+
+    public static float GetLineY(int line )
+    {
+        return LineY [line];
     }
 }
 

@@ -24,6 +24,7 @@ public class CellAction : MonoBehaviour, IPointerEnterHandler
     {
         if ( _isActive )
         {
+            Debug.Log (eventData.currentInputModule);
             if ( !cell.IsLoaded )
             {
                 cell.LoadCell ();
