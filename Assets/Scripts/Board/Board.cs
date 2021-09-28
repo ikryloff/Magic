@@ -90,9 +90,11 @@ public class Board : MonoBehaviour
 
         }
         _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.45f, _height / 2, -10);
+        GameEvents.current.TimeToColorCellsEvent ();
         Debug.Log ("Cells was built");
         _builder.BuildDefTower (_defCells);
-        GameEvents.current.CastResetEvent ();
+
+
     }
 
     public static CellPos GetPositionByCell( Cell cell )

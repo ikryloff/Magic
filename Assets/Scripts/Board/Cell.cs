@@ -7,8 +7,8 @@ public class Cell : MonoBehaviour
     private SpriteRenderer _cellSprite;
     private CellPos _cellPos;
     private Vector2 _position;
-    public bool IsLoaded;
-    public bool IsUsed;
+    private bool _isLoaded;
+    private bool _isPrepared;
     private bool _isEngaged;
     [SerializeField]
     private int cellType; // 0 - common, 1 - untouchable 
@@ -25,13 +25,14 @@ public class Cell : MonoBehaviour
     {
         _cellSprite = GetComponent<SpriteRenderer> ();
         _spellCaster = FindObjectOfType<SpellCaster> ();
-        GameEvents.current.OnCastOver += CountCell;
-        GameEvents.current.OnCastResetAction += ReloadCell;
+        GameEvents.current.OnCastOver += CountCell;  // from touch controller when user finished draw the cast
+        GameEvents.current.OnCastResetEvent += ReloadCell; // from spellcaster when we need to reset spellcasting
+        GameEvents.current.OnTimeToColorCellsEvent += ColorCellByType; // from Board to color cells by type
         spellSprite = ObjectsHolder.Instance.spellSprite;
         cellSprite = ObjectsHolder.Instance.cellSprite;
         colorSprite = ObjectsHolder.Instance.colorSprite;
         untouchableSprite = ObjectsHolder.Instance.untouchableSprite;
-        SetPos (cellPos);
+        SetCellPos (cellPos);
         
     }
 
@@ -39,64 +40,58 @@ public class Cell : MonoBehaviour
     private void OnDisable()
     {
         GameEvents.current.OnCastOver -= CountCell;
-        GameEvents.current.OnCastResetAction -= ReloadCell;
+        GameEvents.current.OnCastResetEvent -= ReloadCell;
+        GameEvents.current.OnTimeToColorCellsEvent -= ColorCellByType; 
     }
    
 
-    private void SetPos( CellPos cellPos )
+    private void SetCellPos( CellPos cellPos )
     {
         _cellPos = cellPos;
     }
 
     public void SetEngagedByTower( TowerUnit tower )
     {
-
         _isEngaged = true;
         _engagingTower = tower;
-        Debug.Log (_engagingTower.name);
         cellType = 2;
-        ReloadCell ();
+        ColorCellByType ();
     }
-
+    public void SetFreefromTower()
+    {
+        _isEngaged = false;
+        _engagingTower = null;
+        cellType = 0;
+        ColorCellByType ();
+    }
     public void SetUnusable()
     {
         _isEngaged = true;
         cellType = 1;
     }
 
-    public void SetFreefromTower()
-    {
-        Debug.Log (_engagingTower.name);
-        _isEngaged = false;
-        _engagingTower = null;
-        cellType = 0;
-        ReloadCell ();
-    }
-
-    public bool GetEngaged()
+    public bool IsEngaged()
     {
         return _isEngaged;
     }
 
+    public bool IsLoaded()
+    {
+        return _isLoaded;
+    }
+
     private void CountCell()
     {
-        if ( IsLoaded ) SpellCaster.CellsCount += 1;
+        if ( _isLoaded ) SpellCaster.CellsCount += 1;
     }
 
     public void ReloadCell()
     {
-        if ( _cellSprite )
-        {
-            if ( cellType == 1 )
-                _cellSprite.sprite = untouchableSprite;
-            if ( cellType == 0 )
-                _cellSprite.sprite = cellSprite;
-            if( cellType == 2 )
-                _cellSprite.sprite = colorSprite;
-
-            _cellSprite.sortingLayerID = 0;
-        }
-        IsLoaded = false;
+        if ( !_isLoaded && !_isPrepared )
+            return;
+        _isLoaded = false;
+        _isPrepared = false;
+        ColorCellByType ();
     }
 
     public void LoadCell()
@@ -104,9 +99,9 @@ public class Cell : MonoBehaviour
         if ( _cellSprite )
         {
             _cellSprite.sprite = spellSprite;
-            _cellSprite.sortingLayerName = Constants.SPELL_SL;
+            _cellSprite.sortingOrder = 0; ;
         }
-        IsLoaded = true;
+        _isLoaded = true;
         _spellCaster.CastLine.Add (this);
     }
 
@@ -114,8 +109,24 @@ public class Cell : MonoBehaviour
     {
         if ( _cellSprite )
         {
+            _isPrepared = true;
             _cellSprite.sprite = colorSprite;
-            _cellSprite.sortingLayerID = 0;
+            _cellSprite.sortingOrder = 0;
+        }
+    }
+
+    public void ColorCellByType()
+    {
+        if ( _cellSprite )
+        {
+            if ( cellType == 1 )
+                _cellSprite.sprite = untouchableSprite;
+            if ( cellType == 0 )
+                _cellSprite.sprite = cellSprite;
+            if ( cellType == 2 )
+                _cellSprite.sprite = colorSprite;
+
+            _cellSprite.sortingOrder = 0;
         }
     }
 

@@ -32,7 +32,10 @@ public class AttackSpeller : MonoBehaviour
         _shotFabric.Init (spellTemplate, cells);
 
         if ( !_shotFabric.IsValidSpellCall (spellTemplate, cells) ) //is enough mana and is any tagret 
+        {
+            GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
             return;
+        }
         StartCoroutine (PrepareSpellRoutine (spellTemplate, _shotFabric));
         GameEvents.current.NewGameMessage (spellTemplate.unitName);
     }
@@ -53,7 +56,7 @@ public class AttackSpeller : MonoBehaviour
         }
         ui.SetPrepareValue (0);
         shotFabric.CreateSpellShot (spellTemplate);
-        GameEvents.current.StopCastingAction ();
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
     }
 
     

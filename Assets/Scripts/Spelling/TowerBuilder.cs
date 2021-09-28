@@ -33,7 +33,10 @@ public class TowerBuilder : MonoBehaviour
     public void BuildTower( UnitTemplate spellTemplate, Cell [] cells )
     {
         if ( !IsValidTowerCall (spellTemplate, cells) ) //is enough mana and place is not engaged 
+        {
+            GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
             return;
+        }
         StartCoroutine (PrepareBuildingRoutine (spellTemplate, cells));
     }
 
@@ -41,10 +44,9 @@ public class TowerBuilder : MonoBehaviour
     {
         for ( int i = 0; i < cells.Length; i++ )
         {
-            if ( cells [i].GetEngaged () )
+            if ( cells [i].IsEngaged () )
             {
                 GameEvents.current.NewGameMessage ("Can`t do that here!");
-                GameEvents.current.StopCastingAction ();
                 return false;
             }
         }
@@ -52,7 +54,6 @@ public class TowerBuilder : MonoBehaviour
         if ( wizard != null && spellTemplate.cost > wizard.GetManapoints () )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
-            GameEvents.current.StopCastingAction (); ;
             return false;
         }
         return true;
@@ -74,7 +75,6 @@ public class TowerBuilder : MonoBehaviour
             yield return null;
         }
         ui.SetPrepareValue (0);
-
         Building (spellTemplate, cells);
     }
 
@@ -88,13 +88,10 @@ public class TowerBuilder : MonoBehaviour
             cells [i].SetEngagedByTower (newTower);
             newTower.Activate (unitTemplate, cells [i]);
             // traps are invisible for humans
-            if ( newTower.towerType != TowerUnit.TowerType.Trap )
-            {
-                UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
-            }
+            UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
             GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
         }
-        GameEvents.current.StopCastingAction ();
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
     }
 
 

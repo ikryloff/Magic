@@ -27,7 +27,7 @@ public class ShotSpell
     public void Return( TowerUnit target )
     {
         Debug.Log ("Return " + target.GetUnitName ());
-
+        target.MakeDeath ();
     }
 
 

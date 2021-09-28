@@ -30,8 +30,9 @@ public class GameEvents : MonoBehaviour
     public event Action <GameManager.GameState> OnGameStateChangedEvent;
     public event Action <bool> OnSwitchTouch;
     public event Action OnStopCastingEvent;
-    public event Action OnBoardIsBuiltAction;
-    public event Action OnCastResetAction;
+    public event Action OnBoardIsBuiltEvent;
+    public event Action OnTimeToColorCellsEvent;
+    public event Action OnCastResetEvent;
     public event Action OnEnemyAppear;
     public event Action<TowerUnit, Cell> OnTowerWasBuiltEvent;
     public event Action<Human, Cell> OnHumanPositionWasChanged;
@@ -44,8 +45,8 @@ public class GameEvents : MonoBehaviour
 
     public void GameStateChangedAction( GameManager.GameState state )
     {
-        OnGameStateChangedEvent?.Invoke (state);
         Debug.Log ("GameState " + state);
+        OnGameStateChangedEvent?.Invoke (state);
     }
 
     public void SwitchTouch( bool isOn )
@@ -91,16 +92,21 @@ public class GameEvents : MonoBehaviour
         OnStopCastingEvent?.Invoke ();
     }
 
-    public void BoardIsBuiltEvent()
+    public void BoardIsBuiltAction()
     {
-        OnBoardIsBuiltAction?.Invoke ();
+        OnBoardIsBuiltEvent?.Invoke ();
+    }
+
+    public void TimeToColorCellsEvent()
+    {
+        OnTimeToColorCellsEvent?.Invoke ();
     }
 
 
 
-    public void CastResetEvent()
+    public void CastResetAction()
     {
-        OnCastResetAction?.Invoke ();
+        OnCastResetEvent?.Invoke ();
     }
 
     public void EnemyAppear()

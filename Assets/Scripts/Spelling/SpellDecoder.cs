@@ -42,7 +42,6 @@ public class SpellDecoder : MonoBehaviour
         }
 
         spellActivator.ActivateSpell (entityTemplate, GetTargetCells(entityTemplate, _activeCells));
-
     }   
 
     public string GetSpellcode( List<Cell> cells )
@@ -88,7 +87,7 @@ public class SpellDecoder : MonoBehaviour
                     continue;
                 }
                 
-                if ( cell.IsLoaded )
+                if ( cell.IsLoaded() )
                 {
                     spell.Add(1);
                     _activeCells [countCell] = cell;

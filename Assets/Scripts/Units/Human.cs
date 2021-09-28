@@ -52,13 +52,16 @@ public class Human : BoardUnit
 
         for ( int i = 0; i < towers.Count; i++ )
         {
+            // Traps are invisible
+            if ( towers [i].GetTowerType () == TowerUnit.TowerType.Trap )
+                continue;
             if ( Mathf.Abs (towers [i].GetColumnPosition () - _columnPosition) <= _attackRange )
                 towersInRange.Add (towers [i]);
         }
 
         if ( towersInRange.Count == 0 )
             return null;
-
+        
         return towersInRange [Random.Range (0, towersInRange.Count)];
     }
 

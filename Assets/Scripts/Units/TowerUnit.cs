@@ -12,7 +12,7 @@ public class TowerUnit : BoardUnit
     }
 
     public int towerID;
-    public TowerType towerType;
+    protected TowerType _towerType;
     public int towerLevel;
     public int towerCost;
 
@@ -23,7 +23,7 @@ public class TowerUnit : BoardUnit
     public virtual void Activate( UnitTemplate template, Cell cell )
     {
         _cell = cell;
-        towerType = template.towerType;
+        _towerType = template.towerType;
         SetLinePosition (cell.GetLinePosition ());
         SetColumnPosition (cell.GetColumnPosition ());
         Init (template);
@@ -58,5 +58,9 @@ public class TowerUnit : BoardUnit
         return humansInRange [Random.Range (0, humansInRange.Count)];
     }
 
+    public TowerType GetTowerType()
+    {
+        return _towerType;
+    }
 
 }

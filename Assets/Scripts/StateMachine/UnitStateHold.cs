@@ -15,8 +15,7 @@ public class UnitStateHold : IUnitState
     }
     public void Enter()
     {
-        if ( _enemy == null )
-            _enemy = _unit.GetRandomTarget ();
+        _enemy = _unit.GetRandomTarget ();
 
         if ( _enemy == null )
         {

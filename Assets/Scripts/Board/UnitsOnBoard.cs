@@ -28,7 +28,7 @@ public class UnitsOnBoard : MonoBehaviour
         {
             LineHumansLists [i] = new List<Human> ();
         }
-        GameEvents.current.BoardIsBuiltEvent ();
+        GameEvents.current.BoardIsBuiltAction ();
 
     }
 
@@ -133,7 +133,6 @@ public class UnitsOnBoard : MonoBehaviour
                 }                    
             }
         }
-        Debug.Log (allHumans.Count);
         return allHumans;
 
 

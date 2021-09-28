@@ -16,9 +16,6 @@ public class UnitStateAttack : IUnitState
 
     public void Enter()
     {
-        if ( _unit == null )
-            return;
-
         GameEvents.current.OnAnimationFinishedAction += ExitCondition;
         _enemy = _unit.GetCurrentEnemy ();
 

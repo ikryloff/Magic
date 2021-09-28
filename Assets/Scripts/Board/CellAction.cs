@@ -22,10 +22,9 @@ public class CellAction : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter( PointerEventData eventData )
     {
-        if ( _isActive )
+        if ( _isActive && Input.touchCount > 0)
         {
-            Debug.Log (eventData.currentInputModule);
-            if ( !cell.IsLoaded )
+            if ( !cell.IsLoaded() )
             {
                 cell.LoadCell ();
             }

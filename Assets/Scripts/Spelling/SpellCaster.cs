@@ -33,21 +33,9 @@ public class SpellCaster : MonoBehaviour
         spellDecoder.MakeSpell (CastLine);
     }
 
-    public void DeleteCast()
-    {
-        CastLine.Clear ();
-        CellsCount = 0;
-    }
-
     public void MakeCast()
     {
         StartCoroutine (MakeCastWithDelay ());
-    }
-
-    public void ClearCast()
-    {
-        DeleteCast ();
-        GameEvents.current.CastResetEvent ();
     }
 
     IEnumerator MakeCastWithDelay()
@@ -69,8 +57,9 @@ public class SpellCaster : MonoBehaviour
 
     private void StopCasting()
     {
-        ClearCast ();
-        GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
+        CastLine.Clear ();
+        CellsCount = 0;
+        GameEvents.current.CastResetAction ();
         ui.SetPrepareValue (100);
         ui.SetDefaultPrepareIcon ();
     }

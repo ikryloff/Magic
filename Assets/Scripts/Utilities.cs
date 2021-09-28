@@ -43,9 +43,17 @@ public class Utilities
     {
         SpriteRenderer sr = unit.GetSprite (unit);
         float dp = GetSpriteZDisplace ();
-        sr.sortingOrder = unit.GetLinePosition ();
+        sr.sortingOrder = GetOrderInLayer (unit);
         unit.transform.position = new Vector3 (unit.transform.position.x, unit.transform.position.y, unit.transform.position.z + dp);
 
     }
-    
+
+    public static int GetOrderInLayer(BoardUnit unit)
+    {
+        if ( unit.GetUnitType () == Unit.UnitType.Human )
+            return unit.GetLinePosition () + 5;
+        else
+            return unit.GetLinePosition ();
+    }
+
 }

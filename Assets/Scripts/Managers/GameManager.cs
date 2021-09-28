@@ -55,10 +55,13 @@ public class GameManager : MonoBehaviour
 
     private void BoardSleep()
     {
+        Debug.Log ("BoardSleep");
         GameEvents.current.SwitchTouch (false);
     }
     private void BoardActive()
     {
+        Debug.Log ("BoardActive");
+        GameEvents.current.StopCastingAction ();
         GameEvents.current.SwitchTouch (true);
     }
 

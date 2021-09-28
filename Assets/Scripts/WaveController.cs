@@ -21,7 +21,6 @@ public class WaveController : MonoBehaviour
     }
     private void Start()
     {
-
         waves = wavesList.GetWavesList (1);
     }
 
