@@ -7,7 +7,7 @@ public class SpellShotFabric : MonoBehaviour
     private UnitTemplate _template;
     private int [] _targetLines;
     List<Human> _targetHumans;
-    TowerUnit _targetsTower;
+    TowerUnit _targetTower;
     private FirePoints _firePoints;
 
     private void Awake()
@@ -46,8 +46,8 @@ public class SpellShotFabric : MonoBehaviour
 
         if ( template.spellType == SpellUnit.SpellType.HealingSpell || template.spellType == SpellUnit.SpellType.ReturnManaSpell )
         {
-            _targetsTower = GetTowerTarget (cells);
-            if ( _targetsTower == null )
+            _targetTower = GetTowerTarget (cells);
+            if ( _targetTower == null )
             {
                 GameEvents.current.NewGameMessage ("No target for using spell!");
                 return false;
@@ -67,9 +67,10 @@ public class SpellShotFabric : MonoBehaviour
             case SpellUnit.SpellType.PressureSpell:
                 break;
             case SpellUnit.SpellType.HealingSpell:
+                HealTower (_targetTower, template);
                 break;
             case SpellUnit.SpellType.ReturnManaSpell:
-                ReturnTowerForMana (_targetsTower);
+                ReturnTowerForMana (_targetTower);
                 break;
 
 
@@ -179,5 +180,11 @@ public class SpellShotFabric : MonoBehaviour
     {
         ShotSpell shotSpell = new ShotSpell ();
         shotSpell.Return (tower);
+    }
+
+    private void HealTower( TowerUnit tower, UnitTemplate unitTemplate )
+    {
+        ShotSpell shotSpell = new ShotSpell ();
+        shotSpell.Heal (tower, unitTemplate);
     }
 }

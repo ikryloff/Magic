@@ -117,6 +117,8 @@ public class Cell : MonoBehaviour
 
     public void ColorCellByType()
     {
+        if ( _isLoaded || _isPrepared )
+            return;
         if ( _cellSprite )
         {
             if ( cellType == 1 )

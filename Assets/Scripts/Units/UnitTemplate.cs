@@ -37,5 +37,8 @@ public class UnitTemplate : ScriptableObject
     public float speed;
     public float xp;
 
+    [Header ("For pointers -1 or 1")]
+    public int stepDirection;
+
 }
 

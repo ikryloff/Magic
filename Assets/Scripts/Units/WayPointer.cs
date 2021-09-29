@@ -1,14 +1,23 @@
 using UnityEngine;
 
-public class PointerDown : Trap
+public class WayPointer : Trap
 {
+    private int _stepDirection;
+
+    public override void Activate( UnitTemplate template, Cell cell )
+    {
+        base.Activate (template, cell);
+        _stepDirection = template.stepDirection;
+    }
+
+
     public override void Fire( BoardUnit enemy )
     {
         if ( enemy )
         {
             Human human = enemy.GetComponent<Human> ();
             int currentLine = human.GetLinePosition ();
-            int newLine = human.GetLinePosition () + 1;
+            int newLine = human.GetLinePosition () + _stepDirection;
             human.SetLinePosition (newLine);
             Utilities.DisplaceZPosition (human); // to prevent flicking
             UnitsOnBoard.RemoveHumanFromLineHumansList (human);

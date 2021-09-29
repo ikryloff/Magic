@@ -50,7 +50,7 @@ public class UnitsOnBoard : MonoBehaviour
         Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + line);
     }
 
-    public static void RemoveTowerFromLineTowersList( TowerUnit tower, Cell cell )
+    public static void RemoveTowerFromLineTowersList( TowerUnit tower )
     {
         LineTowersList [tower.GetLinePosition ()].Remove (tower);
         Debug.Log ("Tower " + tower.name + " Removed from list " + tower.GetLinePosition ());

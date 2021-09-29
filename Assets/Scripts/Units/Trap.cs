@@ -14,6 +14,7 @@ public class Trap : TowerUnit
 
     public override void MakeDeath()
     {
+        UnitsOnBoard.RemoveTowerFromLineTowersList (this);
         SetDieState ();
         Instantiate (_death, transform.position, Quaternion.identity);
         Destroy (gameObject);

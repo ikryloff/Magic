@@ -16,12 +16,10 @@ public class ShotSpell
 
     }
 
-    public void Heal( Tower target, UnitTemplate template )
+    public void Heal( TowerUnit target, UnitTemplate template )
     {
         Debug.Log ("Heal " + target.name);
-
-
-
+        GameEvents.current.NewHit (target, template );
     }
 
     public void Return( TowerUnit target )

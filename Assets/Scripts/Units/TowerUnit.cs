@@ -18,8 +18,6 @@ public class TowerUnit : BoardUnit
 
     public SpellUnit.SpellType spellType;
 
-    public ParticleSystem appearParticles;
-
     public virtual void Activate( UnitTemplate template, Cell cell )
     {
         _cell = cell;
@@ -33,7 +31,7 @@ public class TowerUnit : BoardUnit
 
     public override void MakeDeath()
     {
-        UnitsOnBoard.RemoveTowerFromLineTowersList (this, _cell);
+        UnitsOnBoard.RemoveTowerFromLineTowersList (this);
         Instantiate (_death, transform.position, Quaternion.identity);
         SetDieState ();
         Destroy (gameObject);
