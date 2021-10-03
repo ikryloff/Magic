@@ -3,18 +3,17 @@ using UnityEngine;
 
 public class UnitAnimation : MonoBehaviour
 {
-    //private BoardUnitState unitState;
     private Animator animator;
     private float _attackLeftTime;
     private float _attackRightTime;
     private float _hitLeftTime;
     private float _hitRightTime;
     private BoardUnit _unit;
+    
 
-    private void Awake()
+    public void Init(BoardUnit unit)
     {
-        //unitState = GetComponent<BoardUnitState> ();
-        _unit = GetComponent<BoardUnit> ();
+        _unit = unit;
         animator = GetComponent<Animator> ();
         GetAnimationClipTime ();
     }
@@ -71,7 +70,6 @@ public class UnitAnimation : MonoBehaviour
 
     public void AnimateStayLeft()
     {
-        Debug.Log ("AnimationStayLeft");
         animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_STAY_LEFT);
 

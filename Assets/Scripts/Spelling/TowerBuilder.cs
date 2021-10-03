@@ -84,10 +84,8 @@ public class TowerBuilder : MonoBehaviour
         {
             GameObject newTowerGO = Instantiate (unitTemplate.unitPrefab, cells [i].transform.position, Quaternion.identity);
             TowerUnit newTower = newTowerGO.GetComponent<TowerUnit> ();
-            newTower.towerCost = unitTemplate.cost / unitTemplate.targetIndexes.Length;
             cells [i].SetEngagedByTower (newTower);
             newTower.Activate (unitTemplate, cells [i]);
-            // traps are invisible for humans
             UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
             GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
         }

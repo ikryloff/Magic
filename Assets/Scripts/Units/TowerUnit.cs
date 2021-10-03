@@ -25,35 +25,13 @@ public class TowerUnit : BoardUnit
         SetLinePosition (cell.GetLinePosition ());
         SetColumnPosition (cell.GetColumnPosition ());
         Init (template);
-        towerCost = template.cost;
+        towerCost = template.cost / template.targetIndexes.Length;
 
     }
 
-    public override void MakeDeath()
+    public override void RemoveUnit()
     {
-        UnitsOnBoard.RemoveTowerFromLineTowersList (this);
-        Instantiate (_death, transform.position, Quaternion.identity);
-        SetDieState ();
-        Destroy (gameObject);
-    }
-
-    public override BoardUnit GetRandomTarget()
-    {
-        List<Human> humans = UnitsOnBoard.LineHumansLists [_linePosition];
-
-        if ( humans.Count == 0 )
-            return null;
-
-        List<Human> humansInRange = new List<Human> ();
-        for ( int i = 0; i < humans.Count; i++ )
-        {
-            if ( Mathf.Abs (humans [i].GetColumnPosition () - _columnPosition) <= _attackRange )
-                humansInRange.Add (humans [i]);
-        }
-        if ( humansInRange.Count == 0 )
-            return null;
-
-        return humansInRange [Random.Range (0, humansInRange.Count)];
+        UnitsOnBoard.RemoveTowerFromLineTowersList(this);
     }
 
     public TowerType GetTowerType()

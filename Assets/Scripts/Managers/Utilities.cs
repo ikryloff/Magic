@@ -39,21 +39,21 @@ public class Utilities
     }
 
     // to prevent flickering
-    public static void DisplaceZPosition( BoardUnit unit )
+    public static void DisplaceZPosition( BoardUnit unit, int line )
     {
-        SpriteRenderer sr = unit.GetSprite (unit);
+        SpriteRenderer sr = unit.GetComponent<SpriteRenderer>();
         float dp = GetSpriteZDisplace ();
-        sr.sortingOrder = GetOrderInLayer (unit);
+        sr.sortingOrder = GetOrderInLayer (unit, line);
         unit.transform.position = new Vector3 (unit.transform.position.x, unit.transform.position.y, unit.transform.position.z + dp);
 
     }
 
-    public static int GetOrderInLayer(BoardUnit unit)
+    public static int GetOrderInLayer(BoardUnit unit, int line)
     {
         if ( unit.GetUnitType () == Unit.UnitType.Human )
-            return unit.GetLinePosition () + 5;
+            return line + 5;
         else
-            return unit.GetLinePosition ();
+            return line;
     }
 
 }

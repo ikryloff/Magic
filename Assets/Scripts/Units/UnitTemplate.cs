@@ -23,13 +23,14 @@ public class UnitTemplate : ScriptableObject
     public SpellUnit.SpellType spellType;
     public TowerUnit.TowerType towerType;
 
-    [Header ("For towers and humans")]
+    [Header ("For towers and humans and spell effects")]
     public int attackRange;
     public float attackRate;
     public GameObject unitPrefab;
     public GameObject bulletPrefab;
     public GameObject impactPrefab;
     public GameObject deathPrefab;
+    public GameObject bornPrefab;
     public Texture2D activeIcon;
     public Texture2D unActiveIcon;
 

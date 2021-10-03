@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     private float _hp;
     private UnitTemplate _sender;
 
-    public void SeekTowerToHeal( Tower tower, float hp )
+    public void SeekTowerToHeal( TowerUnit tower, float hp )
     {
         _target = tower.transform;
         _hp = hp;

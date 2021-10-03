@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
             case GameState.ResumeGame:
                 ResumeGame ();
                 break;
+            case GameState.FastGame:
+                FastGame ();
+                break;
         }
 
 
@@ -79,6 +82,20 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    private void FastGame()
+    {
+        if( Time.timeScale > 1 )
+        {
+            ChangeGameState (GameState.ResumeGame);
+        }
+        else
+        {
+            Debug.Log ("Fast");
+            Time.timeScale = 20;
+        }
+            
+    }
+
     public enum GameState
     {
         InitObjects,
@@ -87,6 +104,7 @@ public class GameManager : MonoBehaviour
         BoardActive,
         PauseGame,
         ResumeGame,
+        FastGame,
 
     }
 

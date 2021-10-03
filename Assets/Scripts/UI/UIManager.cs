@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
-    TimeManager timeManager;
     private bool magicPanelIsOn;
     SpellsMaps spells;
     Button menuButton;
@@ -95,7 +94,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         spells = ObjectsHolder.Instance.spells;
-        timeManager = FindObjectOfType<TimeManager> ();
         speedButton.clicked += SpeedGame;
         spellsButton.clicked += ToggleSchoolList;
         CloseSchoolList ();
@@ -116,7 +114,7 @@ public class UIManager : MonoBehaviour
 
     public void SpeedGame()
     {
-        timeManager.TurnTime ();
+        GameEvents.current.GameStateChangedAction (GameManager.GameState.FastGame);
     }
 
 

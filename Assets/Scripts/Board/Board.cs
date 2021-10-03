@@ -86,7 +86,6 @@ public class Board : MonoBehaviour
             if ( y % 2 == 1 )
                 countLineOffset -= 1;
             LineY [_height - y - 1] = y + _tileWidth * 0.5f;
-            Debug.Log (LineY [_height - y - 1] + " in " + (_height - y - 1));
 
         }
         _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.45f, _height / 2, -10);

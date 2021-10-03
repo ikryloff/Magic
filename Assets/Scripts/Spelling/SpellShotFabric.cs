@@ -182,9 +182,10 @@ public class SpellShotFabric : MonoBehaviour
         shotSpell.Return (tower);
     }
 
-    private void HealTower( TowerUnit tower, UnitTemplate unitTemplate )
+    private void HealTower( TowerUnit tower, UnitTemplate spellTemplate )
     {
         ShotSpell shotSpell = new ShotSpell ();
-        shotSpell.Heal (tower, unitTemplate);
+        Instantiate (spellTemplate.unitPrefab, tower.transform.position, Quaternion.identity);
+        shotSpell.Heal (tower, spellTemplate);
     }
 }

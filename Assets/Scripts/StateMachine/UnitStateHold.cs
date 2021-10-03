@@ -3,19 +3,25 @@ using UnityEngine;
 public class UnitStateHold : IUnitState
 {
     private BoardUnit _unit;
-    private UnitAnimation _animator;
-    BoardUnit _enemy;
+    private UnitAnimation _unitAnimation;
+    private TargetFinder _targetFinder;
+    private BoardUnit _enemy;
     private float _delay;
     private float _attackRate;
 
-    public UnitStateHold( BoardUnit unit, UnitAnimation animator )
+    public UnitStateHold( BoardUnit unit, UnitAnimation unitAnimation, TargetFinder targetFinder, UnitTemplate unitTemplate)
     {
         _unit = unit;
-        _animator = animator;
+        _unitAnimation = unitAnimation;
+        _targetFinder = targetFinder;
+        _attackRate = unitTemplate.attackRate;
+        _delay = _attackRate;
     }
     public void Enter()
     {
-        _enemy = _unit.GetRandomTarget ();
+        if ( _targetFinder == null )
+            return;
+        _enemy = _targetFinder.GetRandomTarget ();
 
         if ( _enemy == null )
         {
@@ -24,8 +30,6 @@ public class UnitStateHold : IUnitState
         }
         else
         {
-            _attackRate = _unit.GetUnitRate ();
-            _delay = _unit.GetUnitCurrentDelay ();
             SetAttackPosition (_enemy);
         }
     }
@@ -33,8 +37,6 @@ public class UnitStateHold : IUnitState
 
     public void Exit()
     {
-        _unit.SetUnitCurrentDelay (_delay);
-        _unit.SetCurrentEnemy (_enemy);
     }
 
 
@@ -57,17 +59,19 @@ public class UnitStateHold : IUnitState
 
     private void SetAttackPosition( BoardUnit enemy )
     {
+        if ( _unitAnimation == null )
+            return;
         string dir = "";
 
         if ( enemy.transform.position.x >= _unit.transform.position.x )
         {
             dir = Constants.UNIT_RIGHT_DIR;
-            _animator.AnimateStayRight ();
+            _unitAnimation.AnimateStayRight ();
         }
         else
         {
             dir = Constants.UNIT_LEFT_DIR;
-            _animator.AnimateStayLeft ();
+            _unitAnimation.AnimateStayLeft ();
         }
 
         _unit.SetDirection (dir);

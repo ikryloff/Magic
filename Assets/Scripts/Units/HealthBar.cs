@@ -10,27 +10,40 @@ public class HealthBar : MonoBehaviour
     public Color32 lowColor;
     public float height;
     public float counter = 1f;
+    private float _health;
+    private float _currentHealth;
 
     private const string BAR_GO = "BarGO"; 
     private const string BAR = "Bar"; 
     private const string BAR_SPRITE = "BarSprite"; 
 
-    private void Awake()
+    public void Init(BoardUnit unit)
     {
-        _unit = transform.parent.GetComponent<BoardUnit> ();
+        _unit = unit;
+        _health = _unit.GetUnitTemplate().health;
+        _currentHealth = _health;
         _barGo = transform.Find (BAR_GO).gameObject;
         _bar = _barGo.transform.Find (BAR);
         _sprite = _bar.Find (BAR_SPRITE).GetComponent<SpriteRenderer> ();
         _sprite.sortingOrder = 300;
         _barGo.SetActive (false);
 
-        GameEvents.current.OnNewHit += ShowHealthBar;
+        GameEvents.current.OnNewHit += TakeDamage;
     }
 
     private void OnDestroy()
     {
-        GameEvents.current.OnNewHit -= ShowHealthBar;
+        GameEvents.current.OnNewHit -= TakeDamage;
     }
+
+    private void TakeDamage( BoardUnit unit, UnitTemplate damageTemplate )
+    {
+        if ( unit != _unit )
+            return;
+        _unit.SetHitState();
+        ShowHealthBar (damageTemplate);
+    }
+
 
     private void SetHBSize( float size )
     {
@@ -50,14 +63,12 @@ public class HealthBar : MonoBehaviour
     }
 
 
-    private void ShowHealthBar( BoardUnit unit, UnitTemplate template )
+    private void ShowHealthBar( UnitTemplate damageTemplate )
     {
-        if ( _unit != unit )
-            return;
-        float damage = template.damage;
-        unit.ChangeUnitCurrentHealth (damage);
-        CheckHP (unit);
-        float ratio =  CalcRatio (unit);
+        float damage = damageTemplate.damage;
+        ChangeUnitCurrentHealth (damage);
+        CheckHP ();
+        float ratio =  CalcRatio ();
         if ( ratio <= 1 && ratio >= 0 )
         {
             if ( !_barGo.activeSelf )
@@ -73,19 +84,24 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private float CalcRatio(BoardUnit unit)
+    public void ChangeUnitCurrentHealth( float damage )
     {
-        return unit.GetUnitCurrentHealth () / unit.GetUnitHealth ();
+        _currentHealth -= damage;
     }
 
-    private void CheckHP( BoardUnit unit)
+    private float CalcRatio()
     {
-        float health = unit.GetUnitHealth ();
-        float currentHealth = unit.GetUnitCurrentHealth ();
+        return _currentHealth/ _health;
+    }
 
-        if ( currentHealth <= 0 )
-            unit.MakeDeath ();
-        if ( currentHealth >= health )
-            unit.SetUnitCurrentHealth (health);
+    private void CheckHP()
+    {
+        if ( _currentHealth <= 0 )
+        {
+            _unit.MakeDeath ();
+            return;
+        }
+        if ( _currentHealth >= _health )
+            _currentHealth = _health;
     }
 }

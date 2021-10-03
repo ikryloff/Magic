@@ -5,19 +5,23 @@ using UnityEngine;
 public class UnitStateAttack : IUnitState
 {
     private BoardUnit _unit;
-    private UnitAnimation _animator;
+    private UnitAnimation _unitAnimation;
     private BoardUnit _enemy;
+    private TargetFinder _targetFinder;
+    private Weapon _weapon;
 
-    public UnitStateAttack( BoardUnit unit, UnitAnimation animator )
+    public UnitStateAttack( BoardUnit unit, UnitAnimation unitAnimation, TargetFinder targetFinder, Weapon weapon )
     {
         _unit = unit;
-        _animator = animator;
+        _unitAnimation = unitAnimation;
+        _targetFinder = targetFinder;
+        _weapon = weapon;
     }
 
     public void Enter()
     {
         GameEvents.current.OnAnimationFinishedAction += ExitCondition;
-        _enemy = _unit.GetCurrentEnemy ();
+        _enemy = _targetFinder.GetRandomTarget ();
 
         if ( _enemy )
         {
@@ -39,23 +43,31 @@ public class UnitStateAttack : IUnitState
         {
             if ( animType == Constants.ANIM_UNITY_ATTACK_LEFT || animType == Constants.ANIM_UNITY_ATTACK_RIGHT )
             {
-                _unit.Fire (_enemy);
+                _weapon.Fire (_enemy);
                 _unit.SetHoldState ();
             }
         }
+        else
+            _unit.SetHoldState ();
     }
 
     private void AttackWithDirection(BoardUnit enemy)
     {
+        if ( _unitAnimation == null )
+        {
+            _weapon.Fire (_enemy);
+            return;
+        }
+
         if(enemy.transform.position.x >= _unit.transform.position.x )
         {
             _unit.SetDirection (Constants.UNIT_RIGHT_DIR);
-            _animator.AttackRightAnimation ();
+            _unitAnimation.AttackRightAnimation ();
         }
         else
         {
             _unit.SetDirection (Constants.UNIT_LEFT_DIR);
-            _animator.AttackLeftAnimation ();
+            _unitAnimation.AttackLeftAnimation ();
         }
     }
 

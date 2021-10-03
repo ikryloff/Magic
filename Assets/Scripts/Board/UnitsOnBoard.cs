@@ -47,6 +47,7 @@ public class UnitsOnBoard : MonoBehaviour
     public static void AddTowerToLineTowersList (TowerUnit tower, int line )
     {
         LineTowersList [line].Add (tower);
+        Utilities.DisplaceZPosition (tower, line);
         Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + line);
     }
 
@@ -58,9 +59,8 @@ public class UnitsOnBoard : MonoBehaviour
 
     public static void AddHumanToLineHumansList( Human human, int line )
     {
-        if ( LineHumansLists [line].Contains (human) )
-            return;
         LineHumansLists [line].Add (human);
+        Utilities.DisplaceZPosition (human, line);
         Debug.Log ("Human " + human.name + " Added to list " + line);
     }
 
