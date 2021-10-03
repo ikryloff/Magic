@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent (typeof (TargetFinder))]
 public class UnitAnimation : MonoBehaviour
 {
     private Animator animator;

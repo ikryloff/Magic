@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+[RequireComponent (typeof (TowerUnit))]
+[RequireComponent (typeof (TargetFinder))]
+[RequireComponent (typeof (UnitAnimation))]
 
 public class LoopWeapon : TrapWeapon
 {

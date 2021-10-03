@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -9,10 +7,10 @@ public class Weapon : MonoBehaviour
     private GameObject _bullet;
     protected UnitTemplate _unitTemplate;
 
-    public void Init(BoardUnit unit)
+    public void Init( BoardUnit unit )
     {
         _unit = unit;
-        _unitTemplate = unit.GetUnitTemplate();
+        _unitTemplate = unit.GetUnitTemplate ();
         _bullet = _unitTemplate?.bulletPrefab;
     }
 

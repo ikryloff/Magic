@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TowerUnit : BoardUnit
 {
     public enum TowerType
@@ -11,12 +12,8 @@ public class TowerUnit : BoardUnit
         Barrier,
     }
 
-    public int towerID;
     protected TowerType _towerType;
-    public int towerLevel;
-    public int towerCost;
-
-    public SpellUnit.SpellType spellType;
+    private int _towerCost;
 
     public virtual void Activate( UnitTemplate template, Cell cell )
     {
@@ -25,7 +22,7 @@ public class TowerUnit : BoardUnit
         SetLinePosition (cell.GetLinePosition ());
         SetColumnPosition (cell.GetColumnPosition ());
         Init (template);
-        towerCost = template.cost / template.targetIndexes.Length;
+        _towerCost = template.cost / template.targetIndexes.Length;
 
     }
 

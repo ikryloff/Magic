@@ -14,7 +14,6 @@ public class UnitStateHit : IUnitState
         _unit = unit;
         _template = template;
         _unitAnimation = unitAnimation;
-        _unit.SetImpact (_template);
         _impactParticle = _unit.GetImpactObject ();
     }
 
@@ -23,13 +22,18 @@ public class UnitStateHit : IUnitState
     {
         if ( _unit == null )
             return;
-
         GameEvents.current.OnAnimationFinishedAction += ExitCondition;
         ShowUnitImpact ();
-        if ( _unit.GetDirection () == Constants.UNIT_LEFT_DIR )
-            _unitAnimation?.AnimateHitWhenLeft ();
+        if(_unitAnimation != null )
+        {
+            if ( _unit.GetDirection () == Constants.UNIT_LEFT_DIR )
+                _unitAnimation.AnimateHitWhenLeft ();
+            else
+                _unitAnimation.AnimateHitWhenRight ();
+        }
         else
-            _unitAnimation?.AnimateHitWhenRight ();
+            _unit.SetHoldState ();
+
     }
 
     public void Exit()

@@ -1,5 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
+
+[RequireComponent (typeof (TargetFinder))]
+[RequireComponent (typeof (UnitAnimation))]
+[RequireComponent (typeof (Weapon))]
+[RequireComponent (typeof (Rigidbody2D))]
+
 
 public class Human : BoardUnit
 {
@@ -28,7 +34,7 @@ public class Human : BoardUnit
             GameEvents.current.HumanPositionWasChanged (this, _cell);
         }
     }
-       
+
     public override void IdleBehavior()
     {
         transform.Translate (Vector2.left * _currentSpeed * Time.deltaTime);

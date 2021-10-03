@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+
+[RequireComponent (typeof (TargetFinder))]
+[RequireComponent (typeof (TowerUnit))]
 
 public class PointerWeapon : TrapWeapon
 {

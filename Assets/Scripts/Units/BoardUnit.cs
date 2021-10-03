@@ -6,8 +6,6 @@ public class BoardUnit : Unit
     private int _columnPosition;
     private string _direction;
     private string _name;
-    protected GameObject _death;
-    protected GameObject _born;
     private UnitTemplate _unitTemplate;
     private UnitAnimation _unitAnimation;
     private HealthBar _healthBar;
@@ -21,6 +19,8 @@ public class BoardUnit : Unit
     protected UnitStateAttack _unitStateAttack;
     protected UnitStateHit _unitStateHit;
     protected UnitStateDie _unitStateDie;
+    protected GameObject _deathParticle;
+    protected GameObject _bornParticle;
     private ParticleSystem _impactParticle;
 
     #region 
@@ -80,15 +80,15 @@ public class BoardUnit : Unit
     public void MakeDeath()
     {
         RemoveUnit ();
-        Instantiate (_death, transform.position, Quaternion.identity);
+        Instantiate (_deathParticle, transform.position, Quaternion.identity);
         SetDieState ();
         Destroy (gameObject);
     }
 
     public void MakeBorn()
     {
-        if(_born != null)
-            Instantiate (_born, transform.position, Quaternion.identity);
+        if(_bornParticle != null)
+            Instantiate (_bornParticle, transform.position, Quaternion.identity);
     }
 
     public void SetImpact( UnitTemplate template )
@@ -149,11 +149,11 @@ public class BoardUnit : Unit
         _weapon?.Init (this);
         _unitAnimation = GetComponent<UnitAnimation> ();
         _unitAnimation?.Init (this);
-
+        SetImpact (_unitTemplate);
         _unitType = template.unitType;
         _name = template.unitName;
-        _death = template.deathPrefab;
-        _born = template.bornPrefab;
+        _deathParticle = template.deathPrefab;
+        _bornParticle = template.bornPrefab;
         MakeBorn ();
         SetStartDirection (template);
         InitStateMachine ();
