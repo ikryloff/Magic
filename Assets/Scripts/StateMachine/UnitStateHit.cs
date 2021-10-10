@@ -5,16 +5,14 @@ public class UnitStateHit : IUnitState
 
     private BoardUnit _unit;
     private UnitTemplate _template;
-    private UnitAnimation _unitAnimation;
-    private ParticleSystem _impactParticle;
+    private UCUnitAnimation _unitAnimation;
 
 
-    public UnitStateHit( BoardUnit unit, UnitTemplate template, UnitAnimation unitAnimation )
+    public UnitStateHit( BoardUnit unit, UnitTemplate template, UCUnitAnimation unitAnimation )
     {
         _unit = unit;
         _template = template;
         _unitAnimation = unitAnimation;
-        _impactParticle = _unit.GetImpactObject ();
     }
 
 
@@ -23,7 +21,6 @@ public class UnitStateHit : IUnitState
         if ( _unit == null )
             return;
         GameEvents.current.OnAnimationFinishedAction += ExitCondition;
-        ShowUnitImpact ();
         if(_unitAnimation != null )
         {
             if ( _unit.GetDirection () == Constants.UNIT_LEFT_DIR )
@@ -54,11 +51,4 @@ public class UnitStateHit : IUnitState
         }
     }
 
-
-    public void ShowUnitImpact()
-    {
-        _impactParticle?.Play ();
-    }
-
-   
 }

@@ -5,12 +5,12 @@ using UnityEngine;
 public class UnitStateAttack : IUnitState
 {
     private BoardUnit _unit;
-    private UnitAnimation _unitAnimation;
+    private UCUnitAnimation _unitAnimation;
     private BoardUnit _enemy;
-    private TargetFinder _targetFinder;
-    private Weapon _weapon;
+    private UCTargetFinder _targetFinder;
+    private UCWeapon _weapon;
 
-    public UnitStateAttack( BoardUnit unit, UnitAnimation unitAnimation, TargetFinder targetFinder, Weapon weapon )
+    public UnitStateAttack( BoardUnit unit, UCUnitAnimation unitAnimation, UCTargetFinder targetFinder, UCWeapon weapon )
     {
         _unit = unit;
         _unitAnimation = unitAnimation;

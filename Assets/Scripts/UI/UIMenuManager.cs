@@ -92,7 +92,6 @@ public class UIMenuManager : MonoBehaviour
 
     public void DontDisplayMenu()
     {
-        root.style.display = DisplayStyle.None;
     }
 
     public void OpenOptions()

@@ -1,10 +1,10 @@
 using UnityEngine;
 
 
-[RequireComponent (typeof (TargetFinder))]
+[RequireComponent (typeof (UCTargetFinder))]
 [RequireComponent (typeof (TowerUnit))]
 
-public class PointerWeapon : TrapWeapon
+public class UCPointerWeapon : UCTrapWeapon
 {
     public override void Fire( BoardUnit enemy )
     {
@@ -21,7 +21,7 @@ public class PointerWeapon : TrapWeapon
             enemy.transform.position = newPos;
             GameEvents.current.HumanPositionWasChanged (human, newCell);
 
-            _unit.MakeDeath ();
+            _unit.SetDieState();
         }
     }
 }

@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class UCWeapon : MonoBehaviour
 {
     protected BoardUnit _unit;
     private GameObject _bullet;

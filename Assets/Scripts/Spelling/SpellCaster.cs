@@ -8,11 +8,11 @@ public class SpellCaster : MonoBehaviour
     private ObjectsHolder objects;
     public List<Cell> CastLine;
     public SpellDecoder spellDecoder;
-    private UIManager ui;
+   // private UIManager ui;
 
     private void Awake()
     {
-        ui = ObjectsHolder.Instance.uIManager;
+        //ui = ObjectsHolder.Instance.uIManager;
         CastLine = new List<Cell> ();
         objects = FindObjectOfType<ObjectsHolder> ();
         spellDecoder = FindObjectOfType<SpellDecoder> ();
@@ -60,7 +60,7 @@ public class SpellCaster : MonoBehaviour
         CastLine.Clear ();
         CellsCount = 0;
         GameEvents.current.CastResetAction ();
-        ui.SetPrepareValue (100);
-        ui.SetDefaultPrepareIcon ();
+        //ui.SetPrepareValue (100);
+        //ui.SetDefaultPrepareIcon ();
     }
 }

@@ -1,16 +1,17 @@
 using UnityEngine;
 
 [RequireComponent (typeof (TowerUnit))]
-[RequireComponent (typeof (TargetFinder))]
+[RequireComponent (typeof (UCTargetFinder))]
 
-public class TrapWeapon : Weapon
+public class UCTrapWeapon : UCWeapon
 {
     public override void Fire( BoardUnit enemy )
     {
         if ( enemy )
         {
             GameEvents.current.NewHit (enemy, _unitTemplate);
-            _unit.MakeDeath ();
+            _unit.SetDieState ();
+            
         }
     }
 }

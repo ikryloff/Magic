@@ -1,10 +1,10 @@
 using UnityEngine;
 
 [RequireComponent (typeof (TowerUnit))]
-[RequireComponent (typeof (TargetFinder))]
-[RequireComponent (typeof (UnitAnimation))]
+[RequireComponent (typeof (UCTargetFinder))]
+[RequireComponent (typeof (UCUnitAnimation))]
 
-public class LoopWeapon : TrapWeapon
+public class UCLoopWeapon : UCTrapWeapon
 {
     public override void Fire( BoardUnit enemy )
     {
@@ -18,7 +18,7 @@ public class LoopWeapon : TrapWeapon
             enemy.transform.position = newPos;
             GameEvents.current.HumanPositionWasChanged (human, newCell);
 
-            _unit.MakeDeath ();
+            _unit.SetDieState();
         }
     }
 }

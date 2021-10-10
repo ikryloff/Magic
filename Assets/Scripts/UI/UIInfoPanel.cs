@@ -41,7 +41,7 @@ public class UIInfoPanel : MonoBehaviour
     private void Start()
     {
         spells = ObjectsHolder.Instance.spells;
-        SetInfoPanelText ();
+       // SetInfoPanelText ();
     }
 
     public void SetRootAndInit( VisualElement _root )

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetFinder : MonoBehaviour
+public class UCTargetFinder : MonoBehaviour
 {
     private float _attackRange;
     private BoardUnit _unit;

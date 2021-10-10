@@ -25,8 +25,14 @@ public class ShotSpell
     public void Return( TowerUnit target )
     {
         Debug.Log ("Return " + target.GetUnitName ());
-        target.MakeDeath ();
+        target.SetDieState ();
     }
 
+    public void Hurt( GameObject weak, Human human, UnitTemplate spellTemplate )
+    {
+        Debug.Log ("Weak " + human.name);
+        weak.transform.parent = human.transform;
+        human.SetWeak (spellTemplate);
+    }
 
 }

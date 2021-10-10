@@ -5,7 +5,7 @@ using UnityEngine;
 public class TowerBuilder : MonoBehaviour
 {
     public Wizard wizard;
-    private UIManager ui;
+   // private UIManager ui;
     private UnitsOnBoard _boardUnits;
     private List<Cell> _defCells;
     [SerializeField]
@@ -20,7 +20,7 @@ public class TowerBuilder : MonoBehaviour
     {
         _boardUnits = FindObjectOfType<UnitsOnBoard> ();
         _defCells = new List<Cell> ();
-        ui = FindObjectOfType<UIManager> ();
+        //ui = FindObjectOfType<UIManager> ();
         wizard = FindObjectOfType<Wizard> ();
         print ("Init Defence TBuilder");
     }
@@ -69,12 +69,12 @@ public class TowerBuilder : MonoBehaviour
         float value = 100;
         while ( time > 0 )
         {
-            ui.SetPrepareValue (value);
+            //ui.SetPrepareValue (value);
             time -= Time.deltaTime;
             value -= perc;
             yield return null;
         }
-        ui.SetPrepareValue (0);
+        //ui.SetPrepareValue (0);
         Building (spellTemplate, cells);
     }
 

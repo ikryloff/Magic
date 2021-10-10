@@ -42,6 +42,12 @@ public class SpellShotFabric : MonoBehaviour
                 GameEvents.current.NewGameMessage ("No target!");
                 return false;
             }
+            if( template.spellType == SpellUnit.SpellType.PressureSpell && _targetHumans [0].IsWeak() )
+            {
+                GameEvents.current.NewGameMessage ("No target!");
+                return false;
+            }
+
         }
 
         if ( template.spellType == SpellUnit.SpellType.HealingSpell || template.spellType == SpellUnit.SpellType.ReturnManaSpell )
@@ -52,6 +58,16 @@ public class SpellShotFabric : MonoBehaviour
                 GameEvents.current.NewGameMessage ("No target for using spell!");
                 return false;
             }
+
+            if ( template.spellType == SpellUnit.SpellType.HealingSpell )
+            {
+                if ( _targetTower.GetUnitTemplate().health == _targetTower.GetUnitHealth().GetCurrentHealth() )
+                {
+                    GameEvents.current.NewGameMessage ("No need!");
+                    return false;
+                }
+            }
+                
         }
         return true;
     }
@@ -65,12 +81,13 @@ public class SpellShotFabric : MonoBehaviour
                 CreateAttacksOfHumans (template, _targetHumans);
                 break;
             case SpellUnit.SpellType.PressureSpell:
+                GiveWeaknes (_targetHumans[0], template); // must be only one
                 break;
             case SpellUnit.SpellType.HealingSpell:
                 HealTower (_targetTower, template);
                 break;
             case SpellUnit.SpellType.ReturnManaSpell:
-                ReturnTowerForMana (_targetTower);
+                ReturnTowerForMana (_targetTower, template);
                 break;
 
 
@@ -176,9 +193,10 @@ public class SpellShotFabric : MonoBehaviour
         }
     }
 
-    private void ReturnTowerForMana( TowerUnit tower )
+    private void ReturnTowerForMana( TowerUnit tower, UnitTemplate spellTemplate )
     {
         ShotSpell shotSpell = new ShotSpell ();
+        Instantiate (spellTemplate.unitPrefab, tower.transform.position, Quaternion.identity);
         shotSpell.Return (tower);
     }
 
@@ -187,5 +205,13 @@ public class SpellShotFabric : MonoBehaviour
         ShotSpell shotSpell = new ShotSpell ();
         Instantiate (spellTemplate.unitPrefab, tower.transform.position, Quaternion.identity);
         shotSpell.Heal (tower, spellTemplate);
+    }
+
+    private void GiveWeaknes( Human human, UnitTemplate spellTemplate )
+    {
+        Instantiate (spellTemplate.impactPrefab, human.transform.position, Quaternion.identity);
+        GameObject weak = Instantiate (spellTemplate.unitPrefab, human.transform.position, Quaternion.identity);
+        ShotSpell shotSpell = new ShotSpell ();
+        shotSpell.Hurt (weak, human, spellTemplate);
     }
 }

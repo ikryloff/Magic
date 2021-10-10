@@ -49,12 +49,12 @@ public class AttackSpeller : MonoBehaviour
         float value = 100; ;
         while ( time > 0 )
         {
-            ui.SetPrepareValue (value);
+            //ui.SetPrepareValue (value);
             time -= Time.deltaTime;
             value -= perc;
             yield return null;
         }
-        ui.SetPrepareValue (0);
+       // ui.SetPrepareValue (0);
         shotFabric.CreateSpellShot (spellTemplate);
         GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
     }

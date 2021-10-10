@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-
-public class TowerUnit : BoardUnit
+﻿public class TowerUnit : BoardUnit
 {
     public enum TowerType
     {
@@ -24,11 +20,6 @@ public class TowerUnit : BoardUnit
         Init (template);
         _towerCost = template.cost / template.targetIndexes.Length;
 
-    }
-
-    public override void RemoveUnit()
-    {
-        UnitsOnBoard.RemoveTowerFromLineTowersList(this);
     }
 
     public TowerType GetTowerType()

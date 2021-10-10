@@ -8,7 +8,7 @@ public class XPpoints : MonoBehaviour
     private void Start()
     {
         uI = ObjectsHolder.Instance.uIManager;
-        uI.SetXPoints (XP);
+        //uI.SetXPoints (XP);
         PlayerCharacters.SetPlayerXP (XP);
     }
 

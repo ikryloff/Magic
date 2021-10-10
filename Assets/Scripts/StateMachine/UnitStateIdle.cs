@@ -4,9 +4,9 @@ public class UnitStateIdle : IUnitState
 {
     private BoardUnit _unit;
     private UnitTemplate _template;
-    private UnitAnimation _unitAnimation;
+    private UCUnitAnimation _unitAnimation;
 
-    public UnitStateIdle( BoardUnit unit, UnitTemplate template, UnitAnimation unitAnimation )
+    public UnitStateIdle( BoardUnit unit, UnitTemplate template, UCUnitAnimation unitAnimation )
     {
         _unit = unit;
         _template = template;

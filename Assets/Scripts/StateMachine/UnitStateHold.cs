@@ -3,13 +3,13 @@ using UnityEngine;
 public class UnitStateHold : IUnitState
 {
     private BoardUnit _unit;
-    private UnitAnimation _unitAnimation;
-    private TargetFinder _targetFinder;
+    private UCUnitAnimation _unitAnimation;
+    private UCTargetFinder _targetFinder;
     private BoardUnit _enemy;
     private float _delay;
     private float _attackRate;
 
-    public UnitStateHold( BoardUnit unit, UnitAnimation unitAnimation, TargetFinder targetFinder, UnitTemplate unitTemplate)
+    public UnitStateHold( BoardUnit unit, UCUnitAnimation unitAnimation, UCTargetFinder targetFinder, UnitTemplate unitTemplate)
     {
         _unit = unit;
         _unitAnimation = unitAnimation;

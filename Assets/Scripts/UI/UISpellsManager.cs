@@ -56,8 +56,6 @@ public class UISpellsManager : MonoBehaviour
     private int [] spellsIDList = new int [7];
     private int [] callsIDList = new int [7];
 
-    private bool isSpellPanelIsOpened;
-
     private void Start()
     {
         spells = ObjectsHolder.Instance.spells;
@@ -168,7 +166,6 @@ public class UISpellsManager : MonoBehaviour
         spellContainer.style.display = DisplayStyle.Flex;
         spellsContainer.style.display = DisplayStyle.None;
         infoContainer.style.display = DisplayStyle.None;
-        isSpellPanelIsOpened = true;
         
     }
 
@@ -194,21 +191,13 @@ public class UISpellsManager : MonoBehaviour
         spellContainer.style.display = DisplayStyle.None;
         infoContainer.style.display = DisplayStyle.None;
         spellsContainer.style.display = DisplayStyle.Flex;
-        isSpellPanelIsOpened = false;
         UpdateSpellBoard ();
         SetButtonImages ();
     }
 
     private void CloseOrReturn()
     {
-        if ( isSpellPanelIsOpened )
-        {
-            SpellsPanelOn ();
-        }
-        else
-        {
-            uIManager.ToggleSchoolList ();
-        }
+        
     }
 
     public void UpdateSpellAndCallSchoolBoard( int [] spellList, int [] callList )

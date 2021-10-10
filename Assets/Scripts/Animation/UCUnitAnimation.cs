@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent (typeof (TargetFinder))]
-public class UnitAnimation : MonoBehaviour
+[RequireComponent (typeof (UCTargetFinder))]
+public class UCUnitAnimation : MonoBehaviour
 {
     private Animator animator;
     private float _attackLeftTime;

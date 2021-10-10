@@ -26,7 +26,7 @@ public class Wizard : MonoBehaviour
         mana_norm = 1f;
         manaCicle = 1f;
         manaCicleRate = 1f;
-        uI.SetDefenceValue (hp_norm * 100, defencePoints);
+        //uI.SetDefenceValue (hp_norm * 100, defencePoints);
         CalcMana ();
         //PrintSpellsIDList ();
     }
@@ -90,7 +90,7 @@ public class Wizard : MonoBehaviour
     public void CalcMana()
     {
         mana_norm = manaPoints / startMana;
-        uI.SetManaValue (mana_norm * 100, (int)manaPoints);
+        //uI.SetManaValue (mana_norm * 100, (int)manaPoints);
     }
 
     public float GetManapoints()

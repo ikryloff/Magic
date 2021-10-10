@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 
-[RequireComponent (typeof (TargetFinder))]
-[RequireComponent (typeof (UnitAnimation))]
-[RequireComponent (typeof (Weapon))]
+[RequireComponent (typeof (UCTargetFinder))]
+[RequireComponent (typeof (UCUnitAnimation))]
+[RequireComponent (typeof (UCWeapon))]
 [RequireComponent (typeof (Rigidbody2D))]
 
 
@@ -12,6 +12,7 @@ public class Human : BoardUnit
     private float _xp;
     private float _speed;
     private float _currentSpeed;
+    private bool _isWeak;
 
     public void Activate( int linePosition, UnitTemplate template )
     {
@@ -39,26 +40,18 @@ public class Human : BoardUnit
     {
         transform.Translate (Vector2.left * _currentSpeed * Time.deltaTime);
     }
-
-    public override void RemoveUnit()
+    
+    public bool IsWeak()
     {
-        UnitsOnBoard.RemoveHumanFromLineHumansList (this);
+        return _isWeak;
     }
 
-    public float GetCurrentSpeed()
+    public void SetWeak(UnitTemplate senderTemplate)
     {
-        return _currentSpeed;
+        _isWeak = true;
+        _currentSpeed = _currentSpeed * 0.5f;
     }
 
-    public void SetCurrentSpeed( float speed )
-    {
-        _currentSpeed = speed;
-    }
-
-    public float GetSpeed()
-    {
-        return _speed;
-    }
 
 
 
