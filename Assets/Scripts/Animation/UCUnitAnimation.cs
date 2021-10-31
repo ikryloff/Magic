@@ -35,32 +35,32 @@ public class UCUnitAnimation : MonoBehaviour
         }
     }
 
-    public void AnimateHitWhenLeft()
+    public void AnimateHitWhenLeft( UnitStateHit unitStateHit )
     {
         animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_HIT_LEFT);
-        StartCoroutine (HitAnimationRoutine (_hitLeftTime, Constants.ANIM_UNIT_HIT_LEFT));
+        StartCoroutine (HitAnimationRoutine (_hitLeftTime, Constants.ANIM_UNIT_HIT_LEFT, unitStateHit));
     }
 
-    public void AnimateHitWhenRight()
+    public void AnimateHitWhenRight( UnitStateHit unitStateHit )
     {
         animator.enabled = true;
         animator.Play (Constants.ANIM_UNIT_HIT_RIGHT);
-        StartCoroutine (HitAnimationRoutine (_hitRightTime, Constants.ANIM_UNIT_HIT_RIGHT));
+        StartCoroutine (HitAnimationRoutine (_hitRightTime, Constants.ANIM_UNIT_HIT_RIGHT, unitStateHit));
     }
 
-    public void AttackLeftAnimation()
+    public void AttackLeftAnimation( UnitStateAttack unitStateAttack )
     {
         animator.enabled = true;
         animator.Play (Constants.ANIM_UNITY_ATTACK_LEFT);
-        StartCoroutine (AttackAnimationRoutine (_attackLeftTime, Constants.ANIM_UNITY_ATTACK_LEFT));
+        StartCoroutine (AttackAnimationRoutine (_attackLeftTime, Constants.ANIM_UNITY_ATTACK_LEFT, unitStateAttack));
     }
 
-    public void AttackRightAnimation()
+    public void AttackRightAnimation( UnitStateAttack unitStateAttack )
     {
         animator.enabled = true;
         animator.Play (Constants.ANIM_UNITY_ATTACK_RIGHT);
-        StartCoroutine (AttackAnimationRoutine (_attackRightTime, Constants.ANIM_UNITY_ATTACK_RIGHT));
+        StartCoroutine (AttackAnimationRoutine (_attackRightTime, Constants.ANIM_UNITY_ATTACK_RIGHT, unitStateAttack));
     }
 
     public void AnimateWalk()
@@ -82,24 +82,24 @@ public class UCUnitAnimation : MonoBehaviour
         animator.Play (Constants.ANIM_UNIT_STAY_RIGHT);
     }
 
-    private IEnumerator HitAnimationRoutine( float length, string animType )
+    private IEnumerator HitAnimationRoutine( float length, string animType, UnitStateHit unitStateHit )
     {
         while ( length > 0 )
         {
             length -= Time.deltaTime;
             yield return null;
         }
-        GameEvents.current.AnimationFinishedEvent (_unit, animType);
+        unitStateHit.UnitAfterHit ();
     }
 
-    private IEnumerator AttackAnimationRoutine( float length, string animType )
+    private IEnumerator AttackAnimationRoutine( float length, string animType, UnitStateAttack unitStateAttack )
     {
         while ( length > 0 )
         {
             length -= Time.deltaTime;
             yield return null;
         }
-        GameEvents.current.AnimationFinishedEvent (_unit, animType);
+        unitStateAttack.UnitAttack();
     }
 
     public void StopAllAnimations()

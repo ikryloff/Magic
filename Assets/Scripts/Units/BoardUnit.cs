@@ -90,7 +90,8 @@ public class BoardUnit : Unit
 
     public void SetHitState()
     {
-        ChangeState (_unitStateHit);
+        if(GetCurrentState() == _unitStateIdle)
+            ChangeState (_unitStateHit);
     }
 
     public void SetDieState()

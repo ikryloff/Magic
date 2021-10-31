@@ -60,7 +60,6 @@ public class SpellCaster : MonoBehaviour
         CastLine.Clear ();
         CellsCount = 0;
         GameEvents.current.CastResetAction ();
-        //ui.SetPrepareValue (100);
-        //ui.SetDefaultPrepareIcon ();
+        GameEvents.current.PrepareTimeValueChangedAction (1f);
     }
 }

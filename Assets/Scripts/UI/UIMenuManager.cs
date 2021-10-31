@@ -128,14 +128,14 @@ public class UIMenuManager : MonoBehaviour
 
     private void SetEnglishLang()
     {
-        PlayerCharacters.SetPlayerLanguage (0);
+        Player.SetPlayerLanguage (0);
         optionsEngButton.style.backgroundColor = Color.green;
         optionsRusButton.style.backgroundColor = Color.grey;
     }
 
     private void SetRussianLang()
     {
-        PlayerCharacters.SetPlayerLanguage (1);
+        Player.SetPlayerLanguage (1);
         optionsRusButton.style.backgroundColor = Color.green;
         optionsEngButton.style.backgroundColor = Color.grey;
     }

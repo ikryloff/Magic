@@ -24,7 +24,9 @@ public class ShotSpell
 
     public void Return( TowerUnit target )
     {
-        Debug.Log ("Return " + target.GetUnitName ());
+        int returnMP =  Mathf.RoundToInt(target.GetUnitTemplate ().cost * 0.5f);
+        Debug.Log ("Return " + target.GetUnitName () + " " + returnMP);
+        GameEvents.current.ManaWasteAction (-returnMP);
         target.SetDieState ();
     }
 

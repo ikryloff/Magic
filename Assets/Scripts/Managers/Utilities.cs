@@ -43,17 +43,18 @@ public class Utilities
     {
         SpriteRenderer sr = unit.GetComponent<SpriteRenderer>();
         float dp = GetSpriteZDisplace ();
-        sr.sortingOrder = GetOrderInLayer (unit, line);
+        sr.sortingOrder = line;
+        
+        // only for traps
+        if ( unit.GetUnitTemplate ().unitType == Unit.UnitType.Tower )
+        {
+            if ( unit.GetUnitTemplate ().towerType == TowerUnit.TowerType.Trap )
+            {
+                dp = 1;
+            }
+        }
+
         unit.transform.position = new Vector3 (unit.transform.position.x, unit.transform.position.y, unit.transform.position.z + dp);
-
-    }
-
-    public static int GetOrderInLayer(BoardUnit unit, int line)
-    {
-        if ( unit.GetUnitType () == Unit.UnitType.Human )
-            return line + 5;
-        else
-            return line;
     }
 
 }

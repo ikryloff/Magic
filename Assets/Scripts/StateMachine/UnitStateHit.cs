@@ -20,35 +20,24 @@ public class UnitStateHit : IUnitState
     {
         if ( _unit == null )
             return;
-        GameEvents.current.OnAnimationFinishedAction += ExitCondition;
         if(_unitAnimation != null )
         {
             if ( _unit.GetDirection () == Constants.UNIT_LEFT_DIR )
-                _unitAnimation.AnimateHitWhenLeft ();
+                _unitAnimation.AnimateHitWhenLeft (this);
             else
-                _unitAnimation.AnimateHitWhenRight ();
+                _unitAnimation.AnimateHitWhenRight (this);
         }
         else
             _unit.SetHoldState ();
 
     }
 
-    public void Exit()
+    public void UnitAfterHit()
     {
-        GameEvents.current.OnAnimationFinishedAction -= ExitCondition;
+        _unit.SetHoldState ();
     }
 
     public void Tick() { return;}
 
-    private void ExitCondition( BoardUnit unit, string animType )
-    {
-        if ( _unit == unit )
-        {
-            if ( animType == Constants.ANIM_UNIT_HIT_LEFT || animType == Constants.ANIM_UNIT_HIT_RIGHT )
-            {
-                _unit.SetHoldState ();
-            }
-        }
-    }
-
+    public void Exit() { }
 }

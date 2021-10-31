@@ -20,9 +20,10 @@ public class UCWeapon : MonoBehaviour
     {
         if ( enemy )
         {
+            
             if ( _unitTemplate.attackRange > 1 )
             {
-                GameObject bulletGO = Instantiate (_bullet, transform.position, Quaternion.identity) as GameObject;
+                GameObject bulletGO = Instantiate (_bullet, transform.position, Quaternion.identity);
                 Bullet bullet = bulletGO.GetComponent<Bullet> ();
                 if ( bullet != null )
                 {

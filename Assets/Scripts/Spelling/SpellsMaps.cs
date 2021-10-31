@@ -4,13 +4,7 @@ using UnityEngine;
 public class SpellsMaps : MonoBehaviour
 {
     public UnitTemplate [] spellScript;
-    public Board field;
-    public string bulletName;
-    public TowerBuilder towerBuilder;
-    public AttackSpeller attackManager;
     public Wizard wizard;
-    private ObjectsHolder oh;
-    private UIManager ui;
 
     private int [] natureSchoolSpellList = { 7, 8, 9, 10, 11, 12, 13 };
     private int [] natureSchoolCallllList = { 42, 43, 44, 45, 46, 47, 48 };
@@ -26,14 +20,20 @@ public class SpellsMaps : MonoBehaviour
 
 
 
-    private Dictionary<string, UnitTemplate> spellsSpellCodeMap;
-    private Dictionary<int, UnitTemplate> spellsIDMap;
+    public static Dictionary<string, UnitTemplate> spellsSpellCodeMap;
+    public static Dictionary<int, UnitTemplate> spellsIDMap;
+    public static Dictionary<SpellProperty, List<int>> spellIDsListByPropertyMap;
 
     private void Awake()
     {
+        wizard = FindObjectOfType<Wizard> ();
+
         MakeSpellsStringMap ();
         MakeSpellsIDMap ();
+        MakeSpellIDsListByPropertyMap ();
+
     }
+
 
     private void MakeSpellsStringMap()
     {
@@ -59,58 +59,49 @@ public class SpellsMaps : MonoBehaviour
             if ( ss.unitType != Unit.UnitType.Human )
             {
                 spellsIDMap.Add (ss.unitID, ss);
-                PlayerCharacters.AddSpellToPlayerSpellsIDList (ss.unitID);
+                //here for test
+                Player.AddSpellToPlayerSpellsIDList (ss.unitID);
             }
         }
     }
 
-
-    private void Start()
+    private void MakeSpellIDsListByPropertyMap()
     {
-        oh = ObjectsHolder.Instance;
-        field = oh.field;
-        towerBuilder = oh.buildingManager;
-        attackManager = oh.attackManager;
-        wizard = oh.wizard;
-        ui = oh.uIManager;
+        spellIDsListByPropertyMap = new Dictionary<SpellProperty, List<int>> ();
+        foreach ( var ss in spellScript )
+        {
+            if ( ss.unitType != Unit.UnitType.Human )
+            {
+                SpellProperty spellProperty = new SpellProperty (ss.classProperty, ss.unitType);
+                if ( !spellIDsListByPropertyMap.ContainsKey (spellProperty) )
+                    spellIDsListByPropertyMap [spellProperty] = new List<int> ();
+                spellIDsListByPropertyMap [spellProperty].Add (ss.unitID);
+                spellIDsListByPropertyMap [spellProperty].Sort ();
+
+
+                Debug.Log ("array = " + ss.classProperty + " " + ss.unitType + " " + string.Join (" ",
+                   new List<int> (spellIDsListByPropertyMap [spellProperty])
+                   .ConvertAll (i => i.ToString ())
+                   .ToArray ()));
+            }
+
+        }
+
     }
 
+    public static UnitTemplate GetUnitTemplateBySpellProperty( SpellProperty spellProperty, int num )
+    {
+        if ( spellIDsListByPropertyMap.ContainsKey (spellProperty) )
+        {
+            int id = 0;
+            if (num < spellIDsListByPropertyMap [spellProperty].Count)
+                 id = spellIDsListByPropertyMap [spellProperty] [num];
+            return GetUnitTemplateByID (id);
+        }
+        else return null;
+    }
 
-    //public void FindAndActivateSpell( string spellCode, int top, int bottom, int left, int right, List<Cell> cells )
-    //{
-    //    if ( Wizard.IsStopCasting )
-    //        return;
-    //    print (spellCode);
-    //    Wizard.IsStopCasting = true;
-    //    EntityTemplate spell = GetSpell (spellCode);
-    //    if ( spell != null )
-    //    {
-    //        if ( spell != null )
-    //        {
-    //            ExecuteTrapSpell (spell, top, left);
-
-    //        }
-    //        else if ( spell.isTowerActive )
-    //        {
-    //            ExecuteTowerSpell (spell, top, bottom, left, right);
-    //        }
-    //        else
-    //        {
-    //            ExecuteActiveSpell (spell, top, bottom, left, right);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        PrintMessage ("Unknown spell!!");
-    //        oh.castManager.ClearCast ();
-    //        Wizard.IsStopCasting = false;
-    //    }
-    //}
-
-    
-
-
-    public UnitTemplate GetSpellByID( int id )
+    public static UnitTemplate GetUnitTemplateByID( int id )
     {
         if ( spellsIDMap.ContainsKey (id) )
             return spellsIDMap [id];
@@ -119,72 +110,6 @@ public class SpellsMaps : MonoBehaviour
 
     }
 
-    private void ExecuteTrapSpell( UnitTemplate spell, int top, int left )
-    {
-        //towerBuilder.BuildTrap (spell, new int [] { top + spell.targetCell [0], left + spell.targetCell [1] });
-    }
-
-    //private void ExecuteTowerSpell( EntityTemplate spell, int top, int bottom, int left, int right )
-    //{
-    //    if ( spell.code.Equals (Constants.SPELL_CODE_SACRIFICE) )
-    //    {
-    //        attackManager.ReturnMana (spell, new int [] { top + spell.targetCell [0], left + spell.targetCell [1] });
-    //    }
-    //    else if ( spell.code.Equals (Constants.SPELL_CODE_ENCOURAGEMENT) )
-    //    {
-    //        attackManager.HealTower (spell, new int [] { top + spell.targetCell [0], left + spell.targetCell [1] });
-    //    }
-    //}
-
-    //private void ExecuteActiveSpell( EntityTemplate spell, int top, int bottom, int left, int right )
-    //{
-    //    int [] arr = spell.CalcTarget (top, bottom, left, right);
-    //    if ( spell.isEnemyAffect )
-    //    {
-    //        if ( spell.code.Equals (Constants.SPELL_CODE_SUPPRESSION) )
-    //            attackManager.SlowEnemieMoving (spell, arr);
-    //    }
-    //    else
-    //        attackManager.AttackEnemies (spell, arr);
-    //}
-
-    public UnitTemplate GetSpell( string code )
-    {
-        if ( spellsSpellCodeMap.ContainsKey (code) )
-            return spellsSpellCodeMap [code];
-        return null;
-    }
-
-    public void PrintMessage( string message )
-    {
-        ui.SetMessage (message);
-    }
-
-
-    public int [] GetNatureListByIndex( int index )
-    {
-        return index == 0 ? natureSchoolSpellList : natureSchoolCallllList;
-    }
-
-    public int [] GetElementalListByIndex( int index )
-    {
-        return index == 0 ? elementalSchoolSpellList : elementalSchoolCallList;
-    }
-
-    public int [] GetDemonologyListByIndex( int index )
-    {
-        return index == 0 ? demonologySchoolSpellList : demonologySchoolCallList;
-    }
-
-    public int [] GetNecromancyListByIndex( int index )
-    {
-        return index == 0 ? necromancySchoolSpellList : necromancySchoolCallList;
-    }
-
-    public int [] GetDefensiveListByIndex( int index )
-    {
-        return index == 0 ? defenciveSchoolSpellList : defenciveSchoolCallList;
-    }
 
     public int GetSchoolLearnedSpells( int [] spells, int [] calls )
     {
@@ -192,17 +117,29 @@ public class SpellsMaps : MonoBehaviour
 
         for ( int i = 0; i < spells.Length; i++ )
         {
-            count += PlayerCharacters.GetPlayerSpellsValueByIndex (spells [i]);
+            count += Player.GetPlayerSpellsValueByIndex (spells [i]);
         }
 
         for ( int i = 0; i < calls.Length; i++ )
         {
-            count += PlayerCharacters.GetPlayerSpellsValueByIndex (calls [i]);
+            count += Player.GetPlayerSpellsValueByIndex (calls [i]);
         }
 
         return count;
     }
 
+}
+
+public struct SpellProperty
+{
+    private Unit.UnitClassProperty school;
+    private Unit.UnitType type;
+
+    public SpellProperty( Unit.UnitClassProperty school, Unit.UnitType type )
+    {
+        this.school = school;
+        this.type = type;
+    }
 }
 
 

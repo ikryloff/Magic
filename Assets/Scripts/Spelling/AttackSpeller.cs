@@ -43,18 +43,18 @@ public class AttackSpeller : MonoBehaviour
 
     IEnumerator PrepareSpellRoutine( UnitTemplate spellTemplate, SpellShotFabric shotFabric)
     {
-        //ui.SetPrepareIcon (spell.entityID);
+        GameEvents.current.ManaWasteAction (spellTemplate.cost);
         float time = spellTemplate.prepareTime;
-        float perc = Time.deltaTime / time * 100;
-        float value = 100; ;
+        float perc = Time.deltaTime / time;
+        float value = 1; ;
         while ( time > 0 )
         {
-            //ui.SetPrepareValue (value);
+            GameEvents.current.PrepareTimeValueChangedAction (value);
             time -= Time.deltaTime;
             value -= perc;
             yield return null;
         }
-       // ui.SetPrepareValue (0);
+        GameEvents.current.PrepareTimeValueChangedAction (100);
         shotFabric.CreateSpellShot (spellTemplate);
         GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
     }

@@ -93,11 +93,9 @@ public class UIInfoPanel : MonoBehaviour
         manaPR.text = Localization.GetString ("manaPR");
         possibleSpells.text = Localization.GetString ("possibleSpells");
 
-        defenseValue.text = PlayerCharacters.GetPlayerDP ().ToString ();
-        manaValue.text = PlayerCharacters.GetPlayerMP ().ToString ();
-        expValue.text = PlayerCharacters.GetPlayerXP ().ToString ();
-        manaPPSValue.text = PlayerCharacters.GetPlayerMPPS ().ToString ();
-        manaPRValue.text = (PlayerCharacters.GetPlayerManaReturn () * 100).ToString ();
+        manaValue.text = Player.GetPlayerMP ().ToString ();
+        expValue.text = Player.GetPlayerXP ().ToString ();
+        manaPPSValue.text = Player.GetPlayerMPPS ().ToString ();
 
         known.text = Localization.GetString ("known");
         elem.text = Localization.GetString ("elemental_stat");
@@ -106,11 +104,7 @@ public class UIInfoPanel : MonoBehaviour
         necro.text = Localization.GetString ("necro_stat");
         defensive.text = Localization.GetString ("defencive_stat");
 
-        knownValue.text = PlayerCharacters.GetPlayerSpellsQuantity ().ToString ();
-        elemValue.text = spells.GetSchoolLearnedSpells(spells.GetElementalListByIndex(0), spells.GetElementalListByIndex (1)).ToString();
-        natureValue.text = spells.GetSchoolLearnedSpells (spells.GetNatureListByIndex (0), spells.GetNatureListByIndex (1)).ToString ();
-        demonValue.text = spells.GetSchoolLearnedSpells (spells.GetDemonologyListByIndex (0), spells.GetDemonologyListByIndex (1)).ToString ();
-        necroValue.text = spells.GetSchoolLearnedSpells (spells.GetNecromancyListByIndex (0), spells.GetNecromancyListByIndex (1)).ToString (); 
-        defensiveValue.text = spells.GetSchoolLearnedSpells (spells.GetDefensiveListByIndex (0), spells.GetDefensiveListByIndex (1)).ToString ();
+        knownValue.text = Player.GetPlayerSpellsQuantity ().ToString ();
+        
     }
 }

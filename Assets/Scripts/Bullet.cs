@@ -52,8 +52,10 @@ public class Bullet : MonoBehaviour
     {
         if ( _victim != null )
         {
+            Debug.Log ("vic " + _victim.name + " " + _sender.name);
             GameEvents.current.NewHit (_victim, _sender);
         }
+        else
         _target = null;
         _victim = null;
 

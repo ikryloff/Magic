@@ -31,8 +31,7 @@ public class UnitTemplate : ScriptableObject
     public GameObject impactPrefab;
     public GameObject deathPrefab;
     public GameObject bornPrefab;
-    public Texture2D activeIcon;
-    public Texture2D unActiveIcon;
+    public Sprite activeIcon;
 
     [Header ("For humans")]
     public float speed;

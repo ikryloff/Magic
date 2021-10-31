@@ -51,14 +51,12 @@ public class UISpellsManager : MonoBehaviour
     IMGUIContainer schemaImg;
 
     private UIInfoPanel infoPanel;
-    private SpellsMaps spells;
 
     private int [] spellsIDList = new int [7];
     private int [] callsIDList = new int [7];
 
     private void Start()
     {
-        spells = ObjectsHolder.Instance.spells;
     }
 
     public void SetRootAndInit( VisualElement _root )
@@ -115,7 +113,6 @@ public class UISpellsManager : MonoBehaviour
 
         InitSpellButtons ();
 
-        closePanelButton.clicked += CloseOrReturn;
 
         info.clicked += delegate { TurnTab (0); };
         elem.clicked += delegate { TurnTab (1); };
@@ -151,9 +148,9 @@ public class UISpellsManager : MonoBehaviour
         SpellPanelOn ();
         UnitTemplate spell;
         if ( isSpell )
-            spell = spells.GetSpellByID (spellsIDList [spellNum]);
+            spell = SpellsMaps.GetUnitTemplateByID (spellsIDList [spellNum]);
         else
-            spell = spells.GetSpellByID (callsIDList [spellNum]);
+            spell = SpellsMaps.GetUnitTemplateByID (callsIDList [spellNum]);
        
         itemName.text = Localization.GetString(spell.spellTag);
         schemaImg.style.backgroundImage = GameAssets.instance.GetSchemaByID (spell.unitID);
@@ -195,73 +192,11 @@ public class UISpellsManager : MonoBehaviour
         SetButtonImages ();
     }
 
-    private void CloseOrReturn()
-    {
-        
-    }
-
-    public void UpdateSpellAndCallSchoolBoard( int [] spellList, int [] callList )
-    {
-        for ( int i = 0; i < spellList.Length; i++ )
-        {
-            int sp = spellList [i];
-            int ca = callList [i];
-            if ( PlayerCharacters.IsSpellInPlayerSpellsIDList (sp) )
-            {
-                spellsButtons [i].style.backgroundColor = Color.green;
-            }
-            else
-            {
-                spellsButtons [i].style.backgroundColor = Color.black;
-            }
-            if ( PlayerCharacters.IsSpellInPlayerSpellsIDList (ca) )
-            {
-                callsButtons [i].style.backgroundColor = Color.green;
-            }
-            else
-            {
-                callsButtons [i].style.backgroundColor = Color.black;
-            }
-        }
-
-        
-    }
+      
 
     public void UpdateSpellBoard()
     {
-        switch ( tabSelector )
-        {
-            case 0:
-                itemName.text = Localization.GetString ("info");
-                break;
-            case 1:
-                spellsIDList = spells.GetElementalListByIndex (0);
-                callsIDList = spells.GetElementalListByIndex (1);
-                itemName.text = Localization.GetString ("elemental");
-                break;
-            case 2:
-                spellsIDList = spells.GetNatureListByIndex (0);
-                callsIDList = spells.GetNatureListByIndex (1);
-                itemName.text = Localization.GetString ("nature");
-                break;
-            case 3:
-                spellsIDList = spells.GetDemonologyListByIndex (0);
-                callsIDList = spells.GetDemonologyListByIndex (1);
-                itemName.text = Localization.GetString ("demonology");
-                break;
-            case 4:
-                spellsIDList = spells.GetNecromancyListByIndex (0);
-                callsIDList = spells.GetNecromancyListByIndex (1);
-                itemName.text = Localization.GetString ("necromancy");
-                break;
-            case 5:
-                spellsIDList = spells.GetDefensiveListByIndex (0);
-                callsIDList = spells.GetDefensiveListByIndex (1);
-                itemName.text = Localization.GetString ("defensive");
-                break;
-            default:
-                break;
-        }
+       
 
         SetButtonImages ();
     }

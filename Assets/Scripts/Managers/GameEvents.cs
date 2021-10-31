@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameEvents : MonoBehaviour
 {
@@ -41,7 +42,31 @@ public class GameEvents : MonoBehaviour
     public event Action<BoardUnit, string> OnAnimationFinishedAction;
     public event Action<Human> OnHumanDeathAction;
     public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
+    public event Action <Unit.UnitClassProperty, Color32> OnTabChangeEvent;
+    public event Action <float> OnPrepareTimeValueChangedEvent;
+    public event Action <float> OnManaValueChangedEvent;
+    public event Action <float> OnManaWasteEvent;
 
+
+    public void ManaWasteAction( float value )
+    {
+        OnManaWasteEvent?.Invoke (value);
+    }
+
+    public void ManaValueChangedAction( float value )
+    {
+        OnManaValueChangedEvent?.Invoke (value);
+    }
+
+    public void PrepareTimeValueChangedAction( float value)
+    {
+        OnPrepareTimeValueChangedEvent?.Invoke (value);
+    }
+
+    public void TabChangeAction(Unit.UnitClassProperty classIndex, Color32 color )
+    {
+        OnTabChangeEvent?.Invoke (classIndex, color);
+    }
 
     public void GameStateChangedAction( GameManager.GameState state )
     {

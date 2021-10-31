@@ -83,7 +83,8 @@ public class SpellDecoder : MonoBehaviour
                 //this spell code must be wrong
                 if ( cell == null )
                 {
-                    spell.Add (5);
+                    spell.Add (0);
+                    spell.Add (2);
                     continue;
                 }
                 

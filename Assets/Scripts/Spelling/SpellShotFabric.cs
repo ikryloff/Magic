@@ -28,7 +28,7 @@ public class SpellShotFabric : MonoBehaviour
 
     public bool IsValidSpellCall( UnitTemplate template, Cell [] cells )
     {
-        if ( template.cost > PlayerCharacters.GetPlayerMP () )
+        if ( template.cost > Wizard.GetManapoints() )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
             return false;
@@ -89,9 +89,8 @@ public class SpellShotFabric : MonoBehaviour
             case SpellUnit.SpellType.ReturnManaSpell:
                 ReturnTowerForMana (_targetTower, template);
                 break;
-
-
         }
+
     }
 
     private int [] GetTargetLines( Cell [] cells )

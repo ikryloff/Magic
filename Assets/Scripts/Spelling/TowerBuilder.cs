@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TowerBuilder : MonoBehaviour
 {
-    public Wizard wizard;
-   // private UIManager ui;
     private UnitsOnBoard _boardUnits;
     private List<Cell> _defCells;
     [SerializeField]
@@ -20,16 +18,10 @@ public class TowerBuilder : MonoBehaviour
     {
         _boardUnits = FindObjectOfType<UnitsOnBoard> ();
         _defCells = new List<Cell> ();
-        //ui = FindObjectOfType<UIManager> ();
-        wizard = FindObjectOfType<Wizard> ();
         print ("Init Defence TBuilder");
     }
 
-    private void GetDeffCells( List<Cell> cells )
-    {
-        _defCells = cells;
-    }
-
+   
     public void BuildTower( UnitTemplate spellTemplate, Cell [] cells )
     {
         if ( !IsValidTowerCall (spellTemplate, cells) ) //is enough mana and place is not engaged 
@@ -51,7 +43,7 @@ public class TowerBuilder : MonoBehaviour
             }
         }
 
-        if ( wizard != null && spellTemplate.cost > wizard.GetManapoints () )
+        if ( spellTemplate.cost > Wizard.GetManapoints() )
         {
             GameEvents.current.NewGameMessage ("You have no mana!");
             return false;
@@ -61,20 +53,19 @@ public class TowerBuilder : MonoBehaviour
 
     IEnumerator PrepareBuildingRoutine( UnitTemplate spellTemplate, Cell [] cells )
     {
-        //ui.SetPrepareIcon (spellTemplate);
-        //wizard.ManaWaste (spellTemplate.cost);
+        GameEvents.current.ManaWasteAction (spellTemplate.cost);
         GameEvents.current.NewGameMessage (spellTemplate.unitName);
         float time = spellTemplate.prepareTime;
-        float perc = Time.deltaTime / time * 100;
-        float value = 100;
+        float perc = Time.deltaTime / time;
+        float value = 1;
         while ( time > 0 )
         {
-            //ui.SetPrepareValue (value);
+            GameEvents.current.PrepareTimeValueChangedAction (value);
             time -= Time.deltaTime;
             value -= perc;
             yield return null;
         }
-        //ui.SetPrepareValue (0);
+        GameEvents.current.PrepareTimeValueChangedAction (1f);
         Building (spellTemplate, cells);
     }
 

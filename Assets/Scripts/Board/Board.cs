@@ -62,7 +62,7 @@ public class Board : MonoBehaviour
                 _positionCellMap.Add (new CellPos (col, line), cell);
 
                 // set bounds of board
-                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1 || x == 1 )
+                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1 || x == 0 )
                 {
                     cell.SetUnusable ();
                 }
@@ -77,7 +77,7 @@ public class Board : MonoBehaviour
                     _firePoints.SetPointPosition (x, cell.transform.position + new Vector3 (0, _tileWidth * 2f, 0));
                 }
                 // setup deffense towers cells
-                if ( y != 0 && y != _height - 1 && x == 1 )
+                if ( y != 0 && y != _height - 1 && x == 1)
                 {
                     _defCells.Add (cell);
                 }

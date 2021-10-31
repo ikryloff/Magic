@@ -12,8 +12,7 @@ public class UIManager : MonoBehaviour
     
 
     private UISpellsManager uISpellsManager;
-    private UIMenuManager uIMenuManager;
-    private UIInfoPanel uIInfoPanel;
+    
 
     private int defencePoints;
     private int manaPoints;
@@ -22,8 +21,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         uISpellsManager = GetComponent<UISpellsManager> ();
-        uIMenuManager = GetComponent<UIMenuManager> ();
-        uIInfoPanel = GetComponent<UIInfoPanel> ();
+        
         
 
         // Events
@@ -40,14 +38,12 @@ public class UIManager : MonoBehaviour
     {
         CleanMessage ();
         PrintSpellsQuantity ();
-        SetPrepareValue (100);
-        SetDefaultPrepareIcon ();
+        CloseSpellsPanel ();
     }
 
     public void OpenMenu()
     {
         StopSpelling ();
-        uIMenuManager.OpenMenu ();
     }
 
     public void SpeedGame()
@@ -102,27 +98,6 @@ public class UIManager : MonoBehaviour
         GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
     }
 
-    public void SetPrepareValue( float value )
-    {
-        
-        
-    }
-
-    public void SetManaValue( float value, float points )
-    {
-        
-    }
-
-    public void SetDefenceValue( float value, float points )
-    {
-        
-    }
-
-    public void SetXPoints( int value )
-    {
-        
-    }
-
     public void StopSpelling()
     {
         GameEvents.current.GameStateChangedAction (GameManager.GameState.PauseGame);
@@ -130,17 +105,6 @@ public class UIManager : MonoBehaviour
     public void ResumeSpelling()
     {
         GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
-    }
-
-
-    public void SetPrepareIcon( UnitTemplate et )
-    {
-        
-    }
-
-    public void SetDefaultPrepareIcon()
-    {
-        
     }
 
 }

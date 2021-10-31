@@ -66,9 +66,9 @@ public class Localization
     public static string GetString( string str )
     {
         if ( local.ContainsKey(str) )
-            return local [str] [PlayerCharacters.GetPlayerLanguage ()];
+            return local [str] [Player.GetPlayerLanguage ()];
         else
-            return local ["NONE"] [PlayerCharacters.GetPlayerLanguage ()];
+            return local ["NONE"] [Player.GetPlayerLanguage ()];
     }
 
 }

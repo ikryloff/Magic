@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpellPanel : MonoBehaviour
 {
@@ -18,7 +16,7 @@ public class SpellPanel : MonoBehaviour
         BonusText [] texts = new BonusText [bonusTexts.Length];
         for ( int i = 0; i < bonusTexts.Length; i++ )
         {
-            texts [bonusTexts [i].LevelNumber -1] = bonusTexts [i];
+            texts [bonusTexts [i].LevelNumber - 1] = bonusTexts [i];
         }
         bonusTexts = texts;
     }
@@ -27,7 +25,7 @@ public class SpellPanel : MonoBehaviour
     {
         for ( int i = 0; i < bonusTexts.Length; i++ )
         {
-            bonusTexts [i].SetText ("Bonus " + bonusTexts[i].LevelNumber);
+            bonusTexts [i].SetText ("Bonus " + bonusTexts [i].LevelNumber);
         }
     }
 }

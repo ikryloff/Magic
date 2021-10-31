@@ -1,16 +1,14 @@
 ﻿using System.Linq;
 
-public static class PlayerCharacters
+public static class Player
 {
     private static int playerLanguage = 1; // 0 - english, 1 - russian
     private static int playerLevel;
     private static int playerStartMP = 300;
     private static int playerMP = 300;
-    private static int playerDP = 1000;
     private static int playerXP = 0;
     private static float playerMPPS = 0.3f;
     private static int playerManaBonus = 1;
-    private static float playerManaReturn = 0.3f;
    
 
     private static int [] playerSpellsIDList = 
@@ -67,10 +65,7 @@ public static class PlayerCharacters
         playerMP += delta;
     }
 
-    public static int GetPlayerDP()
-    {
-        return playerDP;
-    }
+   
     public static int GetPlayerXP()
     {
         return playerXP;
@@ -86,11 +81,7 @@ public static class PlayerCharacters
         playerMP = mp;
     }
 
-    public static void SetPlayerDP( int dp )
-    {
-        playerDP = dp;
-    }
-
+  
     public static void SetPlayerXP( int xp )
     {
         playerXP = xp;
@@ -131,9 +122,4 @@ public static class PlayerCharacters
         playerManaBonus = bonus;
     }
 
-    public static float GetPlayerManaReturn()
-    {
-        return playerManaReturn;
-    }
-   
 }

@@ -3,12 +3,9 @@
 public class Wizard : MonoBehaviour
 {
     private UIManager uI;
-    public float startHp;
-    public float startMana;
-    private float hp_norm;
     private float mana_norm;
     private float defencePoints;
-    private float manaPoints;
+    public static float ManaPoints;
     private float manaCicle;
     private float manaCicleRate;
     public float temp;
@@ -18,18 +15,20 @@ public class Wizard : MonoBehaviour
     {
         uI = ObjectsHolder.Instance.uIManager;
         temp = Time.time;
-        defencePoints = PlayerCharacters.GetPlayerDP ();
-        manaPoints = PlayerCharacters.GetPlayerMP ();
-        startHp = defencePoints;
-        startMana = manaPoints;
-        hp_norm = 1f;
+        ManaPoints = Player.GetPlayerMP ();
         mana_norm = 1f;
         manaCicle = 1f;
         manaCicleRate = 1f;
-        //uI.SetDefenceValue (hp_norm * 100, defencePoints);
         CalcMana ();
         //PrintSpellsIDList ();
+        GameEvents.current.OnManaWasteEvent += ManaWaste;
     }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.OnManaWasteEvent -= ManaWaste;
+    }
+
     private void Update()
     {
         ManaRecoveryCicle ();
@@ -39,7 +38,7 @@ public class Wizard : MonoBehaviour
     {
         if ( manaCicle <= 0 )
         {
-            ManaRecover (PlayerCharacters.GetPlayerMPPS ());
+            ManaRecover (Player.GetPlayerMPPS ());
             manaCicle = manaCicleRate;
         }
         manaCicle -= Time.deltaTime;
@@ -47,55 +46,34 @@ public class Wizard : MonoBehaviour
 
     public void ManaRecover( float mPoints )
     {
-        manaPoints += mPoints;
-        if ( manaPoints > startMana )
+        if ( ManaPoints >= Player.GetPlayerMP () )
+            return;
+        ManaPoints += mPoints;
+        if ( ManaPoints > Player.GetPlayerMP () )
         {
-            manaPoints = startMana;
+            ManaPoints = Player.GetPlayerMP ();
         }
         CalcMana ();
     }
 
-    public void CalcDamage( float damage )
-    {
-        defencePoints -= damage;
-        hp_norm = defencePoints / startHp;
-        uI.SetDefenceValue (hp_norm * 100, defencePoints);
-        PlayerCharacters.SetPlayerDP ((int)defencePoints);
-        CheckDefence ();
-    }
-
-    private void CheckDefence()
-    {
-        if ( defencePoints <= 0 )
-        {
-            defencePoints = 0;
-            uI.SetDefenceValue (0, defencePoints);
-            PlayerCharacters.SetPlayerDP ((int)defencePoints);
-            print ("GameOver");
-
-            temp = Time.time - temp;
-            Time.timeScale = 0;
-            print (temp);
-        }
-    }
 
     public void ManaWaste( float mPoints )
     {
-        manaPoints -= mPoints;
-        if ( manaPoints < 0 )
-            manaPoints = 0;
+        ManaPoints -= mPoints;
+        if ( ManaPoints < 0 )
+            ManaPoints = 0;
         CalcMana ();
     }
 
     public void CalcMana()
     {
-        mana_norm = manaPoints / startMana;
-        //uI.SetManaValue (mana_norm * 100, (int)manaPoints);
+        mana_norm = ManaPoints / Player.GetPlayerMP ();
+        GameEvents.current.ManaValueChangedAction (mana_norm);
     }
 
-    public float GetManapoints()
+    public static float GetManapoints()
     {
-        return manaPoints;
+        return ManaPoints;
     }
 
 
@@ -104,10 +82,10 @@ public class Wizard : MonoBehaviour
     //For test
     public void PrintSpellsIDList()
     {
-        for ( int i = 0; i < PlayerCharacters.GetPlayerSpellsIDList ().Length; i++ )
+        for ( int i = 0; i < Player.GetPlayerSpellsIDList ().Length; i++ )
         {
-            print (PlayerCharacters.GetPlayerSpellsIDList () [i] + ", ");
+            print (Player.GetPlayerSpellsIDList () [i] + ", ");
         }
-        print ("Quantity: " + PlayerCharacters.GetPlayerSpellsQuantity ());
+        print ("Quantity: " + Player.GetPlayerSpellsQuantity ());
     }
 }

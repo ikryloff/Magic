@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         GameEvents.current.SwitchTouch (false);
         Time.timeScale = 1;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        PlayerCharacters.SetPlayerLevel (1);
+        Player.SetPlayerLevel (1);
         yield return new WaitForSeconds (0.5f);
         GameEvents.current.SwitchTouch (true);
         Debug.Log ("State: StartGame");
