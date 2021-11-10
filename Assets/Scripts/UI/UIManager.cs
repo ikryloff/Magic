@@ -9,10 +9,12 @@ public class UIManager : MonoBehaviour
     Button speedButton;
     [SerializeField] private GameObject _spellsPanel;
     [SerializeField] private GameObject _inGameUI;
-    
+    [SerializeField] private GameObject _spellItemView;
+
 
     private UISpellsManager uISpellsManager;
-    
+    private SpellPropertiesView _spellPropertiesView;
+
 
     private int defencePoints;
     private int manaPoints;
@@ -21,17 +23,19 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         uISpellsManager = GetComponent<UISpellsManager> ();
-        
-        
+        _spellPropertiesView = _spellItemView.GetComponent<SpellPropertiesView> ();
+
+        GameEvents.current.OnItemButtonClickedEvent += OpenSpellView;
 
         // Events
         //GameEvents.current.OnNewGameMessage += SetMessage;
     }
 
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameEvents.current.OnNewGameMessage -= SetMessage;
+        GameEvents.current.OnItemButtonClickedEvent -= OpenSpellView;
     }
 
     private void Start()
@@ -70,30 +74,39 @@ public class UIManager : MonoBehaviour
         CleanMessage ();
     }
 
-
-
     public void CleanMessage()
     {
-       
+
     }
 
     public void PrintSpellsQuantity()
     {
+
+    }
+
+    private void OpenSpellView(UnitTemplate unitTemplate)
+    {
+        _spellItemView.SetActive (true);
+        _spellPropertiesView.UpdateView (unitTemplate);
         
     }
 
+   
     public void OpenSpellsPanel()
     {
         Debug.Log ("Open");
         _spellsPanel.SetActive (true);
         _inGameUI.SetActive (false);
+        _spellItemView.SetActive (false);
         GameEvents.current.GameStateChangedAction (GameManager.GameState.PauseGame);
+        GameEvents.current.TabChangeAction (TabButton.SchoolIndex);
     }
 
     public void CloseSpellsPanel()
     {
         Debug.Log ("Close");
         _spellsPanel.SetActive (false);
+        _spellItemView.SetActive (false);
         _inGameUI.SetActive (true);
         GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
     }

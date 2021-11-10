@@ -1,46 +1,45 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TabButton : UIButton
 {
     [SerializeField]
-    private Color32 _activeColor;
-    private Color32 _unActiveColor;
-    [SerializeField]
     private Unit.UnitClassProperty _tabValue;
-    public static Unit.UnitClassProperty SchoolIndex = 0;
+    [SerializeField]
+    private Sprite _imageActive;
+    [SerializeField]
+    private Sprite _imageUnactive;
 
-    private void Start()
-    {
-        _unActiveColor = new Color32 (_activeColor.r, _activeColor.g, _activeColor.b, 100);
-        GameEvents.current.OnTabChangeEvent += ActivateSchool;
-    }
+    public static Unit.UnitClassProperty SchoolIndex = Unit.UnitClassProperty.Elemental;
 
+    
     private void OnEnable()
     {
-        if ( _tabValue == SchoolIndex )
-            Action ();
+        if(GameEvents.current != null)
+            GameEvents.current.OnTabChangeEvent += ActivateSchool;
     }
 
-    private void OnDestroy()
+
+    private void OnDisable()
     {
         GameEvents.current.OnTabChangeEvent -= ActivateSchool;
     }
 
     public override void Action()
     {
-        GameEvents.current.TabChangeAction (_tabValue, _activeColor);
+        GameEvents.current.TabChangeAction (_tabValue);
     }
 
-    private void ActivateSchool( Unit.UnitClassProperty tabIndex, Color32 color )
+    private void ActivateSchool( Unit.UnitClassProperty tabIndex )
     {
         if ( tabIndex == _tabValue )
         {
-            _button.image.color = _unActiveColor;
-            SchoolIndex = tabIndex;
+           SchoolIndex = tabIndex;
+            _button.image.sprite = _imageActive;
         }
         else
         {
-            _button.image.color = _activeColor;
+            _button.image.sprite = _imageUnactive;
         }
     }
 }

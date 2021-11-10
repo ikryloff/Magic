@@ -16,11 +16,11 @@ public class Unit : StateMachine
         Demonology,
         Necromancy,
         Deffence,
-        Hunter,
-        Bravery,
-        Nobility,
-        Holiness,
-        Immunity
+        Commons,
+        Regulars,
+        Nobles,
+        Holies,
+        Invincibles
     }
 
     public enum UnitAttackPower

@@ -3,40 +3,60 @@ using UnityEngine;
 public class ItemButton : UIButton
 {
     [SerializeField]
+    Material _greyScaleMat;
+    [SerializeField]
     private int number;
     [SerializeField]
     private Unit.UnitType type;
 
-    private void Start()
-    {
-        GameEvents.current.OnTabChangeEvent += UpdateButton;
+    private UnitTemplate _unitTemplate;
 
+    private void OnEnable()
+    {
+        if(GameEvents.current != null)
+            GameEvents.current.OnTabChangeEvent += UpdateButton;
     }
 
-    private void OnDestroy()
+  
+    private void OnDisable()
     {
         GameEvents.current.OnTabChangeEvent -= UpdateButton;
     }
 
 
-    private void UpdateButton( Unit.UnitClassProperty schoolIndex, Color32 color )
+    private void UpdateButton( Unit.UnitClassProperty schoolIndex )
     {
         SpellProperty spellProperty = new SpellProperty (schoolIndex, type);
-        UnitTemplate template = SpellsMaps.GetUnitTemplateBySpellProperty (spellProperty, number);
-        if ( template != null )
+        _unitTemplate = SpellsMaps.GetUnitTemplateBySpellProperty (spellProperty, number);
+        if ( _unitTemplate != null )
         {
-            _button.image.sprite = template.activeIcon;
+            _button.image.sprite = _unitTemplate.activeIcon;
 
-            if ( Player.IsSpellInPlayerSpellsIDList (template.unitID) )
-                _button.image.material.SetFloat (Constants.GRAYSCALE_RATIO, 0);
+            if ( Player.IsSpellInPlayerSpellsIDList (_unitTemplate.unitID) )
+                SetColorized ();
             else
-                _button.image.material.SetFloat (Constants.GRAYSCALE_RATIO, 1);
+                SetGray ();
+            // for test only
+            if ( number == 2 )
+                SetGray ();
         }
     }
 
+    public void SetGray()
+    {
+        _button.image.material = _greyScaleMat;
+    }
+
+    public void SetColorized()
+    {
+        _button.image.material = null;
+    }
 
     public override void Action()
     {
+        // for test only
+        //SetColorized ();
+        GameEvents.current.ItemButtonClickedAction (_unitTemplate);
 
     }
 }

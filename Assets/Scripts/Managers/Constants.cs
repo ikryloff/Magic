@@ -17,7 +17,7 @@
     public static float TRAP_DIST = 0.3f;
     public static float PATH_LENGHT = 17f;
     public static float PATH_START_X = 10.4f;
-    public static float BULLET_SPEED = 35f;
+    public static float BULLET_SPEED = 40f;
 
 
     public static float TOWER_HEAL_POINTS = 30f;

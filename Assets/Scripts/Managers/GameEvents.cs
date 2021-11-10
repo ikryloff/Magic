@@ -42,11 +42,23 @@ public class GameEvents : MonoBehaviour
     public event Action<BoardUnit, string> OnAnimationFinishedAction;
     public event Action<Human> OnHumanDeathAction;
     public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
-    public event Action <Unit.UnitClassProperty, Color32> OnTabChangeEvent;
+    public event Action <Unit.UnitClassProperty> OnTabChangeEvent;
+    public event Action <UnitTemplate> OnItemButtonClickedEvent;
+    public event Action <UnitTemplate> OnSpellItemViewOpenedEvent;
     public event Action <float> OnPrepareTimeValueChangedEvent;
     public event Action <float> OnManaValueChangedEvent;
     public event Action <float> OnManaWasteEvent;
 
+
+    public void SpellItemViewOpenedAction( UnitTemplate template )
+    {
+        OnSpellItemViewOpenedEvent?.Invoke (template);
+    }
+
+    public void ItemButtonClickedAction( UnitTemplate template )
+    {
+        OnItemButtonClickedEvent?.Invoke (template);
+    }
 
     public void ManaWasteAction( float value )
     {
@@ -63,9 +75,9 @@ public class GameEvents : MonoBehaviour
         OnPrepareTimeValueChangedEvent?.Invoke (value);
     }
 
-    public void TabChangeAction(Unit.UnitClassProperty classIndex, Color32 color )
+    public void TabChangeAction(Unit.UnitClassProperty classIndex)
     {
-        OnTabChangeEvent?.Invoke (classIndex, color);
+        OnTabChangeEvent?.Invoke (classIndex);
     }
 
     public void GameStateChangedAction( GameManager.GameState state )
