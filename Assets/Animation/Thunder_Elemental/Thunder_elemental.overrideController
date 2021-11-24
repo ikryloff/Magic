@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Thunder_elemental
+  m_Controller: {fileID: 9100000, guid: bbdb3e6642e0ee74bb5a1d869b47449b, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 7653ba8c389f4d642b1fc211589bfb81, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0c310e53816fa024fab994ee9bbf724e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 130c4ed7511d82441ad1642f06f57d6f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c12a56dbddd25a04d99f82e23dad81f4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6ad4ddd146663424a9f01cf3499f5bdd, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 03c29e29e9f8ef449856d08530098fba, type: 2}

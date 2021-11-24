@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _spellsPanel;
     [SerializeField] private GameObject _inGameUI;
     [SerializeField] private GameObject _spellItemView;
+    [SerializeField] private GameObject _gameMenu;
+    [SerializeField] private GameObject _wizardView;
 
 
     private UISpellsManager uISpellsManager;
@@ -42,12 +44,20 @@ public class UIManager : MonoBehaviour
     {
         CleanMessage ();
         PrintSpellsQuantity ();
+        _gameMenu.SetActive (false);
         CloseSpellsPanel ();
     }
 
     public void OpenMenu()
     {
         StopSpelling ();
+        _gameMenu.SetActive (true);
+    }
+
+    public void CloseMenu()
+    {
+        ResumeSpelling ();
+        _gameMenu.SetActive (false);
     }
 
     public void SpeedGame()
@@ -91,7 +101,19 @@ public class UIManager : MonoBehaviour
         
     }
 
-   
+    public void OpenWizardView()
+    {
+        _wizardView.SetActive (true);
+
+    }
+
+    public void CloseWizardView()
+    {
+        _wizardView.SetActive (false);
+
+    }
+
+
     public void OpenSpellsPanel()
     {
         Debug.Log ("Open");
@@ -108,6 +130,7 @@ public class UIManager : MonoBehaviour
         _spellsPanel.SetActive (false);
         _spellItemView.SetActive (false);
         _inGameUI.SetActive (true);
+        CloseWizardView ();
         GameEvents.current.GameStateChangedAction (GameManager.GameState.ResumeGame);
     }
 

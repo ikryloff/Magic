@@ -9,6 +9,8 @@ public static class Player
     private static int playerXP = 0;
     private static float playerMPPS = 0.3f;
     private static int playerManaBonus = 1;
+    // levels Attack, Defence, Intelligence, Learning, Alteration, Regeneration, FastReading
+    private static int [] skillLevels = new int [] { 0, 0, 0, 0, 0, 0, 0 };
    
 
     private static int [] playerSpellsIDList = 
@@ -65,7 +67,18 @@ public static class Player
         playerMP += delta;
     }
 
-   
+    public static int GetPlayerSkillLevel(int index)
+    {
+        return skillLevels[index];
+    }
+
+    public static void SetPlayerSkillLevel( int index, int value)
+    {
+        skillLevels [index] = value;
+    }
+
+    
+
     public static int GetPlayerXP()
     {
         return playerXP;

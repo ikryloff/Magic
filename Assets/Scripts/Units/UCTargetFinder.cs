@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (UCUnitAnimation))]
 public class UCTargetFinder : MonoBehaviour
 {
     private float _attackRange;
     private BoardUnit _unit;
     private UnitTemplate _unitTemplate;
+    private bool _isInBattle;
+    private BoardUnit _enemy;
+    private float _delay;
+    private float _attackRate;
 
 
     public void Init(BoardUnit unit)
@@ -13,6 +18,8 @@ public class UCTargetFinder : MonoBehaviour
         _unit = unit;
         _unitTemplate = _unit.GetUnitTemplate();
         _attackRange = _unitTemplate.attackRange;
+        _attackRate = _unitTemplate.attackRate;
+        _delay = _attackRate;
 
         GameEvents.current.OnHumanPositionWasChanged += SeekEnemies;
         GameEvents.current.OnTowerWasBuiltEvent += SeekEnemies;
@@ -23,6 +30,13 @@ public class UCTargetFinder : MonoBehaviour
     {
         GameEvents.current.OnHumanPositionWasChanged -= SeekEnemies;
         GameEvents.current.OnTowerWasBuiltEvent -= SeekEnemies;
+    }
+
+
+    private void Update()
+    {
+        if ( !_isInBattle) return;
+        AttackQueue ();
     }
 
     public BoardUnit GetRandomTarget()
@@ -78,10 +92,40 @@ public class UCTargetFinder : MonoBehaviour
         return humansInRange [Random.Range (0, humansInRange.Count)];
     }
 
-    public void SeekEnemies( BoardUnit unit, Cell cell )
+    public void SeekEnemies( BoardUnit unit )
     {
-        if ( cell.GetLinePosition () != _unit.GetLinePosition())
+        if ( unit.GetLinePosition () != _unit.GetLinePosition())
             return;
-        _unit.SetHoldState();
+
+         _enemy = GetRandomTarget ();
+
+        if ( _enemy == null )
+        {
+            Debug.Log ("Cant see anybody " + _unit.name);
+            if(_isInBattle) GameEvents.current.IdleStateAction (_unit);
+            _isInBattle = false;
+        }
+        else
+        {
+            _isInBattle = true;
+            GameEvents.current.StopToFightAction (_unit, _enemy);
+        }
+    }
+
+    
+    public void AttackQueue()
+    {
+        if(_enemy == null )
+        {
+            SeekEnemies (_unit);
+            return;
+        }
+
+        if ( _delay <= 0 )
+        {
+            _delay = _attackRate;
+            GameEvents.current.AttackStartedAction (_unit, _enemy);
+        }
+        _delay -= Time.deltaTime;
     }
 }

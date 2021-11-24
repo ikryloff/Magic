@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UnitHealth : MonoBehaviour
+public class UCUnitHealth : MonoBehaviour
 {
     [SerializeField] private Transform _bar;
     [SerializeField] private GameObject _barGo;
@@ -29,11 +29,13 @@ public class UnitHealth : MonoBehaviour
         _barGo.SetActive (false);
 
         GameEvents.current.OnNewHit += TakeDamage;
+        GameEvents.current.OnDieEvent += MakeDeath;
     }
 
     private void OnDestroy()
     {
         GameEvents.current.OnNewHit -= TakeDamage;
+        GameEvents.current.OnDieEvent -= MakeDeath;
     }
 
     private void TakeDamage( BoardUnit unit, UnitTemplate damageTemplate )
@@ -42,7 +44,6 @@ public class UnitHealth : MonoBehaviour
             return;
         if ( damageTemplate.damage > 0 ) // if it is hit, not heal
         {
-            _unit.SetHitState ();
             _effects.ShowHit ();
         }
         ShowHealthBar (damageTemplate);
@@ -102,23 +103,37 @@ public class UnitHealth : MonoBehaviour
     {
         if ( _currentHealth <= 0 )
         {
-            _unit.SetDieState ();
+            MakeDeath (_unit);
             return;
         }
         if ( _currentHealth >= _health )
             _currentHealth = _health;
     }
 
-    public void MakeDeath()
-    {
-        _effects.ShowDeath ();
-        Destroy (_unit.gameObject);
-    }
-
-
-
     public float GetCurrentHealth()
     {
         return _currentHealth;
     }
+
+    public void MakeDeath(BoardUnit unit)
+    {
+        if ( unit != _unit ) return;
+        _effects.ShowDeath ();
+        RemoveUnit ();
+        Destroy (_unit.gameObject);
+    }
+
+    private void RemoveUnit()
+    {
+        if ( _unitTemplate.unitType == Unit.UnitType.Human )
+        {
+            UnitsOnBoard.RemoveHumanFromLineHumansList (_unit.GetComponent<Human> ());
+        }
+        else
+        {
+            _unit.GetCurrentCell ().SetFreefromTower ();
+            UnitsOnBoard.RemoveTowerFromLineTowersList (_unit.GetComponent<TowerUnit> ());
+        }
+    }
 }
+

@@ -1,4 +1,6 @@
-public class Unit : StateMachine
+using UnityEngine;
+
+public class Unit : MonoBehaviour
 {
     protected UnitType _unitType;
 

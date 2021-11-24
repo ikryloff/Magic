@@ -35,11 +35,15 @@ public class GameEvents : MonoBehaviour
     public event Action OnTimeToColorCellsEvent;
     public event Action OnCastResetEvent;
     public event Action OnEnemyAppear;
-    public event Action<TowerUnit, Cell> OnTowerWasBuiltEvent;
-    public event Action<Human, Cell> OnHumanPositionWasChanged;
+    public event Action<TowerUnit> OnTowerWasBuiltEvent;
+    public event Action<Human> OnHumanPositionWasChanged;
     public event Action<string> OnNewGameMessage;
+    public event Action<BoardUnit> OnIdleStateEvent;
+    public event Action<BoardUnit> OnDieEvent;
     public event Action<BoardUnit, UnitTemplate> OnNewHit;
-    public event Action<BoardUnit, string> OnAnimationFinishedAction;
+    public event Action<BoardUnit, BoardUnit> OnStopToFightEvent;
+    public event Action<BoardUnit, BoardUnit> OnAttackAnimationFinishedEvent;
+    public event Action<BoardUnit, BoardUnit> OnAttackStartedEvent;
     public event Action<Human> OnHumanDeathAction;
     public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
     public event Action <Unit.UnitClassProperty> OnTabChangeEvent;
@@ -49,6 +53,17 @@ public class GameEvents : MonoBehaviour
     public event Action <float> OnManaValueChangedEvent;
     public event Action <float> OnManaWasteEvent;
 
+
+    public void DieAction( BoardUnit unit )
+    {
+        OnDieEvent?.Invoke (unit);
+    }
+
+
+    public void IdleStateAction( BoardUnit unit )
+    {
+        OnIdleStateEvent?.Invoke (unit);
+    }
 
     public void SpellItemViewOpenedAction( UnitTemplate template )
     {
@@ -108,9 +123,19 @@ public class GameEvents : MonoBehaviour
         OnNewHit?.Invoke (unit, sender);
     }
 
-    public void AnimationFinishedEvent( BoardUnit unit, string animType )
+    public void StopToFightAction( BoardUnit unit, BoardUnit enemy )
     {
-        OnAnimationFinishedAction?.Invoke (unit, animType);
+        OnStopToFightEvent?.Invoke (unit, enemy);
+    }
+
+    public void AttackAnimationFinishedAction( BoardUnit unit, BoardUnit enemy )
+    {
+        OnAttackAnimationFinishedEvent?.Invoke (unit, enemy);
+    }
+
+    public void AttackStartedAction( BoardUnit unit, BoardUnit enemy )
+    {
+        OnAttackStartedEvent?.Invoke (unit, enemy);
     }
 
     public void NewGameMessage( string message )
@@ -154,14 +179,14 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void TowerWasBuiltAction( TowerUnit tower, Cell cell )
+    public void TowerWasBuiltAction( TowerUnit tower )
     {
-        OnTowerWasBuiltEvent?.Invoke (tower, cell);
+        OnTowerWasBuiltEvent?.Invoke (tower);
     }
 
-    public void HumanPositionWasChanged( Human human, Cell cell )
+    public void HumanPositionWasChanged( Human human )
     {
-        OnHumanPositionWasChanged?.Invoke (human, cell);
+        OnHumanPositionWasChanged?.Invoke (human);
     }
 
   

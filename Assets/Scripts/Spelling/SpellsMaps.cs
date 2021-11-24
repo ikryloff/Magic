@@ -79,10 +79,10 @@ public class SpellsMaps : MonoBehaviour
                 spellIDsListByPropertyMap [spellProperty].Sort ();
 
 
-                Debug.Log ("array = " + ss.classProperty + " " + ss.unitType + " " + string.Join (" ",
-                   new List<int> (spellIDsListByPropertyMap [spellProperty])
-                   .ConvertAll (i => i.ToString ())
-                   .ToArray ()));
+               //Debug.Log ("array = " + ss.classProperty + " " + ss.unitType + " " + string.Join (" ",
+               //    new List<int> (spellIDsListByPropertyMap [spellProperty])
+               //    .ConvertAll (i => i.ToString ())
+               //    .ToArray ()));
             }
 
         }

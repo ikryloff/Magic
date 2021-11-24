@@ -37,7 +37,7 @@ public class AttackSpeller : MonoBehaviour
             return;
         }
         StartCoroutine (PrepareSpellRoutine (spellTemplate, _shotFabric));
-        GameEvents.current.NewGameMessage (spellTemplate.unitName);
+        //GameEvents.current.NewGameMessage (spellTemplate.unitName);
     }
 
 

@@ -5,7 +5,6 @@ public class Board : MonoBehaviour
 {
     [SerializeField]
     private GameObject _cellTile;
-    [SerializeField]
     private int _width, _height;
     private float _tileWidth;
     private Camera _mainCamera;
@@ -25,6 +24,8 @@ public class Board : MonoBehaviour
 
     private void Init()
     {
+        _width = Constants.BOARD_WIDTH;
+        _height = Constants.BOARD_HEIGHT;
         _defCells = new List<Cell> ();
         _mainCamera = Camera.main;
         _tileWidth = _cellTile.GetComponent<SpriteRenderer> ().bounds.size.x;
@@ -88,7 +89,7 @@ public class Board : MonoBehaviour
             LineY [_height - y - 1] = y + _tileWidth * 0.5f;
 
         }
-        _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.45f, _height / 2, -10);
+        _mainCamera.transform.position = new Vector3 (_width * _tileWidth * 0.450f, _height / 2, -10);
         GameEvents.current.TimeToColorCellsEvent ();
         Debug.Log ("Cells was built");
         _builder.BuildDefTower (_defCells);
@@ -108,6 +109,7 @@ public class Board : MonoBehaviour
         else return null;
     }
 
+   
     public static float GetLineY(int line )
     {
         return LineY [line];

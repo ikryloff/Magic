@@ -54,7 +54,7 @@ public class TowerBuilder : MonoBehaviour
     IEnumerator PrepareBuildingRoutine( UnitTemplate spellTemplate, Cell [] cells )
     {
         GameEvents.current.ManaWasteAction (spellTemplate.cost);
-        GameEvents.current.NewGameMessage (spellTemplate.unitName);
+       // GameEvents.current.NewGameMessage (spellTemplate.unitName);
         float time = spellTemplate.prepareTime;
         float perc = Time.deltaTime / time;
         float value = 1;
@@ -78,7 +78,7 @@ public class TowerBuilder : MonoBehaviour
             cells [i].SetEngagedByTower (newTower);
             newTower.Activate (unitTemplate, cells [i]);
             UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
-            GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
+            GameEvents.current.TowerWasBuiltAction (newTower);
         }
         GameEvents.current.GameStateChangedAction (GameManager.GameState.BoardActive);
     }
@@ -93,7 +93,7 @@ public class TowerBuilder : MonoBehaviour
             newTower.Activate (_defTowerTemplate, cells [i]);
             UnitsOnBoard.AddTowerToLineTowersList (newTower, cells [i].GetLinePosition ());
             cells [i].SetEngagedByTower (newTower);
-            GameEvents.current.TowerWasBuiltAction (newTower, cells [i]);
+            GameEvents.current.TowerWasBuiltAction (newTower);
         }
 
         Debug.Log ("BuildDefTower");

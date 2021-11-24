@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class UCWeapon : MonoBehaviour
 {
+    
     protected BoardUnit _unit;
     private GameObject _bullet;
     protected UnitTemplate _unitTemplate;
@@ -12,29 +13,35 @@ public class UCWeapon : MonoBehaviour
         _unit = unit;
         _unitTemplate = unit.GetUnitTemplate ();
         _bullet = _unitTemplate?.bulletPrefab;
+
+        GameEvents.current.OnAttackAnimationFinishedEvent += Fire;
     }
 
-
-
-    public virtual void Fire( BoardUnit enemy )
+    private void OnDestroy()
     {
-        if ( enemy )
+        GameEvents.current.OnAttackAnimationFinishedEvent -= Fire;
+    }
+
+    public virtual void Fire( BoardUnit unit, BoardUnit enemy )
+    {
+        if ( unit != _unit ) return;
+        if ( enemy == null ) return;
+        if ( _unitTemplate.attackRange > 1 )
         {
-            
-            if ( _unitTemplate.attackRange > 1 )
+            GameObject bulletGO = Instantiate (_bullet, transform.position, Quaternion.identity);
+            Bullet bullet = bulletGO.GetComponent<Bullet> ();
+            if ( bullet != null )
             {
-                GameObject bulletGO = Instantiate (_bullet, transform.position, Quaternion.identity);
-                Bullet bullet = bulletGO.GetComponent<Bullet> ();
-                if ( bullet != null )
-                {
-                    bullet.SeekTarget (enemy, _unitTemplate);
-                }
-            }
-            else
-            {
-                GameEvents.current.NewHit (enemy, _unitTemplate);
+                bullet.SeekTarget (enemy, _unitTemplate);
             }
         }
+        else
+        {
+            GameEvents.current.NewHit (enemy, _unitTemplate);
+        }
     }
+
+
+   
 
 }

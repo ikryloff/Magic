@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class UCTrapWeapon : UCWeapon
 {
-    public override void Fire( BoardUnit enemy )
+    public override void Fire( BoardUnit unit, BoardUnit enemy )
     {
-        if ( enemy )
-        {
-            GameEvents.current.NewHit (enemy, _unitTemplate);
-            _unit.SetDieState ();
-            
-        }
+        if ( unit != _unit ) return;
+        if ( enemy == null ) return;
+        GameEvents.current.NewHit (enemy, _unitTemplate);
+        GameEvents.current.DieAction (_unit);
     }
 }

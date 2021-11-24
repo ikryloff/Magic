@@ -5,11 +5,9 @@ public class UnitTemplate : ScriptableObject
 {
     [Header ("Base info")]
     public int unitID;
-    public string unitName;
     public Unit.UnitType unitType;
     public Unit.UnitClassProperty classProperty;
     public Unit.UnitAttackPower attackPower;
-    public string description;
     public int level;
     public int damage;
     public int health;
@@ -26,15 +24,16 @@ public class UnitTemplate : ScriptableObject
     [Header ("For towers and humans and spell effects")]
     public int attackRange;
     public float attackRate;
+    public float speed;
     public GameObject unitPrefab;
     public GameObject bulletPrefab;
     public GameObject impactPrefab;
     public GameObject deathPrefab;
     public GameObject bornPrefab;
     public Sprite activeIcon;
+    public Sprite scheme;
 
     [Header ("For humans")]
-    public float speed;
     public float xp;
 
     [Header ("For pointers -1 or 1")]

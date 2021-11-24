@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class Localization
 {
-    private static readonly Dictionary<string, string []> local = new Dictionary<string, string []>
+    private static readonly Dictionary<string, string []> localNames = new Dictionary<string, string []>
     {
         { "NONE", new string[] { "ERROR", "Œÿ»¡ ¿"} },
 
@@ -65,10 +65,10 @@ public class Localization
 
     public static string GetString( string str )
     {
-        if ( local.ContainsKey(str) )
-            return local [str] [Player.GetPlayerLanguage ()];
+        if ( localNames.ContainsKey(str) )
+            return localNames [str] [Player.GetPlayerLanguage ()];
         else
-            return local ["NONE"] [Player.GetPlayerLanguage ()];
+            return localNames ["NONE"] [Player.GetPlayerLanguage ()];
     }
 
 }

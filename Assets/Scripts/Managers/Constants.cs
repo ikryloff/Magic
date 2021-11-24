@@ -12,29 +12,27 @@
     public static string GRAYSCALE_RATIO = "_GrayscaleAmount";
 
     // Numbers
-    public static float CELL_WIDTH = 1.35f;
-    public static float CELL_HEIGHT = 1.125f;
+    public static int BOARD_WIDTH = 16;
+    public static int BOARD_HEIGHT = 9;
+    public static int PLAYER_SKILLS_MAX_LEVEL = 5;
     public static float TRAP_DIST = 0.3f;
     public static float PATH_LENGHT = 17f;
     public static float PATH_START_X = 10.4f;
     public static float BULLET_SPEED = 40f;
+    public static float DEG_180 = 180f;
 
 
     public static float TOWER_HEAL_POINTS = 30f;
-    //Strings
-    public static string UNIT_LEFT_DIR = "unit_left";
-    public static string UNIT_RIGHT_DIR = "unit_right";
-
-    public static string ANIM_UNIT_HIT_LEFT = "unit_hit_left";
-    public static string ANIM_UNIT_HIT_RIGHT = "unit_hit_right";
+    
+    
+    //Strings for animation
+    public static string ANIM_BOOL_IS_IN_BATTLE = "isInBattle";
+    public static string ANIM_UNIT_HIT= "unit_hit";
+    public static string ANIM_UNIT_ATTACK = "unit_attack";
+    public static string ANIM_UNIT_STAY = "unit_stay";
     public static string ANIM_UNIT_WALK = "unit_walk";
-    public static string ANIM_UNIT_STAY_LEFT = "unit_stay_left";
-    public static string ANIM_UNIT_STAY_RIGHT = "unit_stay_right";
-    public static string ANIM_UNITY_ATTACK_RIGHT = "unit_attack_right";
-    public static string ANIM_UNITY_ATTACK_LEFT = "unit_attack_left";
 
-
-
+   
     public static string BULLET_BULLET = "bullet";
     public static string BULLET_ARROW = "arrow";
     public static string BULLET_AE_BULLET = "ae-bullet";

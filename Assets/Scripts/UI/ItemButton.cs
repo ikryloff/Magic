@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ItemButton : UIButton
@@ -9,22 +10,38 @@ public class ItemButton : UIButton
     [SerializeField]
     private Unit.UnitType type;
 
+    private Animator _animator;
+
     private UnitTemplate _unitTemplate;
+
+
+    private new void Awake()
+    {
+        base.Awake ();
+        _animator = GetComponent<Animator> ();
+    }
 
     private void OnEnable()
     {
         if(GameEvents.current != null)
             GameEvents.current.OnTabChangeEvent += UpdateButton;
+
+        if ( _animator != null )
+            PlayPulseAnimation ();
     }
 
-  
+    private void PlayPulseAnimation()
+    {
+        _animator.Play ("pulse");
+    }
+
     private void OnDisable()
     {
         GameEvents.current.OnTabChangeEvent -= UpdateButton;
     }
 
 
-    private void UpdateButton( Unit.UnitClassProperty schoolIndex )
+    public virtual void UpdateButton( Unit.UnitClassProperty schoolIndex )
     {
         SpellProperty spellProperty = new SpellProperty (schoolIndex, type);
         _unitTemplate = SpellsMaps.GetUnitTemplateBySpellProperty (spellProperty, number);
@@ -42,15 +59,16 @@ public class ItemButton : UIButton
         }
     }
 
-    public void SetGray()
+    public virtual void SetGray()
     {
         _button.image.material = _greyScaleMat;
     }
 
-    public void SetColorized()
+    public virtual void SetColorized()
     {
         _button.image.material = null;
     }
+
 
     public override void Action()
     {

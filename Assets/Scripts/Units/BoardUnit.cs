@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent (typeof (UCEffects))]
+[RequireComponent (typeof (UCBoardUnitMoving))]
 public class BoardUnit : Unit
 {
     private int _linePosition;
@@ -8,33 +9,18 @@ public class BoardUnit : Unit
     private string _direction;
     private string _name;
     private UnitTemplate _unitTemplate;
-    private UCUnitAnimation _unitAnimation;
-    private UnitHealth _health;
+    private UCUnitHealth _health;
     private UCTargetFinder _targetFinder;
     private UCEffects _effects;
     private UCWeapon _weapon;
+    private UCBoardUnitMoving _moving;
+    private UCUnitAnimation _animation;
 
     protected Cell _cell;
 
-    protected UnitStateIdle _unitStateIdle;
-    protected UnitStateHold _unitStateHold;
-    protected UnitStateAttack _unitStateAttack;
-    protected UnitStateHit _unitStateHit;
-    protected UnitStateDie _unitStateDie;
-    
-
     #region 
 
-    public void SetDirection( string dir )
-    {
-        _direction = dir;
-    }
-
-    public string GetDirection()
-    {
-        return _direction;
-    }
-
+   
     public int GetLinePosition()
     {
         return _linePosition;
@@ -60,7 +46,7 @@ public class BoardUnit : Unit
         return _name;
     }
 
-    public UnitHealth GetUnitHealth()
+    public UCUnitHealth GetUnitHealth()
     {
         return _health;
     }
@@ -72,76 +58,25 @@ public class BoardUnit : Unit
 
     public Cell GetCurrentCell() { return _cell; }
 
-
-    public void SetHoldState()
-    {
-        ChangeState (_unitStateHold);
-    }
-
-    public virtual void IdleBehavior() { }
-
     #endregion
 
-    
-    public void SetIdleState()
-    {
-        ChangeState (_unitStateIdle);
-    }
-
-    public void SetHitState()
-    {
-        if(GetCurrentState() == _unitStateIdle)
-            ChangeState (_unitStateHit);
-    }
-
-    public void SetDieState()
-    {
-        ChangeState (_unitStateDie);
-    }
-
-    public void SetAttackState()
-    {
-        ChangeState (_unitStateAttack);
-    }
-
-    
-
-    public void SetStartDirection( UnitTemplate template )
-    {
-        if ( template.unitType == UnitType.Human )
-            SetDirection (Constants.UNIT_LEFT_DIR);
-        else
-            SetDirection (Constants.UNIT_RIGHT_DIR);
-    }
-
+  
     protected void Init( UnitTemplate unitTemplate )
     {
         _unitTemplate = unitTemplate;
         _effects = GetComponent<UCEffects> ();
         _effects.Init (unitTemplate);
-        _health = GetComponentInChildren<UnitHealth> ();
+        _moving = GetComponent<UCBoardUnitMoving> ();
+        _moving.Init (this);
+        _health = GetComponentInChildren<UCUnitHealth> ();
         _health?.Init (this, _effects);
         _targetFinder = GetComponent<UCTargetFinder>();
         _targetFinder?.Init (this);
         _weapon = GetComponent<UCWeapon> ();
         _weapon?.Init (this);
-        _unitAnimation = GetComponent<UCUnitAnimation> ();
-        _unitAnimation?.Init (this);
         _unitType = unitTemplate.unitType;
-        _name = unitTemplate.unitName;
-        SetStartDirection (unitTemplate);
-        InitStateMachine ();
+        _animation = GetComponent<UCUnitAnimation> ();
+        _animation?.Init (this);
     }
 
-    protected void InitStateMachine()
-    {
-
-        _unitStateIdle = new UnitStateIdle (this, _unitTemplate, _unitAnimation);
-        _unitStateHit = new UnitStateHit (this, _unitTemplate, _unitAnimation);
-        _unitStateHold = new UnitStateHold (this, _unitAnimation, _targetFinder, _unitTemplate);
-        _unitStateAttack = new UnitStateAttack (this, _unitAnimation, _targetFinder, _weapon);
-        _unitStateDie = new UnitStateDie (this, _unitAnimation, _health, _unitTemplate);
-
-        SetIdleState ();
-    }
 }
