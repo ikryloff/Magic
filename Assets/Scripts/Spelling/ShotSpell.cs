@@ -27,7 +27,7 @@ public class ShotSpell
         int returnMP =  Mathf.RoundToInt(target.GetUnitTemplate ().cost * 0.5f);
         Debug.Log ("Return " + target.GetUnitName () + " " + returnMP);
         GameEvents.current.ManaWasteAction (-returnMP);
-        //target.SetDieState ();
+        GameEvents.current.DieAction (target);
     }
 
     public void Hurt( GameObject weak, Human human, UnitTemplate spellTemplate )

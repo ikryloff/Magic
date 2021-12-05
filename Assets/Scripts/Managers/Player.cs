@@ -4,16 +4,15 @@ public static class Player
 {
     private static int playerLanguage = 1; // 0 - english, 1 - russian
     private static int playerLevel;
-    private static int playerStartMP = 300;
-    private static int playerMP = 300;
-    private static int playerXP = 0;
+    private static float playerXP = 0;
     private static float playerMPPS = 0.3f;
-    private static int playerManaBonus = 1;
+    private static float playerManaBonus = 1.3f;
     // levels Attack, Defence, Intelligence, Learning, Alteration, Regeneration, FastReading
-    private static int [] skillLevels = new int [] { 0, 0, 0, 0, 0, 0, 0 };
-   
+    private static int [] skillLevels = new int [] { 0, 3, 5, 2, 2, 1, 3 };
+    
+    private static int skillPoints = 10;
 
-    private static int [] playerSpellsIDList = 
+    private static int [] playerSpellsIDList =
     {
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
@@ -25,7 +24,7 @@ public static class Player
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0 
+        0, 0, 0, 0, 0, 0, 0
     };
 
     public static int [] GetPlayerSpellsIDList()
@@ -33,53 +32,43 @@ public static class Player
         return playerSpellsIDList;
     }
 
-    public static bool IsSpellInPlayerSpellsIDList( int id)
+    public static bool IsSpellInPlayerSpellsIDList( int id )
     {
         return playerSpellsIDList [id] == 1;
     }
 
-    public static void AddSpellToPlayerSpellsIDList (int id)
-    {        
+    public static void AddSpellToPlayerSpellsIDList( int id )
+    {
         playerSpellsIDList [id] = 1;
     }
 
     public static int GetPlayerSpellsQuantity()
-    {     
+    {
         return playerSpellsIDList.Sum ();
     }
 
-    public static int GetPlayerSpellsValueByIndex( int id)
+    public static int GetPlayerSpellsValueByIndex( int id )
     {
-        return playerSpellsIDList[id];
+        return playerSpellsIDList [id];
     }
 
-    public static int GetStartPlayerMP()
+    public static int [] GetPlayerSkillLevels()
     {
-        return playerStartMP;
-    }
-    public static int GetPlayerMP()
-    {
-        return playerMP;
+        return skillLevels;
     }
 
-    public static void ChangePlayerMP(int delta)
+    public static int GetPlayerSkillPoints()
     {
-        playerMP += delta;
+        return skillPoints;
     }
 
-    public static int GetPlayerSkillLevel(int index)
+   
+    public static void SetPlayerSkillPoints( int value )
     {
-        return skillLevels[index];
+        skillPoints = value;
     }
 
-    public static void SetPlayerSkillLevel( int index, int value)
-    {
-        skillLevels [index] = value;
-    }
-
-    
-
-    public static int GetPlayerXP()
+    public static float GetPlayerXP()
     {
         return playerXP;
     }
@@ -89,12 +78,9 @@ public static class Player
         return playerMPPS;
     }
 
-    public static void SetPlayerMP(int mp)
-    {
-        playerMP = mp;
-    }
-
   
+
+
     public static void SetPlayerXP( int xp )
     {
         playerXP = xp;
@@ -120,14 +106,19 @@ public static class Player
         playerLanguage = lang;
     }
 
-    public static int GetPlayerLanguage( )
+    public static int GetPlayerLanguage()
     {
         return playerLanguage;
     }
 
-    public static int GetPlayerManaBonus()
+    public static float GetPlayerManaBonus()
     {
-        return playerManaBonus;
+        return Constants.LEVEL_BONUS_RATIO [skillLevels[2]];
+    }
+
+    public static float GetPlayerXPBonus()
+    {
+        return Constants.LEVEL_BONUS_RATIO [skillLevels [3]];
     }
 
     public static void SetPlayerManaBonus( int bonus )

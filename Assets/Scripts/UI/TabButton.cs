@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TabButton : UIButton
 {
@@ -12,11 +11,10 @@ public class TabButton : UIButton
 
     public static Unit.UnitClassProperty SchoolIndex = Unit.UnitClassProperty.Elemental;
 
-    
+
     private void OnEnable()
     {
-        if(GameEvents.current != null)
-            GameEvents.current.OnTabChangeEvent += ActivateSchool;
+        GameEvents.current.OnTabChangeEvent += ActivateSchool;
     }
 
 
@@ -34,7 +32,7 @@ public class TabButton : UIButton
     {
         if ( tabIndex == _tabValue )
         {
-           SchoolIndex = tabIndex;
+            SchoolIndex = tabIndex;
             _button.image.sprite = _imageActive;
         }
         else

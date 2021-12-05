@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameEvents : MonoBehaviour
 {
@@ -28,8 +26,8 @@ public class GameEvents : MonoBehaviour
 
 
     public event Action OnCastOver;
-    public event Action <GameManager.GameState> OnGameStateChangedEvent;
-    public event Action <bool> OnSwitchTouch;
+    public event Action<GameManager.GameState> OnGameStateChangedEvent;
+    public event Action<bool> OnSwitchTouch;
     public event Action OnStopCastingEvent;
     public event Action OnBoardIsBuiltEvent;
     public event Action OnTimeToColorCellsEvent;
@@ -46,14 +44,22 @@ public class GameEvents : MonoBehaviour
     public event Action<BoardUnit, BoardUnit> OnAttackStartedEvent;
     public event Action<Human> OnHumanDeathAction;
     public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
-    public event Action <Unit.UnitClassProperty> OnTabChangeEvent;
-    public event Action <UnitTemplate> OnItemButtonClickedEvent;
-    public event Action <UnitTemplate> OnSpellItemViewOpenedEvent;
-    public event Action <float> OnPrepareTimeValueChangedEvent;
-    public event Action <float> OnManaValueChangedEvent;
-    public event Action <float> OnManaWasteEvent;
+    public event Action<Unit.UnitClassProperty> OnTabChangeEvent;
+    public event Action<UnitTemplate> OnItemButtonClickedEvent;
+    public event Action<UnitTemplate> OnSpellItemViewOpenedEvent;
+    public event Action<float> OnPrepareTimeValueChangedEvent;
+    public event Action<float> OnManaValueChangedEvent;
+    public event Action<float> OnManaWasteEvent;
 
+    //UI Events
+    public event Action OnWizardLevelChangeEvent;
 
+    public void WizardLevelChangeAction()
+    {
+        OnWizardLevelChangeEvent?.Invoke ();
+    }
+
+   
     public void DieAction( BoardUnit unit )
     {
         OnDieEvent?.Invoke (unit);
@@ -85,12 +91,12 @@ public class GameEvents : MonoBehaviour
         OnManaValueChangedEvent?.Invoke (value);
     }
 
-    public void PrepareTimeValueChangedAction( float value)
+    public void PrepareTimeValueChangedAction( float value )
     {
         OnPrepareTimeValueChangedEvent?.Invoke (value);
     }
 
-    public void TabChangeAction(Unit.UnitClassProperty classIndex)
+    public void TabChangeAction( Unit.UnitClassProperty classIndex )
     {
         OnTabChangeEvent?.Invoke (classIndex);
     }
@@ -118,7 +124,7 @@ public class GameEvents : MonoBehaviour
         OnTowerUnitDeathEvent?.Invoke (unit, cell);
     }
 
-    public void NewHit( BoardUnit unit, UnitTemplate sender)
+    public void NewHit( BoardUnit unit, UnitTemplate sender )
     {
         OnNewHit?.Invoke (unit, sender);
     }
@@ -189,5 +195,5 @@ public class GameEvents : MonoBehaviour
         OnHumanPositionWasChanged?.Invoke (human);
     }
 
-  
+
 }

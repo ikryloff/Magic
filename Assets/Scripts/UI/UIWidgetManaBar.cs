@@ -4,6 +4,7 @@ public class UIWidgetManaBar : MonoBehaviour
 {
     [SerializeField] private ProgressBar bar;
 
+
     private void Start()
     {
         GameEvents.current.OnManaValueChangedEvent += SetValue;

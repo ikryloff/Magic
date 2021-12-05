@@ -1,32 +1,35 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public class Wizard : MonoBehaviour
 {
-    private UIManager uI;
+    [SerializeField] private TextMeshProUGUI manaValue;
+    [SerializeField] private TextMeshProUGUI xpValue;
+
     private float mana_norm;
     private float defencePoints;
     public static float ManaPoints;
     private float manaCicle;
     private float manaCicleRate;
-    public float temp;
 
 
     void Start()
     {
-        uI = ObjectsHolder.Instance.uIManager;
-        temp = Time.time;
-        ManaPoints = Player.GetPlayerMP ();
+        ManaPoints = LevelBook.GetPlayerManaPoints();
+        Debug.Log (ManaPoints);
         mana_norm = 1f;
         manaCicle = 1f;
         manaCicleRate = 1f;
-        CalcMana ();
-        //PrintSpellsIDList ();
+        CalcAndShowManaPoints ();
+        ShowXPPoints ();
         GameEvents.current.OnManaWasteEvent += ManaWaste;
+        GameEvents.current.OnDieEvent += CalcXP;
     }
 
     private void OnDestroy()
     {
         GameEvents.current.OnManaWasteEvent -= ManaWaste;
+        GameEvents.current.OnDieEvent -= CalcXP;
     }
 
     private void Update()
@@ -46,14 +49,14 @@ public class Wizard : MonoBehaviour
 
     public void ManaRecover( float mPoints )
     {
-        if ( ManaPoints >= Player.GetPlayerMP () )
+        if ( ManaPoints >= LevelBook.GetPlayerManaPoints () )
             return;
         ManaPoints += mPoints;
-        if ( ManaPoints > Player.GetPlayerMP () )
+        if ( ManaPoints > LevelBook.GetPlayerManaPoints () )
         {
-            ManaPoints = Player.GetPlayerMP ();
+            ManaPoints = LevelBook.GetPlayerManaPoints ();
         }
-        CalcMana ();
+        CalcAndShowManaPoints ();
     }
 
 
@@ -62,14 +65,28 @@ public class Wizard : MonoBehaviour
         ManaPoints -= mPoints;
         if ( ManaPoints < 0 )
             ManaPoints = 0;
-        CalcMana ();
+        CalcAndShowManaPoints ();
     }
 
-    public void CalcMana()
+    public void CalcAndShowManaPoints()
     {
-        mana_norm = ManaPoints / Player.GetPlayerMP ();
+        mana_norm = ManaPoints / LevelBook.GetPlayerManaPoints ();
+        manaValue.text = Mathf.RoundToInt (ManaPoints).ToString();
         GameEvents.current.ManaValueChangedAction (mana_norm);
     }
+
+    public void ShowXPPoints()
+    {
+        xpValue.text = LevelBook.GetXPPoints ().ToString ();
+    }
+
+    public void CalcXP(BoardUnit unit)
+    {
+        if ( unit.GetUnitType () != Unit.UnitType.Human ) return;
+        LevelBook.AddXPPoints (unit.GetUnitTemplate ().xp);
+        ShowXPPoints ();
+    }
+
 
     public static float GetManapoints()
     {

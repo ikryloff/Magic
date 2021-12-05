@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
 
     public enum GameState
     {
-        InitObjects,
         StartGame,
         BoardSleep,
         BoardActive,
@@ -114,9 +113,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Player.SetPlayerLevel (1);
+        LevelBook.SetDefaultLevelNotes ();
         yield return new WaitForSeconds (0.5f);
         GameEvents.current.SwitchTouch (true);
         Debug.Log ("State: StartGame");
         Debug.Log ("GameManager");
     }
+
+
 }

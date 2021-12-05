@@ -91,29 +91,6 @@ public class UCBoardUnitMoving : MonoBehaviour
             TurnRight ();
     }
 
-
-    private void ChangePositionForHumanAttack( BoardUnit unit, BoardUnit enemy, string direction )
-    {
-        int newColPos = unit.GetColumnPosition ();
-        int enemyColPos = enemy.GetColumnPosition ();
-
-        if ( newColPos == enemyColPos )
-        {
-           // if ( direction.Equals (Constants.UNIT_RIGHT_DIR) )
-            {
-                newColPos = enemyColPos - 1;
-
-            }
-          //  if ( direction.Equals (Constants.UNIT_LEFT_DIR) )
-            {
-                newColPos = enemyColPos + 1;
-            }
-            unit.SetColumnPosition (newColPos);
-        }
-        CellPos newPos = new CellPos (newColPos, unit.GetLinePosition ());
-        Cell newCell = Board.GetCellByPosition (newPos);
-        unit.transform.position = new Vector3 (newCell.transform.position.x + Utilities.GetPositionDisplace (), unit.transform.position.y, unit.transform.position.z);
-    }
 }
 
 public enum Direction

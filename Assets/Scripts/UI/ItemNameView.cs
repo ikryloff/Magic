@@ -12,8 +12,7 @@ public class ItemNameView : MonoBehaviour
 
     private void OnEnable()
     {
-        if ( GameEvents.current != null )
-            GameEvents.current.OnSpellItemViewOpenedEvent += UpdateView;
+        GameEvents.current.OnSpellItemViewOpenedEvent += UpdateView;
     }
 
     private void OnDisable()

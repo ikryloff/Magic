@@ -103,7 +103,7 @@ public class UCUnitHealth : MonoBehaviour
     {
         if ( _currentHealth <= 0 )
         {
-            MakeDeath (_unit);
+            GameEvents.current.DieAction (_unit);
             return;
         }
         if ( _currentHealth >= _health )

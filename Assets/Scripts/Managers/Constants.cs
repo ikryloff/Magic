@@ -11,10 +11,14 @@
     //Shaders
     public static string GRAYSCALE_RATIO = "_GrayscaleAmount";
 
-    // Numbers
+    //Player
+    public static float MANA_POINTS = 100;
+    public static int PLAYER_SKILLS_MAX_LEVEL = 5;
+    public static float [] LEVEL_BONUS_RATIO = new float [] { 1, 1.1f, 1.2f, 1.5f, 2f, 4f };
+
+    // Board
     public static int BOARD_WIDTH = 16;
     public static int BOARD_HEIGHT = 9;
-    public static int PLAYER_SKILLS_MAX_LEVEL = 5;
     public static float TRAP_DIST = 0.3f;
     public static float PATH_LENGHT = 17f;
     public static float PATH_START_X = 10.4f;

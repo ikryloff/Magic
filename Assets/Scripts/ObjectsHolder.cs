@@ -15,7 +15,6 @@ public class ObjectsHolder : MonoBehaviour
     public TowerBuilder buildingManager;
     public AttackSpeller attackManager;
     public Wizard wizard;
-    public XPpoints xpPoints;
     public UIManager uIManager;
     public TouchController touchController;
     public FirePoints firePoints;
@@ -43,7 +42,6 @@ public class ObjectsHolder : MonoBehaviour
         castManager = FindObjectOfType<SpellCaster> ();
         touchController = FindObjectOfType<TouchController>();
         wizard = FindObjectOfType<Wizard> ();
-        xpPoints = wizard.GetComponent<XPpoints> ();
         uIManager = FindObjectOfType<UIManager> ();
         firePoints = FindObjectOfType<FirePoints> ();
     }

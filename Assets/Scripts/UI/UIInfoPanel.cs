@@ -93,7 +93,6 @@ public class UIInfoPanel : MonoBehaviour
         manaPR.text = Localization.GetString ("manaPR");
         possibleSpells.text = Localization.GetString ("possibleSpells");
 
-        manaValue.text = Player.GetPlayerMP ().ToString ();
         expValue.text = Player.GetPlayerXP ().ToString ();
         manaPPSValue.text = Player.GetPlayerMPPS ().ToString ();
 
