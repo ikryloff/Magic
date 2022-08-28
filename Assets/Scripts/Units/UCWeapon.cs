@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class UCWeapon : MonoBehaviour
 {
+    [SerializeField]private Transform _firePoint;
     
     protected BoardUnit _unit;
     private GameObject _bullet;
@@ -28,7 +29,9 @@ public class UCWeapon : MonoBehaviour
         if ( enemy == null ) return;
         if ( _unitTemplate.attackRange > 1 )
         {
-            GameObject bulletGO = Instantiate (_bullet, transform.position, Quaternion.identity);
+            Vector3 firePointPosition = _firePoint == null ? transform.position : _firePoint.position;
+            
+            GameObject bulletGO = Instantiate (_bullet, firePointPosition, Quaternion.identity);
             Bullet bullet = bulletGO.GetComponent<Bullet> ();
             if ( bullet != null )
             {

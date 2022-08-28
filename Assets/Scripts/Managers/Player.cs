@@ -1,18 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using UnityEngine;
 
-public static class Player
+public class Player : MonoBehaviour
 {
-    private static int playerLanguage = 1; // 0 - english, 1 - russian
-    private static int playerLevel;
-    private static float playerXP = 0;
-    private static float playerMPPS = 0.3f;
-    private static float playerManaBonus = 1.3f;
-    // levels Attack, Defence, Intelligence, Learning, Alteration, Regeneration, FastReading
-    private static int [] skillLevels = new int [] { 0, 3, 5, 2, 2, 1, 3 };
-    
-    private static int skillPoints = 10;
+    private int playerLanguage = 1; // 0 - english, 1 - russian
 
-    private static int [] playerSpellsIDList =
+    private int playerStage;
+
+    private float playerXP = 0;
+    // levels Attack, Defence, Intelligence, Learning, Alteration, Regeneration, FastReading
+    private int [] skillLevels = new int [] { 0, 0, 0, 0, 0, 0, 0 };
+
+    private int skillPoints = 35;
+
+    private int [] spellsIDList = new int []
     {
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
@@ -24,106 +26,136 @@ public static class Player
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0
     };
 
-    public static int [] GetPlayerSpellsIDList()
+    private float _manaPoints;
+
+    public void LoadGameData( GameData data )
     {
-        return playerSpellsIDList;
+        playerLanguage = data.playerLanguage;
+        playerStage = data.stage;
+        Debug.Log (playerStage);
+        playerXP = data.xpPoints;
+        skillLevels = new int [data.skillLevels.Length];
+        Array.Copy (data.skillLevels, skillLevels, data.skillLevels.Length);
+        skillPoints = data.skillPoints;
+        spellsIDList = new int [data.spellsIDList.Length];
+        Array.Copy (data.spellsIDList, spellsIDList, data.spellsIDList.Length);
+
+        _manaPoints = Constants.LEVEL_BONUS_RATIO [skillLevels [Constants.SL_INT]] * Constants.MANA_POINTS;
     }
 
-    public static bool IsSpellInPlayerSpellsIDList( int id )
+
+
+    public float GetManaPoints()
     {
-        return playerSpellsIDList [id] == 1;
+        return _manaPoints;
     }
 
-    public static void AddSpellToPlayerSpellsIDList( int id )
+    public void SetManaPoints( float manaPoints )
     {
-        playerSpellsIDList [id] = 1;
+        _manaPoints = manaPoints;
     }
 
-    public static int GetPlayerSpellsQuantity()
+
+    public int [] GetSpellsIDList()
     {
-        return playerSpellsIDList.Sum ();
+        int [] newArray = new int [spellsIDList.Length];
+        Array.Copy (spellsIDList, newArray, spellsIDList.Length);
+        return newArray;
     }
 
-    public static int GetPlayerSpellsValueByIndex( int id )
+    public void SetSpellsIDList( int [] sourceArray )
     {
-        return playerSpellsIDList [id];
+        Array.Copy (sourceArray, spellsIDList, sourceArray.Length);
+    }
+    public int [] GetSkillLevels()
+    {
+        int [] newArray = new int [skillLevels.Length];
+        Array.Copy (skillLevels, newArray, skillLevels.Length);
+        return newArray;
     }
 
-    public static int [] GetPlayerSkillLevels()
+    public void SetSkillLevels( int [] sourceArray )
     {
-        return skillLevels;
+        Array.Copy (sourceArray, skillLevels, sourceArray.Length);
     }
 
-    public static int GetPlayerSkillPoints()
+    public bool IsSpellInPlayerSpellsIDList( int id )
+    {
+        return spellsIDList [id] == 1;
+    }
+
+    public void AddSpellToPlayerSpellsIDList( int id )
+    {
+        spellsIDList [id] = 1;
+    }
+
+    public int GetPlayerSpellsQuantity()
+    {
+        return spellsIDList.Sum ();
+    }
+
+    public int GetPlayerSpellsValueByIndex( int id )
+    {
+        return spellsIDList [id];
+    }
+
+
+    public int GetSkillPoints()
     {
         return skillPoints;
     }
 
-   
-    public static void SetPlayerSkillPoints( int value )
+    public void SetSkillPoints( int value )
     {
         skillPoints = value;
     }
 
-    public static float GetPlayerXP()
+    public float GetXPPoints()
     {
         return playerXP;
     }
 
-    public static float GetPlayerMPPS()
+    public void AddXPPoints( float points )
     {
-        return playerMPPS;
+        playerXP += points;
     }
 
-  
 
-
-    public static void SetPlayerXP( int xp )
+    public void SetPlayerXP( int xp )
     {
         playerXP = xp;
     }
 
-    public static void SetPlayerMPPS( int mp )
+    public void SetPlayerStage( int level )
     {
-        playerMPPS = mp;
+        playerStage = level;
     }
 
-    public static int GetPlayerLevel()
-    {
-        return playerLevel;
-    }
-
-    public static void SetPlayerLevel( int level )
-    {
-        playerLevel = level;
-    }
-
-    public static void SetPlayerLanguage( int lang )
+    public void SetPlayerLanguage( int lang )
     {
         playerLanguage = lang;
     }
 
-    public static int GetPlayerLanguage()
+    public int GetPlayerLanguage()
     {
         return playerLanguage;
     }
 
-    public static float GetPlayerManaBonus()
+    public int GetPlayerStage()
     {
-        return Constants.LEVEL_BONUS_RATIO [skillLevels[2]];
+        return playerStage;
     }
 
-    public static float GetPlayerXPBonus()
+    public float GetPlayerManaBonus()
     {
-        return Constants.LEVEL_BONUS_RATIO [skillLevels [3]];
+        return Constants.LEVEL_BONUS_RATIO [skillLevels [Constants.SL_INT]];
     }
 
-    public static void SetPlayerManaBonus( int bonus )
+    public float GetPlayerXPBonus()
     {
-        playerManaBonus = bonus;
+        return Constants.LEVEL_BONUS_RATIO [skillLevels [Constants.SL_LRN]];
     }
 
 }

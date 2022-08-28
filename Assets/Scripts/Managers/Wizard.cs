@@ -1,29 +1,28 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
 public class Wizard : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI manaValue;
     [SerializeField] private TextMeshProUGUI xpValue;
 
+    public static int count = 0;
+
     private float mana_norm;
     private float defencePoints;
     public static float ManaPoints;
     private float manaCicle;
     private float manaCicleRate;
+    private bool isOn;
+
+    private Player player;
 
 
-    void Start()
+    private void Awake()
     {
-        ManaPoints = LevelBook.GetPlayerManaPoints();
-        Debug.Log (ManaPoints);
-        mana_norm = 1f;
-        manaCicle = 1f;
-        manaCicleRate = 1f;
-        CalcAndShowManaPoints ();
-        ShowXPPoints ();
         GameEvents.current.OnManaWasteEvent += ManaWaste;
         GameEvents.current.OnDieEvent += CalcXP;
+        player = GetComponent<Player> ();
     }
 
     private void OnDestroy()
@@ -34,14 +33,32 @@ public class Wizard : MonoBehaviour
 
     private void Update()
     {
+        if ( !isOn ) return;
         ManaRecoveryCicle ();
+    }
+
+    public void Init()
+    {
+        UpdateManaValues ();
+        mana_norm = 1f;
+        manaCicle = 1f;
+        manaCicleRate = 1f;
+        ShowXPPoints ();
+        isOn = true;
+    }
+
+
+    private void UpdateManaValues()
+    {
+        ManaPoints = player.GetManaPoints();
+        CalcAndShowManaPoints ();
     }
 
     private void ManaRecoveryCicle()
     {
         if ( manaCicle <= 0 )
         {
-            ManaRecover (Player.GetPlayerMPPS ());
+            ManaRecover (1f);
             manaCicle = manaCicleRate;
         }
         manaCicle -= Time.deltaTime;
@@ -49,19 +66,23 @@ public class Wizard : MonoBehaviour
 
     public void ManaRecover( float mPoints )
     {
-        if ( ManaPoints >= LevelBook.GetPlayerManaPoints () )
+        float playerMana = player.GetManaPoints ();
+        if ( ManaPoints >= playerMana )
             return;
         ManaPoints += mPoints;
-        if ( ManaPoints > LevelBook.GetPlayerManaPoints () )
+        if ( ManaPoints > playerMana )
         {
-            ManaPoints = LevelBook.GetPlayerManaPoints ();
+            ManaPoints = playerMana;
         }
         CalcAndShowManaPoints ();
     }
 
 
-    public void ManaWaste( float mPoints )
+    private void ManaWaste( float mPoints )
     {
+        count++;
+        Debug.Log (count + " " + this.GetInstanceID().ToString());
+        Debug.Log (mPoints + " WASTED");
         ManaPoints -= mPoints;
         if ( ManaPoints < 0 )
             ManaPoints = 0;
@@ -70,20 +91,20 @@ public class Wizard : MonoBehaviour
 
     public void CalcAndShowManaPoints()
     {
-        mana_norm = ManaPoints / LevelBook.GetPlayerManaPoints ();
-        manaValue.text = Mathf.RoundToInt (ManaPoints).ToString();
+        mana_norm = ManaPoints / player.GetManaPoints ();
+        manaValue.text = Mathf.RoundToInt (ManaPoints).ToString ();
         GameEvents.current.ManaValueChangedAction (mana_norm);
     }
 
     public void ShowXPPoints()
     {
-        xpValue.text = LevelBook.GetXPPoints ().ToString ();
+        xpValue.text = player.GetXPPoints ().ToString ();
     }
 
-    public void CalcXP(BoardUnit unit)
+    public void CalcXP( BoardUnit unit )
     {
         if ( unit.GetUnitType () != Unit.UnitType.Human ) return;
-        LevelBook.AddXPPoints (unit.GetUnitTemplate ().xp);
+        player.AddXPPoints (unit.GetUnitTemplate ().xp);
         ShowXPPoints ();
     }
 
@@ -94,15 +115,13 @@ public class Wizard : MonoBehaviour
     }
 
 
-
-
     //For test
     public void PrintSpellsIDList()
     {
-        for ( int i = 0; i < Player.GetPlayerSpellsIDList ().Length; i++ )
+        for ( int i = 0; i < player.GetSpellsIDList ().Length; i++ )
         {
-            print (Player.GetPlayerSpellsIDList () [i] + ", ");
+            print (player.GetSpellsIDList () [i] + ", ");
         }
-        print ("Quantity: " + Player.GetPlayerSpellsQuantity ());
+        print ("Quantity: " + player.GetPlayerSpellsQuantity ());
     }
 }

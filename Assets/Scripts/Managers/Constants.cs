@@ -1,4 +1,5 @@
-﻿public class Constants
+﻿
+public class Constants
 {
 
     //Camera
@@ -12,9 +13,18 @@
     public static string GRAYSCALE_RATIO = "_GrayscaleAmount";
 
     //Player
+    public static int STAGES_QUANTITY = 36;
     public static float MANA_POINTS = 100;
     public static int PLAYER_SKILLS_MAX_LEVEL = 5;
     public static float [] LEVEL_BONUS_RATIO = new float [] { 1, 1.1f, 1.2f, 1.5f, 2f, 4f };
+
+    public static int SL_ATT = 0;
+    public static int SL_DEF = 1;
+    public static int SL_INT = 2;
+    public static int SL_LRN = 3;
+    public static int SL_ALT = 4;
+    public static int SL_REG = 5;
+    public static int SL_FST = 6;
 
     // Board
     public static int BOARD_WIDTH = 16;
@@ -27,8 +37,13 @@
 
 
     public static float TOWER_HEAL_POINTS = 30f;
-    
-    
+
+    //IO
+
+    public static string DIRECTORY = "/Saves";
+    public static string DATA_NAME = "/data";
+    public static string DATA_SUFFIX = ".ik";
+
     //Strings for animation
     public static string ANIM_BOOL_IS_IN_BATTLE = "isInBattle";
     public static string ANIM_UNIT_HIT= "unit_hit";

@@ -42,8 +42,6 @@ public class GameEvents : MonoBehaviour
     public event Action<BoardUnit, BoardUnit> OnStopToFightEvent;
     public event Action<BoardUnit, BoardUnit> OnAttackAnimationFinishedEvent;
     public event Action<BoardUnit, BoardUnit> OnAttackStartedEvent;
-    public event Action<Human> OnHumanDeathAction;
-    public event Action<TowerUnit, Cell> OnTowerUnitDeathEvent;
     public event Action<Unit.UnitClassProperty> OnTabChangeEvent;
     public event Action<UnitTemplate> OnItemButtonClickedEvent;
     public event Action<UnitTemplate> OnSpellItemViewOpenedEvent;
@@ -52,11 +50,11 @@ public class GameEvents : MonoBehaviour
     public event Action<float> OnManaWasteEvent;
 
     //UI Events
-    public event Action OnWizardLevelChangeEvent;
+    public event Action<int> OnWizardLevelChangeEvent;
 
-    public void WizardLevelChangeAction()
+    public void WizardLevelChangeAction(int skill)
     {
-        OnWizardLevelChangeEvent?.Invoke ();
+        OnWizardLevelChangeEvent?.Invoke (skill);
     }
 
    
@@ -83,6 +81,7 @@ public class GameEvents : MonoBehaviour
 
     public void ManaWasteAction( float value )
     {
+        Debug.Log ("WasteEvent");
         OnManaWasteEvent?.Invoke (value);
     }
 
@@ -111,17 +110,6 @@ public class GameEvents : MonoBehaviour
     {
         OnSwitchTouch?.Invoke (isOn);
         Debug.Log ("Touch " + isOn);
-    }
-
-
-    public void HumanDeathEvent( Human unit )
-    {
-        OnHumanDeathAction?.Invoke (unit);
-    }
-
-    public void TowerUnitDeathAction( TowerUnit unit, Cell cell )
-    {
-        OnTowerUnitDeathEvent?.Invoke (unit, cell);
     }
 
     public void NewHit( BoardUnit unit, UnitTemplate sender )

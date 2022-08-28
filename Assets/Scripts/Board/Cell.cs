@@ -10,7 +10,7 @@ public class Cell : MonoBehaviour
     private bool _isLoaded;
     private bool _isPrepared;
     private bool _isEngaged;
-    [SerializeField]
+    private bool _isGameEnder;
     private int cellType; // 0 - common, 1 - untouchable 
     private SpellCaster _spellCaster;
     public Sprite spellSprite;
@@ -28,10 +28,7 @@ public class Cell : MonoBehaviour
         GameEvents.current.OnCastOver += CountCell;  // from touch controller when user finished draw the cast
         GameEvents.current.OnCastResetEvent += ReloadCell; // from spellcaster when we need to reset spellcasting
         GameEvents.current.OnTimeToColorCellsEvent += ColorCellByType; // from Board to color cells by type
-        spellSprite = ObjectsHolder.Instance.spellSprite;
-        cellSprite = ObjectsHolder.Instance.cellSprite;
-        colorSprite = ObjectsHolder.Instance.colorSprite;
-        untouchableSprite = ObjectsHolder.Instance.untouchableSprite;
+        
         SetCellPos (cellPos);
         
     }
@@ -68,6 +65,11 @@ public class Cell : MonoBehaviour
     {
         _isEngaged = true;
         cellType = 1;
+    }
+
+    public void SetEnder()
+    {
+        _isGameEnder = true;
     }
 
     public bool IsEngaged()
@@ -142,6 +144,9 @@ public class Cell : MonoBehaviour
         return _cellPos.Col;
     }
 
-
+    public bool IsGameEnder()
+    {
+        return _isGameEnder;
+    }
 
 }

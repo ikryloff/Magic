@@ -14,7 +14,7 @@ public class SpellActivator : MonoBehaviour
         GameEvents.current.OnSwitchTouch += SwitchActivity;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameEvents.current.OnSwitchTouch -= SwitchActivity;
     }

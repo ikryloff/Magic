@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class AttackSpeller : MonoBehaviour
 {
-    
+    public static int count = 0;
     public Human targetEnemy;
     public List<Transform> targetsTransforms;
 
     private SpawnPoints _spawnPoints;
-    private SpellCaster castManager;
-    private UIManager ui;
 
     private SpellShotFabric _shotFabric;
 
@@ -21,11 +19,6 @@ public class AttackSpeller : MonoBehaviour
         _shotFabric = GetComponent<SpellShotFabric> ();
     }
 
-    private void Start()
-    {
-        ui = ObjectsHolder.Instance.uIManager;
-        castManager = ObjectsHolder.Instance.castManager;
-    }
 
     public void MakeSpelling( UnitTemplate spellTemplate, Cell [] cells )
     {
@@ -37,13 +30,13 @@ public class AttackSpeller : MonoBehaviour
             return;
         }
         StartCoroutine (PrepareSpellRoutine (spellTemplate, _shotFabric));
-        //GameEvents.current.NewGameMessage (spellTemplate.unitName);
     }
 
 
     IEnumerator PrepareSpellRoutine( UnitTemplate spellTemplate, SpellShotFabric shotFabric)
     {
         GameEvents.current.ManaWasteAction (spellTemplate.cost);
+        
         float time = spellTemplate.prepareTime;
         float perc = Time.deltaTime / time;
         float value = 1; ;

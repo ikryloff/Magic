@@ -4,7 +4,6 @@ using UnityEngine;
 public class SpellsMaps : MonoBehaviour
 {
     public UnitTemplate [] spellScript;
-    public Wizard wizard;
 
     private int [] natureSchoolSpellList = { 7, 8, 9, 10, 11, 12, 13 };
     private int [] natureSchoolCallllList = { 42, 43, 44, 45, 46, 47, 48 };
@@ -24,10 +23,8 @@ public class SpellsMaps : MonoBehaviour
     public static Dictionary<int, UnitTemplate> spellsIDMap;
     public static Dictionary<SpellProperty, List<int>> spellIDsListByPropertyMap;
 
-    private void Awake()
+    public void Init()
     {
-        wizard = FindObjectOfType<Wizard> ();
-
         MakeSpellsStringMap ();
         MakeSpellsIDMap ();
         MakeSpellIDsListByPropertyMap ();
@@ -60,7 +57,7 @@ public class SpellsMaps : MonoBehaviour
             {
                 spellsIDMap.Add (ss.unitID, ss);
                 //here for test
-                Player.AddSpellToPlayerSpellsIDList (ss.unitID);
+                //Player.AddSpellToPlayerSpellsIDList (ss.unitID);
             }
         }
     }
@@ -109,26 +106,7 @@ public class SpellsMaps : MonoBehaviour
             return spellsIDMap [0];
 
     }
-
-
-    public int GetSchoolLearnedSpells( int [] spells, int [] calls )
-    {
-        int count = 0;
-
-        for ( int i = 0; i < spells.Length; i++ )
-        {
-            count += Player.GetPlayerSpellsValueByIndex (spells [i]);
-        }
-
-        for ( int i = 0; i < calls.Length; i++ )
-        {
-            count += Player.GetPlayerSpellsValueByIndex (calls [i]);
-        }
-
-        return count;
-    }
-
-}
+ }
 
 public struct SpellProperty
 {

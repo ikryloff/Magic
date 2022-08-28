@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TowerBuilder : MonoBehaviour
 {
-    private UnitsOnBoard _boardUnits;
     private List<Cell> _defCells;
     [SerializeField]
     private UnitTemplate _defTowerTemplate;
@@ -16,7 +15,6 @@ public class TowerBuilder : MonoBehaviour
 
     private void Init()
     {
-        _boardUnits = FindObjectOfType<UnitsOnBoard> ();
         _defCells = new List<Cell> ();
         print ("Init Defence TBuilder");
     }
@@ -54,7 +52,6 @@ public class TowerBuilder : MonoBehaviour
     IEnumerator PrepareBuildingRoutine( UnitTemplate spellTemplate, Cell [] cells )
     {
         GameEvents.current.ManaWasteAction (spellTemplate.cost);
-       // GameEvents.current.NewGameMessage (spellTemplate.unitName);
         float time = spellTemplate.prepareTime;
         float perc = Time.deltaTime / time;
         float value = 1;

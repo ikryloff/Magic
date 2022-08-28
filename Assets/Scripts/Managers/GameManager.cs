@@ -1,8 +1,14 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Wizard wizard;
+    [SerializeField] private WaveController waveController;
+    [SerializeField] private UIManager uIManager;
+    [SerializeField] private SpellsMaps spellsMaps;
+    [SerializeField] private Player player;
+
     public static GameState State;
 
     private void Awake()
@@ -10,14 +16,45 @@ public class GameManager : MonoBehaviour
         GameEvents.current.OnGameStateChangedEvent += ChangeGameState;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameEvents.current.OnGameStateChangedEvent -= ChangeGameState;
     }
 
     private void Start()
     {
+        ChangeGameState (GameState.StartGame);
+    }
+
+    private void StartGame()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        GameEvents.current.SwitchTouch (true);
+        Debug.Log ("State: StartGame");
+        Debug.Log ("GameManager");
+        uIManager.OpenLevelMenu ();
+        
+    }
+
+    public void InitLevel( int level )
+    {
+        spellsMaps.Init ();
+        Storage.LoadData (player, level);
+        wizard.Init ();
+        waveController.Init (level);
+        uIManager.StartGame ();
+        Debug.Log ("Init level " + level);
+    }
+
+    public void ReloadGame()
+    {
+        SceneManager.LoadScene (0);
         StartGame ();
+    }
+
+    public void SaveGame()
+    {
+        Storage.SaveData (player, player.GetPlayerStage () + 1);
     }
 
     private void ChangeGameState( GameState newState )
@@ -45,16 +82,17 @@ public class GameManager : MonoBehaviour
             case GameState.FastGame:
                 FastGame ();
                 break;
+            case GameState.GameOver:
+                PauseGame ();
+                GameOver ();
+                break;
+            case GameState.LevelComplete:
+                PauseGame ();
+                LevelComplete ();
+                break;
         }
-
-
     }
 
-    private void StartGame()
-    {
-        StartCoroutine (GameStartWithDelay ());        
-
-    }
 
     private void BoardSleep()
     {
@@ -84,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     private void FastGame()
     {
-        if( Time.timeScale > 1 )
+        if ( Time.timeScale > 1 )
         {
             ChangeGameState (GameState.ResumeGame);
         }
@@ -93,7 +131,17 @@ public class GameManager : MonoBehaviour
             Debug.Log ("Fast");
             Time.timeScale = 20;
         }
-            
+
+    }
+
+    private void LevelComplete()
+    {
+        Debug.Log ("Level Copmlete");
+    }
+
+    private void GameOver()
+    {
+        Debug.Log ("Game Over");
     }
 
     public enum GameState
@@ -104,20 +152,8 @@ public class GameManager : MonoBehaviour
         PauseGame,
         ResumeGame,
         FastGame,
-
-    }
-
-    IEnumerator GameStartWithDelay()
-    {
-        GameEvents.current.SwitchTouch (false);
-        Time.timeScale = 1;
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        Player.SetPlayerLevel (1);
-        LevelBook.SetDefaultLevelNotes ();
-        yield return new WaitForSeconds (0.5f);
-        GameEvents.current.SwitchTouch (true);
-        Debug.Log ("State: StartGame");
-        Debug.Log ("GameManager");
+        GameOver,
+        LevelComplete,
     }
 
 

@@ -52,7 +52,7 @@ public class UCTargetFinder : MonoBehaviour
 
     public BoardUnit GetRandomTower()
     {
-        List<TowerUnit> towers = UnitsOnBoard.LineTowersList [_unit.GetLinePosition()];
+        List<TowerUnit> towers = UnitsOnBoard.LineTowersLists [_unit.GetLinePosition()];
         if ( towers.Count == 0 )
             return null;
 

@@ -24,6 +24,11 @@ public class Human : BoardUnit
         if ( collider.gameObject.tag.Equals (Constants.CELL_TAG) )
         {
             _cell = collider.GetComponent<Cell> ();
+            if ( _cell.IsGameEnder() )
+            {
+                GameEvents.current.GameStateChangedAction (GameManager.GameState.GameOver);
+                return;
+            }
             this.SetColumnPosition (_cell.GetColumnPosition ());
             this.SetLinePosition (_cell.GetLinePosition ());
             GameEvents.current.HumanPositionWasChanged (this);

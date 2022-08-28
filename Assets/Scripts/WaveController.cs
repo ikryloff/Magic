@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class WaveController : MonoBehaviour
 {
+    public static int HumanCount = 0;
     private Wave [] waves;
     public WavesList wavesList;
     private SpawnPoints spawnPoints;
 
-    private float timeBetweenWaves = 40f;
+    private float timeBetweenWaves = 20f;
     private float timeBetweenCreeps = 10f;
     private float countdown = 2f;
 
     private int waveIndex = 0;
+
+    private bool isOn;
 
     private void Awake()
     {
@@ -19,13 +22,22 @@ public class WaveController : MonoBehaviour
         waves = new Wave [3];
         spawnPoints = FindObjectOfType<SpawnPoints> ();
     }
-    private void Start()
+    public void Init(int level)
     {
-        waves = wavesList.GetWavesList (1);
+        GameEvents.current.OnDieEvent += RemoveOneHuman;
+        waves = wavesList.GetWavesList (level);
+        isOn = true;
+        HumanCount = waves.Length * waves [0].humans.Length;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.OnDieEvent -= RemoveOneHuman;
     }
 
     private void Update()
     {
+        if ( !isOn ) return;
         if ( waves.Length == 0 )
             return;
         if ( waveIndex == waves.Length )
@@ -66,5 +78,14 @@ public class WaveController : MonoBehaviour
         Human newHuman = humanGO.GetComponent<Human> ();
         newHuman.Activate (pos, humanTemplate);
         UnitsOnBoard.AddHumanToLineHumansList (newHuman, pos);
+    }
+
+    private void RemoveOneHuman(BoardUnit boardUnit)
+    {
+        if ( boardUnit.GetUnitType () != Unit.UnitType.Human ) return;
+        HumanCount -= 1;
+        Debug.Log ("Humans left " + HumanCount);
+        if ( HumanCount == 0 )
+            GameEvents.current.GameStateChangedAction (GameManager.GameState.LevelComplete);
     }
 }

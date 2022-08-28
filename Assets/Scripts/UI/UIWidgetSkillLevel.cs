@@ -8,6 +8,7 @@ public class UIWidgetSkillLevel : MonoBehaviour
     [SerializeField] private Material inactiveMaterial;
     [SerializeField] private int skillIndex;
 
+
     private void Awake()
     {
         bar = GetComponentInChildren<ProgressBar> ();
@@ -16,30 +17,20 @@ public class UIWidgetSkillLevel : MonoBehaviour
         addButton.onClick.AddListener (AddOnePointToTempSkillLevel);
     }
 
-    private void OnEnable()
+    public int GetIndex()
     {
-        CalcValueAndSetToBar ();
-        GameEvents.current.OnWizardLevelChangeEvent += CalcValueAndSetToBar;
-        
+        return skillIndex;
     }
 
-    private void OnDisable()
+    public void CalcValueAndSetToBar(int level)
     {
-        GameEvents.current.OnWizardLevelChangeEvent -= CalcValueAndSetToBar;
-    }
-
-    private void CalcValueAndSetToBar()
-    {
-        int level = LevelBook.GetPlayerSkillLevel (skillIndex);
         float barValue = level * (1f / Constants.PLAYER_SKILLS_MAX_LEVEL);
         SetValue (barValue);
         if ( level == Constants.PLAYER_SKILLS_MAX_LEVEL )
             SetButtonUnActive ();
         else
             SetButtonActive ();
-
-        if ( !LevelBook.HasSkillPoints () )
-            SetButtonUnActive ();
+               
     }
 
     private void SetValue( float value )
@@ -49,13 +40,10 @@ public class UIWidgetSkillLevel : MonoBehaviour
 
     private void AddOnePointToTempSkillLevel()
     {
-        if ( LevelBook.GetPlayerSkillLevel(skillIndex) >= Constants.PLAYER_SKILLS_MAX_LEVEL ) return;
-        if ( LevelBook.HasSkillPoints() )
-            LevelBook.AddOnePointToPlayerSkillLevel (skillIndex);
-        GameEvents.current.WizardLevelChangeAction ();
+        GameEvents.current.WizardLevelChangeAction (skillIndex);
     }
 
-    private void SetButtonUnActive()
+    public void SetButtonUnActive()
     {
         addButton.image.material = inactiveMaterial;
         addButton.interactable = false;

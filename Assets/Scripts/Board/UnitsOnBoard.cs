@@ -3,40 +3,35 @@ using UnityEngine;
 
 public class UnitsOnBoard : MonoBehaviour
 {
-    public static List <TowerUnit> [] LineTowersList;
+    public static List <TowerUnit> [] LineTowersLists;
     public static List <Human> [] LineHumansLists;
 
-    private void OnEnable()
+    private void Awake()
     {
         InitLists ();
     }
 
-    private void OnDisable()
-    {
-    }
-
+    
     private void InitLists()
     {
         Debug.Log ("Init BoardUnits Lists");
-        LineTowersList = new List<TowerUnit> [9]; // 0 and 8 are unused
-        for ( int i = 0; i < LineTowersList.Length; i++ )
+        LineTowersLists = new List<TowerUnit> [9]; // 0 and 8 are unused
+        for ( int i = 0; i < LineTowersLists.Length; i++ )
         {
-            LineTowersList [i] = new List<TowerUnit> ();
+            LineTowersLists [i] = new List<TowerUnit> ();
         }
         LineHumansLists = new List<Human> [9]; // 0 and 8 are unused
         for ( int i = 0; i < LineHumansLists.Length; i++ )
         {
             LineHumansLists [i] = new List<Human> ();
         }
-        GameEvents.current.BoardIsBuiltAction ();
-
     }
 
     
 
     public  List<TowerUnit> GetLineTowersList(int lineNumber) 
     {
-        return LineTowersList [lineNumber];
+        return LineTowersLists [lineNumber];
     }
 
     public  List<Human> GetLineHumansList( int lineNumber )
@@ -46,14 +41,14 @@ public class UnitsOnBoard : MonoBehaviour
 
     public static void AddTowerToLineTowersList (TowerUnit tower, int line )
     {
-        LineTowersList [line].Add (tower);
+        LineTowersLists [line].Add (tower);
         Utilities.DisplaceZPosition (tower, line);
         Debug.Log ("Tower " + tower.GetUnitName() + " Added to list " + line);
     }
 
     public static void RemoveTowerFromLineTowersList( TowerUnit tower )
     {
-        LineTowersList [tower.GetLinePosition ()].Remove (tower);
+        LineTowersLists [tower.GetLinePosition ()].Remove (tower);
         Debug.Log ("Tower " + tower.name + " Removed from list " + tower.GetLinePosition ());
     }
 
@@ -141,15 +136,15 @@ public class UnitsOnBoard : MonoBehaviour
     public static TowerUnit GetTowerUnitFromCell( Cell cell )
     {
         int line = cell.GetLinePosition ();
-        if ( LineTowersList [line].Count == 0 )
+        if ( LineTowersLists [line].Count == 0 )
         {
             return null;
         }
         else
         {
-            for ( int i = 0; i < LineTowersList[line].Count; i++ )
+            for ( int i = 0; i < LineTowersLists[line].Count; i++ )
             {
-                TowerUnit towerUnit = LineTowersList [line][i];
+                TowerUnit towerUnit = LineTowersLists [line][i];
                 if ( towerUnit.GetColumnPosition () == cell.GetColumnPosition () )
                     return towerUnit;
             }

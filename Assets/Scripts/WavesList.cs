@@ -19,15 +19,20 @@ public class WavesList : MonoBehaviour
 
         switch ( level )
         {
-            case 1:
+            case 0:
                 waves [0].humans = new UnitTemplate [] { archer, peasant, peasant };
                 waves [1].humans = new UnitTemplate [] { peasant, archer, peasant };
                 waves [2].humans = new UnitTemplate [] { peasant, peasant, archer };
                 break;
-            case 2:
+            case 1:
                 waves [0].humans = new UnitTemplate [] { peasant, peasant, peasant };
                 waves [1].humans = new UnitTemplate [] { peasant, peasant, peasant };
                 waves [2].humans = new UnitTemplate [] { peasant, peasant, peasant };
+                break;
+            case 2:
+                waves [0].humans = new UnitTemplate [] { archer, peasant, peasant };
+                waves [1].humans = new UnitTemplate [] { peasant, archer, peasant };
+                waves [2].humans = new UnitTemplate [] { peasant, peasant, archer };
                 break;
             default:
                 waves = null;

@@ -49,7 +49,7 @@ public class ItemButton : UIButton
         {
             _button.image.sprite = _unitTemplate.activeIcon;
 
-            if ( Player.IsSpellInPlayerSpellsIDList (_unitTemplate.unitID) )
+            if ( true )
                 SetColorized ();
             else
                 SetGray ();

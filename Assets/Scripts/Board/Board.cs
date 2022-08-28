@@ -63,9 +63,11 @@ public class Board : MonoBehaviour
                 _positionCellMap.Add (new CellPos (col, line), cell);
 
                 // set bounds of board
-                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1 || x == 0 )
+                if ( y == 0 || y == _height - 1 || x == 0 || x == _width - 1  )
                 {
                     cell.SetUnusable ();
+                    if ( x == 0 )
+                        cell.SetEnder ();
                 }
                 // setup spawnpoints if it is last cell in line, without first and last lines
                 if ( x == _width - 1 && line != 0 && line < 8)

@@ -1,49 +1,50 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    SpellsMaps spells;
-    Button menuButton;
-    Button speedButton;
     [SerializeField] private GameObject _spellsPanel;
     [SerializeField] private GameObject _inGameUI;
     [SerializeField] private GameObject _spellItemView;
     [SerializeField] private GameObject _gameMenu;
+    [SerializeField] private GameObject _levelMenu;
     [SerializeField] private GameObject _wizardView;
 
+    private LevelMenuPanel levelMenuPanel;
 
-    private UISpellsManager uISpellsManager;
     private SpellPropertiesView _spellPropertiesView;
-
-
-    private int defencePoints;
-    private int manaPoints;
-    private int xpPoints;
 
     private void Awake()
     {
-        uISpellsManager = GetComponent<UISpellsManager> ();
         _spellPropertiesView = _spellItemView.GetComponent<SpellPropertiesView> ();
 
         GameEvents.current.OnItemButtonClickedEvent += OpenSpellView;
 
-        // Events
-        //GameEvents.current.OnNewGameMessage += SetMessage;
+        levelMenuPanel = _levelMenu.transform.GetComponentInChildren<LevelMenuPanel> ();
     }
 
 
     private void OnDestroy()
     {
-        GameEvents.current.OnNewGameMessage -= SetMessage;
         GameEvents.current.OnItemButtonClickedEvent -= OpenSpellView;
     }
 
-    private void Start()
+    public void OpenLevelMenu()
     {
-        CleanMessage ();
-        PrintSpellsQuantity ();
+        _levelMenu.SetActive (true);
+        levelMenuPanel.InitMenu ();
+    }
+
+    private void CloseLevelMenu()
+    {
+        _levelMenu.SetActive (false);
+    }
+
+    public void StartGame()
+    {
+        CloseLevelMenu ();
         _gameMenu.SetActive (false);
         CloseSpellsPanel ();
     }
@@ -63,35 +64,6 @@ public class UIManager : MonoBehaviour
     public void SpeedGame()
     {
         GameEvents.current.GameStateChangedAction (GameManager.GameState.FastGame);
-    }
-
-
-    public void SetMessage( string mess )
-    {
-        StopCoroutine (Message (mess));
-        StartCoroutine (Message (mess));
-    }
-
-    IEnumerator Message( string mess )
-    {
-        float messTime = 2.5f;
-        while ( messTime > 0 )
-        {
-            messTime -= Time.deltaTime;
-            yield return null;
-
-        }
-        CleanMessage ();
-    }
-
-    public void CleanMessage()
-    {
-
-    }
-
-    public void PrintSpellsQuantity()
-    {
-
     }
 
     private void OpenSpellView(UnitTemplate unitTemplate)

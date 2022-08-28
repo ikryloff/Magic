@@ -5,16 +5,13 @@ using UnityEngine;
 public class SpellCaster : MonoBehaviour
 {
     public static int CellsCount = 0;
-    private ObjectsHolder objects;
     public List<Cell> CastLine;
     public SpellDecoder spellDecoder;
-   // private UIManager ui;
+    // private UIManager ui;
 
     private void Awake()
     {
-        //ui = ObjectsHolder.Instance.uIManager;
         CastLine = new List<Cell> ();
-        objects = FindObjectOfType<ObjectsHolder> ();
         spellDecoder = FindObjectOfType<SpellDecoder> ();
     }
 

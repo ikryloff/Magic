@@ -4,7 +4,6 @@ using UnityEngine;
 public class TouchController : MonoBehaviour
 {
     private SpellCaster castManager;
-    private ObjectsHolder objects;
 
     private bool _isTouchable;
 
@@ -12,7 +11,6 @@ public class TouchController : MonoBehaviour
     private void Awake()
     {
         castManager = FindObjectOfType<SpellCaster> ();
-        objects = FindObjectOfType<ObjectsHolder> ();
         GameEvents.current.OnSwitchTouch += SwitchTouchability;
 
     }
